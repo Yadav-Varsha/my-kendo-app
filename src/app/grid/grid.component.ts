@@ -198,6 +198,7 @@ import { images } from "./images";
       }
     `,
   ],
+  
 })
 export class GridComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;

@@ -1,0 +1,24 @@
+
+
+.btn-all {
+  min-width: 120px;
+  height: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #012a6b 
+}
+
+.badge {
+  font-size: 0.65rem;
+}
+
+.navbar-nav{
+  border-bottom: #7ec241 4px solid ;
+}
+
+.rounded-circle{
+
+  
+  border: white 2px solid;
+}

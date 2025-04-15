@@ -1,0 +1,56 @@
+
+ 
+<!-- TOP RIGHT NAVBAR -->
+<nav class="navbar justify-content-end bg-light px-3 py-1 mt-2">
+  <button class="btn btn-all text-white btn-sm me-2">
+    <i class="bi bi-envelope"></i>
+  </button>
+  <button class="btn btn-all text-white btn-sm me-2">
+    <i class="bi bi-gear"></i>
+  </button>
+  <button class="btn btn-all text-white btn-sm position-relative me-3">
+    <i class="bi bi-bell"></i>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+      4
+    </span>
+  </button>
+    <button class="btn btn-all text-black d-flex align-items-center">
+    <div
+      class="rounded-circle text-white d-flex justify-content-center align-items-center fw-bold me-2"
+      style="width: 36px; height: 36px;"
+    >
+      A
+    </div>
+    <div class="text-white">
+      admin<br /><small>Admin</small>
+    </div>
+  </button>
+</nav>
+
+<!-- MAIN NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-light px-3 py-2">
+  <div class="navbar-nav w-100 justify-content-start">
+    <a class="btn btn-all text-white me-2" routerLink="/dashboard">
+      <i class="bi bi-house"></i> Dashboard
+    </a>
+    <div class="dropdown me-2">
+      <button class="btn btn-all text-white dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="bi bi-person"></i> Agent Management
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Agents</a></li>
+        <li><a class="dropdown-item" href="#">Teams</a></li>
+      </ul>
+    </div>
+    <a class="btn btn-all text-white me-2" href="#"><i class="bi bi-calendar"></i> Calendar</a>
+    <a class="btn btn-all text-white me-2" href="#">EZ Quote</a>
+    <a class="btn btn-success text-white me-2" href="#"><i class="bi bi-folder"></i> Lead Management</a>
+    <a class="btn btn-all text-white me-2" href="#"><i class="bi bi-list-task"></i> Activities</a>
+    <a class="btn btn-all text-white me-2" href="#"><i class="bi bi-diagram-3"></i> Workflows</a>
+    <a class="btn btn-all text-white position-relative" href="#">
+      <i class="bi bi-chat-dots"></i> Chat
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">1</span>
+    </a>
+  </div>
+</nav>
+

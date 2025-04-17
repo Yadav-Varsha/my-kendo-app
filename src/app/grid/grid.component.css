@@ -25,3 +25,49 @@
   .text-bold {
     font-weight: 600;
   }
+
+  .btn-all{
+  background-color:  #7ec241;
+  }
+  .text-all{
+    color:  #7ec241;
+  }
+
+  .large-dropdown{
+    width: 200px;
+  }
+
+  .btn{
+    background-color: #7ec241;
+  }
+  .toggle-wrapper {
+    background-color: #002366; /* Dark blue */
+    border-radius: 50px;
+  }
+  
+  .toggle-btn {
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-weight: bold;
+    padding: 6px 20px;
+    border-radius: 50px;
+    transition: background-color 0.3s;
+  }
+  
+  .toggle-btn.active-btn {
+    background-color: #8bc34a; /* Green */
+    color: #002366; /* Dark blue text on active */
+  }
+
+  /* ::ng-deep .k-grid-header .td.k-header {
+    background-color: #002366;
+    color: white;
+    font-weight: bold;
+  } */
+  ::ng-deep .k-grid-header th.k-header {
+    background-color: #002366 !important;
+    color: white !important;
+    font-weight: bold;
+  }
+  

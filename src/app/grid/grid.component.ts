@@ -12,6 +12,9 @@ import { process } from "@progress/kendo-data-query";
 import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
 import { employees } from "./employee";
 import { images } from "./images";
+import { FormsModule } from "@angular/forms";
+import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { IconModule } from "@progress/kendo-angular-icons";
 
 @Component({
   selector: "app-grid",
@@ -23,12 +26,39 @@ import { images } from "./images";
     KENDO_INPUTS,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,
+    FormsModule,DropDownsModule,IconModule
   ],
    templateUrl: './grid.component.html',
   styleUrl: './grid.component.css'
 })
 export class GridComponent implements OnInit {
+ 
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
+  leadsOptions = ['All Leads', 'My Leads', 'Archived'];
+  // preferencesOptions = ['Select Saved Preferences', 'Preference A', 'Preference B'];
+
+  selectedLead = 'All Leads';
+  selectedPreference = 'Select Saved Preferences';
+  searchText = '';
+
+  
+  activeView: string = 'non-intl';
+
+toggleView(view: string): void {
+  this.activeView = view;
+}
+
+  
+  public areaList: Array<string> = [
+    "avg smf",
+    "canada",
+    "App.setter",
+    "Canada Filter",
+    "Interstate",
+    "lostvswon",
+    "Shipper Type-National Account",
+  
+  ];
   public gridData: unknown[] = employees;
   public gridView!: unknown[];
 

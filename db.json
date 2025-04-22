@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "recordId": 111994,
+      "lastName": "Test",
+      "firstName": "APRILELEVEN",
+      "primaryEmail": "TULSI.KULKATRNI@WAIIN.COM",
+      "primaryPhoneType": "Home (565) 656-5666 -6",
+      "lmpLeadId": "",
+      "appointmentType": "",
+      "bookingAgency": "2222000",
+      "id": "09b2"
+    },
+    {
+      "recordId": 109907,
+      "lastName": "Nat Storage",
+      "firstName": "Marie",
+      "primaryEmail": "m@e.com",
+      "primaryPhoneType": "Home (630) 555-2024",
+      "lmpLeadId": "",
+      "appointmentType": "",
+      "bookingAgency": "2007000",
+      "id": "d82d"
+    },
+    {
+      "recordId": 111962,
+      "lastName": "Pathak 09-04",
+      "firstName": "Pooja",
+      "primaryEmail": "p.u@gmail.com",
+      "primaryPhoneType": "Home (313) 233-3233",
+      "lmpLeadId": "",
+      "appointmentType": "MS-Pro",
+      "bookingAgency": "2222000",
+      "id": "ce94"
+    },
+    {
+      "recordId": 111993,
+      "lastName": "E-Sign III",
+      "firstName": "Test",
+      "primaryEmail": "joseph.long@sirva.com",
+      "primaryPhoneType": "Mobile/Cell (630) 561-1303",
+      "lmpLeadId": "",
+      "appointmentType": "",
+      "bookingAgency": "2222000",
+      "id": "0fea"
+    },
+    {
+      "recordId": 111992,
+      "lastName": "E-Sign II",
+      "firstName": "Test",
+      "primaryEmail": "joseph.long@sirva.com",
+      "primaryPhoneType": "Mobile/Cell (630) 561-1303",
+      "lmpLeadId": "",
+      "appointmentType": "",
+      "bookingAgency": "2222000",
+      "id": "eb7d"
+    }
+  ]
+}

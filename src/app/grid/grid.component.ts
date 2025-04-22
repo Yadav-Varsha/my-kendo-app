@@ -152,6 +152,21 @@ public editedItem: any;
     this.myGrid.saveAsExcel();
 
 }
+
+addUser(): void {
+  const newUser = {
+    id: null, 
+    name: '',
+    email: '',
+  };
+
+  this.gridView.unshift(newUser); 
+  this.gridView = [...this.gridView]; 
+
+  this.editedRowIndex = 0;
+  this.editedItem = { ...newUser };
+}
+
 onEdit(dataItem: any, rowIndex: number): void {
   this.editedRowIndex = rowIndex;
   this.editedItem = { ...dataItem };
@@ -165,18 +180,33 @@ cancelEdit(): void {
 saveEdit(rowIndex: number): void {
   const updatedItem = { ...this.gridView[rowIndex], ...this.editedItem };
 
-  this.dataService.updateUser(updatedItem).subscribe(() => {
-    this.gridView[rowIndex] = updatedItem;
-    this.editedRowIndex = null;
-    this.editedItem = null;
-  });
+  if (updatedItem.id == null) {
+    // New user 
+    this.dataService.addUser(updatedItem).subscribe((res: any) => {
+      this.gridView[rowIndex] = res;
+      this.gridView = [...this.gridView];
+      this.editedRowIndex = null;
+      this.editedItem = null;
+    });
+  } else {
+    // Existing user 
+    this.dataService.updateUser(updatedItem).subscribe((res: any) => {
+      this.gridView[rowIndex] = res;
+      this.gridView = [...this.gridView];
+      this.editedRowIndex = null;
+      this.editedItem = null;
+    });
+  }
 }
 
-
-
-
 onDelete(dataItem: any): void {
-  console.log('Delete:', dataItem);
+  const confirmed = window.confirm('Are you sure you want to delete this item?');
+
+  if (confirmed) {
+    this.dataService.deleteUser(dataItem.id).subscribe(() => {
+      this.gridView = this.gridView.filter(item => item.id !== dataItem.id);
+    });
+  }
 }
 
 

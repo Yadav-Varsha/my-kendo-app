@@ -36,6 +36,9 @@
   .large-dropdown{
     width: 200px;
   }
+  .large{
+    width: 100px;
+  }
 
   .btn{
     background-color: #7ec241;

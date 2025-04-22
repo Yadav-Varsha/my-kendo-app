@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GridComponent } from "./grid/grid.component";
-import { ButtonComponent } from "./button/button.component";
-import { NavbarComponent } from './navbar/navbar.component';
 import { NavBar3Component } from './updatenav/nav-bar.component';
 
 
@@ -13,5 +11,15 @@ import { NavBar3Component } from './updatenav/nav-bar.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  users:any
   title = 'my-kendo-app';
+//   constructor(private dataService:DataService){
+
+//   }
+//   ngOnInit(){
+//     this.dataService.getUsers().subscribe((data:any)=>{
+// this.users=data;
+// console.log(this.users);
+//     })
+//   }
 }

@@ -1,20 +1,23 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
+import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import {
   DataBindingDirective,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
   KENDO_GRID_PDF_EXPORT,
+  GridComponent as KendoGridComponent
 } from "@progress/kendo-angular-grid";
+import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
 import { process } from "@progress/kendo-data-query";
 import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
-import { employees } from "./employee";
+// import { employees } from "./employee";
+// import { DataService } from '../data.service';
+import { DataService } from '../service/data.service';
 import { images } from "./images";
-import { FormsModule } from "@angular/forms";
-import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
-import { IconModule } from "@progress/kendo-angular-icons";
 
 @Component({
   selector: "app-grid",
@@ -26,16 +29,20 @@ import { IconModule } from "@progress/kendo-angular-icons";
     KENDO_INPUTS,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,
-    FormsModule,DropDownsModule,IconModule
+    FormsModule,DropDownsModule,IconModule,
+    
+   
   ],
    templateUrl: './grid.component.html',
   styleUrl: './grid.component.css'
 })
 export class GridComponent implements OnInit {
+  
  
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
+  @ViewChild('myGrid') myGrid!: KendoGridComponent;
   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
-  // preferencesOptions = ['Select Saved Preferences', 'Preference A', 'Preference B'];
+ 
 
   selectedLead = 'All Leads';
   selectedPreference = 'Select Saved Preferences';
@@ -48,8 +55,17 @@ toggleView(view: string): void {
   this.activeView = view;
 }
 
+public selectedAction: string = 'Action';
+
+public areaList: Array<string> = [
+"Edit",
+"Delete", 
+"View",
+];
+
+
   
-  public areaList: Array<string> = [
+  public someList: Array<string> = [
     "avg smf",
     "canada",
     "App.setter",
@@ -59,17 +75,26 @@ toggleView(view: string): void {
     "Shipper Type-National Account",
   
   ];
-  public gridData: unknown[] = employees;
-  public gridView!: unknown[];
+  public editedRowIndex: number | null = null;
+public editedItem: any;
+
+  public gridData: any[] = [];
+  public gridView: any[] = [];
 
   public mySelection: string[] = [];
   public pdfSVG: SVGIcon = filePdfIcon;
   public excelSVG: SVGIcon = fileExcelIcon;
 
-  public ngOnInit(): void {
-    this.gridView = this.gridData;
-  }
+  
+  constructor(private dataService: DataService) {}
 
+  ngOnInit(): void {
+    this.dataService.getUsers().subscribe((data: any) => {
+      this.gridData = data;
+      this.gridView = data;
+    });
+  }
+  
   public onFilter(value: Event): void {
     const inputValue = value;
 
@@ -122,4 +147,38 @@ toggleView(view: string): void {
 
     return image[code];
   }
+  
+  public exportExcel(): void {
+    this.myGrid.saveAsExcel();
+
+}
+onEdit(dataItem: any, rowIndex: number): void {
+  this.editedRowIndex = rowIndex;
+  this.editedItem = { ...dataItem };
+}
+
+cancelEdit(): void {
+  this.editedRowIndex = null;
+  this.editedItem = null;
+}
+
+saveEdit(rowIndex: number): void {
+  const updatedItem = { ...this.gridView[rowIndex], ...this.editedItem };
+
+  this.dataService.updateUser(updatedItem).subscribe(() => {
+    this.gridView[rowIndex] = updatedItem;
+    this.editedRowIndex = null;
+    this.editedItem = null;
+  });
+}
+
+
+
+
+onDelete(dataItem: any): void {
+  console.log('Delete:', dataItem);
+}
+
+
+
 }

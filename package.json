@@ -24,6 +24,7 @@
     "@progress/kendo-angular-grid": "^18.5.0",
     "@progress/kendo-angular-icons": "^18.5.0",
     "@progress/kendo-angular-indicators": "^18.5.0",
+    "@progress/kendo-angular-inputs": "^18.5.0",
     "@progress/kendo-angular-layout": "^18.5.0",
     "@progress/kendo-angular-navigation": "^18.5.0",
     "@progress/kendo-angular-toolbar": "^18.5.0",

@@ -8,71 +8,65 @@
     <button type="button" class="btn btn-all" (click)="exportExcel()">
       <i class="bi bi-file-earmark-excel"></i> Export to Excel
     </button>
-<!-- 
+    <!-- 
     <button type="button" class="btn btn-all" (click)="addUser()">
       Create
-    </button> -->
+    </button>  -->
   </div>
 </div>
 
-<div class="grid-container" (click)="onGridClick($event)">
-  <kendo-grid #myGrid [kendoGridBinding]="gridData" kendoGridSelectBy="id" [(selectedKeys)]="mySelection"
-    [selectable]="{ mode: 'multiple', drag: true }" [pageSize]="20" [pageable]="true" [sortable]="true"
-    [groupable]="true" [reorderable]="true" [resizable]="true" [height]="500" [columnMenu]="{ filter: true }"
-    (cellClick)="onCellClick($event)" (dataStateChange)="dataStateChange($event)" (rowClick)="onRowClick($event)" [editable]="true" >
 
-    <ng-template kendoGridToolbarTemplate>
+<kendo-grid #myGrid [kendoGridBinding]="gridData" kendoGridSelectBy="id" [(selectedKeys)]="mySelection"
+  [selectable]="{ mode: 'multiple', drag: true }" [pageSize]="20" [pageable]="true" [sortable]="true" [groupable]="false"
+  [reorderable]="true" [resizable]="true" [height]="500" [columnMenu]="{ filter: true }"
+  (cellClick)="onCellClick($event)" (cellClose)="onCellClose($event)">
 
-      <kendo-dropdownlist [data]="leadsOptions" [(ngModel)]="selectedLead" class="large-dropdown">
+  <ng-template kendoGridToolbarTemplate>
 
-      </kendo-dropdownlist>
-      <kendo-dropdownlist [data]="someList" defaultItem="Select Saved Preferences"
-        class="large-dropdown"></kendo-dropdownlist>
+    <kendo-dropdownlist [data]="leadsOptions" [(ngModel)]="selectedLead" class="large-dropdown">
 
-
-      <kendo-textbox [style.width.px]="165" placeholder="Search in all columns..." (valueChange)="onFilter($event)">
-      </kendo-textbox>
-      <button class="btn">
-        <i class="bi bi-search"></i>
-      </button>
-      <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-
-        <!-- Toggle Buttons -->
-        <div class="toggle-wrapper d-inline-flex p-1 rounded-pill">
-          <button class="toggle-btn" [ngClass]="{ 'active-btn': activeView === 'non-intl' }"
-            (click)="toggleView('non-intl')">
-            Non-Intl.
-          </button>
-
-          <button class="toggle-btn" [ngClass]="{ 'active-btn': activeView === 'intl' }" (click)="toggleView('intl')">
-            Intl.
-          </button>
-        </div>
+    </kendo-dropdownlist>
+    <kendo-dropdownlist [data]="someList" defaultItem="Select Saved Preferences"
+      class="large-dropdown"></kendo-dropdownlist>
 
 
+    <kendo-textbox [style.width.px]="165" placeholder="Search in all columns..." (valueChange)="onFilter($event)">
+    </kendo-textbox>
+    <button class="btn">
+      <i class="bi bi-search"></i>
+    </button>
+    <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
 
+      <!-- Toggle Buttons -->
+      <div class="toggle-wrapper d-inline-flex p-1 rounded-pill">
+        <button class="toggle-btn" [ngClass]="{ 'active-btn': activeView === 'non-intl' }"
+          (click)="toggleView('non-intl')">
+          Non-Intl.
+        </button>
 
-        <!-- Action Buttons -->
-        <button class="btn">Clear Filters</button>
-        <button class="btn">Bulk Edit</button>
-        <button class="btn">Save Preferences</button>
-
-        <!-- Menu Icon Button -->
-        <button class="btn border" style="padding: 4px 8px;">
-          <i class="bi bi-list"></i>
+        <button class="toggle-btn" [ngClass]="{ 'active-btn': activeView === 'intl' }" (click)="toggleView('intl')">
+          Intl.
         </button>
       </div>
 
-    </ng-template>
-    <!-- 
-<kendo-grid [data]="gridData" [height]="600" [resizable]="true" [sortable]="true" [filterable]="true">
-  
-  <kendo-grid-checkbox-column [width]="45" [showSelectAll]="true"></kendo-grid-checkbox-column> -->
-    <kendo-grid-checkbox-column [width]="45" [headerClass]="{ 'text-center': true }" [class]="{ 'text-center': true }"
-      [resizable]="false" [columnMenu]="false" [showSelectAll]="true"></kendo-grid-checkbox-column>
-    <!-- Actions -->
-    <kendo-grid-column field="actions" title="Actions" [width]="250">
-      <!-- <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+
+
+
+      <!-- Action Buttons -->
+      <button class="btn">Clear Filters</button>
+      <button class="btn">Bulk Edit</button>
+      <button class="btn">Save Preferences</button>
+
+      <!-- Menu Icon Button -->
+      <button class="btn border" style="padding: 4px 8px;">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+
+  </ng-template>
+
+  <!-- <kendo-grid-column field="actions" title="Actions" [width]="250">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
       <ng-container *ngIf="editedRowIndex === rowIndex; else normalActions">
         <button class="btn btn-sm btn-success me-1" (click)="saveEdit(rowIndex)">
           <i class="bi bi-check-lg"></i>
@@ -80,8 +74,8 @@
         <button class="btn btn-sm btn-secondary me-1" (click)="cancelEdit()">
           <i class="bi bi-x-lg"></i>
         </button>
-      </ng-container> -->
-      <!-- <ng-template #normalActions>
+      </ng-container> 
+<ng-template #normalActions>
         <button class="btn btn-sm btn-warning me-1" (click)="onEdit(dataItem, rowIndex)">
           <i class="bi bi-pencil"></i>
         </button>
@@ -90,236 +84,81 @@
         </button>
         <kendo-dropdownlist [data]="areaList" defaultItem="Actions" class="large"></kendo-dropdownlist>
    
-      </ng-template> -->
-      <!-- </ng-template> -->
-    </kendo-grid-column>
-
-    <!-- <kendo-grid-column field="actions" title="Actions" [width]="250">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <button class="btn btn-sm btn-primary me-1" (click)="onView(dataItem)">
-        <i class="bi bi-eye"></i>
-      </button>
-      <button class="btn btn-sm btn-warning me-1" (click)="onEdit(dataItem)">
-        <i class="bi bi-pencil"></i>
-      </button>
-      <button class="btn btn-sm btn-danger me-1" (click)="onDelete(dataItem)">
-        <i class="bi bi-trash"></i>
-      </button>
-
-      <kendo-dropdownlist [data]="areaList" defaultItem="Actions" class="large"></kendo-dropdownlist>
-   
-    </ng-template>
-   
-  </kendo-grid-column> -->
-
-    <!-- Record Id -->
-    <kendo-grid-column field="recordId" title="Record Id" [width]="200">
-      <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-        <input kendoTextBox formControlName="recordId" />
       </ng-template>
-    </kendo-grid-column>
-    <!-- <kendo-grid-column field="recordId" title="Record Id" [width]="150"></kendo-grid-column> -->
-    <!-- <kendo-grid-column field="recordId" title="Record Id" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.recordId" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.recordId }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-
-    <!-- Last Name -->
-    <kendo-grid-column field="lastName" title="Last Name" [width]="200"></kendo-grid-column>
-    <!-- <kendo-grid-column field="lastName" title="Last Name" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.lastName" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.lastName }}
-      </ng-template>
-    </ng-template>
-
-  </kendo-grid-column> -->
-
-    <!-- First Name -->
-    <kendo-grid-column field="firstName" title="First Name" [width]="200"></kendo-grid-column>
-    <!-- <kendo-grid-column field="firstName" title="First Name" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.firstName" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.firstName }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-
-
-    <!-- Primary Email Address -->
-    <kendo-grid-column field="primaryEmail" title="Primary Email Address" [width]="250"></kendo-grid-column>
-    <!-- <kendo-grid-column field="primaryEmail" title="Primary Email Address" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.primaryEmail" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.primaryEmail }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-
-    <!-- Primary Phone Type -->
-    <kendo-grid-column field="primaryPhoneType" title="Primary Phone Type" [width]="220"></kendo-grid-column>
-    <!-- <kendo-grid-column field="primaryPhoneType" title="Primary Phone Type" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.primaryPhoneType" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.primaryPhoneType }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-    <!-- LMP Lead Id -->
-    <kendo-grid-column field="lmpLeadId" title="LMP Lead Id" [width]="150"></kendo-grid-column>
-    <!-- <kendo-grid-column field="lmpLeadId" title="LMP Lead Id" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.lmpLeadId" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.lmpLeadId }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-    <!-- Appointment Type -->
-    <kendo-grid-column field="appointmentType" title="Appointment Type" [width]="200"></kendo-grid-column>
-    <!-- <kendo-grid-column field="appointmentType" title="Appointment Type" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.appointmentType" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.appointmentType }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-
-    <!-- Booking Agency -->
-    <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200"></kendo-grid-column>
-    <!-- <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else viewTemplate">
-        <input kendoTextBox [(ngModel)]="editedItem.bookingAgency" />
-      </ng-container>
-      <ng-template #viewTemplate>
-        {{ dataItem.bookingAgency }}
-      </ng-template>
-    </ng-template>
-  </kendo-grid-column> -->
-
-    <kendo-grid-pdf fileName="GridData.pdf" [repeatHeaders]="true"></kendo-grid-pdf>
-    <kendo-grid-excel fileName="GridData.xlsx"></kendo-grid-excel>
-  </kendo-grid>
-</div>
-
-<!-- <kendo-grid-checkbox-column [width]="45" [headerClass]="{ 'text-center': true }" [class]="{ 'text-center': true }"
-    [resizable]="false" [columnMenu]="false" [showSelectAll]="true"></kendo-grid-checkbox-column>
-  
-    <kendo-grid-column field="actions" title="Actions" [width]="250">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        
-        <button class="btn btn-sm btn-primary me-1" (click)="onView(dataItem)">
-          <i class="bi bi-eye"></i>
-        </button>
-        <button class="btn btn-sm btn-warning me-1" (click)="onEdit(dataItem)">
-          <i class="bi bi-pencil"></i>
-        </button>
-        <button class="btn btn-sm btn-danger me-1" (click)="onDelete(dataItem)">
-          <i class="bi bi-trash"></i>
-        </button>
-        
-     
-       <kendo-dropdownlist
-       [data]="areaList"
-       [defaultItem]="'Action'"
-       [(ngModel)]="selectedAction"
-       class="large"
-     >
-      
-       <ng-template kendoDropDownListItemTemplate let-dataItem>
-         <ng-container *ngIf="dataItem === 'Action'; else regularItem">
-           <i class="bi bi-gear me-2"></i> {{ dataItem }}
-         </ng-container>
-         <ng-template #regularItem>
-           {{ dataItem }}
-         </ng-template>
        </ng-template>
-     </kendo-dropdownlist>
-     
-      
+    </kendo-grid-column>  -->
 
 
-    
-       
-      </ng-template>
-    </kendo-grid-column>
-    
-    <kendo-grid-column  field="recordId" title="Record Id" [width]="220">
-    </kendo-grid-column>
-    <kendo-grid-column   field="lastName" title="Last Name" [width]="220" [class]="{ 'text-center': true }"
-      [resizable]="false">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <img class="flag" [src]="flagURL(dataItem)" [width]="30" />
-      </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column   field="firstName" title="First Name" [width]="220" [class]="{ 'text-center': true }"
-      [resizable]="false" filter="boolean">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        @if (dataItem.is_online === true) {
-        <span class="badge badge-success">Online</span>
-        } @if (dataItem.is_online === false) {
-        <span class="badge badge-danger">Offline</span>
-        }
-      </ng-template>
-    </kendo-grid-column>
+  <kendo-grid-checkbox-column [width]="45" [headerClass]="{ 'text-center': true }" [class]="{ 'text-center': true }"
+    [resizable]="false" [columnMenu]="false" [showSelectAll]="true"></kendo-grid-checkbox-column>
+  <!-- Actions -->
 
-    <kendo-grid-column  field="primaryEmail" title="Primary Email Address" [width]="220" [resizable]="false" filter="numeric">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <kendo-rating [value]="dataItem.rating" [readonly]="true" precision="half"></kendo-rating>
-      </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column  field="primaryPhoneType" title="Primary Phone Type" [width]="220" [resizable]="false" filter="numeric">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <kendo-sparkline type="bar" [data]="dataItem.target" [tooltip]="{ visible: false }" [transitions]="true"
-          [seriesDefaults]="{
-                labels: { background: 'none', visible: true, format: '{0}%' }
-              }">
-          <kendo-chart-area [opacity]="0" [width]="220"></kendo-chart-area>
-          <kendo-chart-value-axis>
-            <kendo-chart-value-axis-item [min]="0" [max]="130">
-            </kendo-chart-value-axis-item>
-          </kendo-chart-value-axis>
-        </kendo-sparkline>
-      </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="lmpLeadId" title="LMP Lead Id" [width]="220" filter="numeric" >
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <span [ngClass]="{ 'red text-bold': dataItem.budget < 0 }">{{
-          dataItem.budget | currency
-          }}</span>
-      </ng-template>
-    </kendo-grid-column>
-  
-    <kendo-grid-column  field="appointmentType" title="Appointment Type" [width]="220" [headerClass]="'header-blue'">
-    </kendo-grid-column>
-    <kendo-grid-column  field="bookingAgency" title="Booking Agency" [width]="220" [headerClass]="'header-blue'">
-    </kendo-grid-column>
+  <!-- Record Id -->
+  <kendo-grid-column field="recordId" title="Record Id" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="recordId" />
+    </ng-template>
+  </kendo-grid-column>
+
+  <!-- Last Name -->
+  <kendo-grid-column field="lastName" title="Last Name" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="lastName" />
+    </ng-template>
+  </kendo-grid-column>
 
 
-  <kendo-grid-pdf fileName="Employees.pdf" [repeatHeaders]="true"></kendo-grid-pdf>
-  <kendo-grid-excel fileName="Employees.xlsx"></kendo-grid-excel>
-</kendo-grid> -->
+  <!-- First Name -->
+  <kendo-grid-column field="firstName" title=" First Name" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="firstName" />
+    </ng-template>
+  </kendo-grid-column>
+
+
+
+  <!-- Primary Email Address -->
+  <kendo-grid-column field="primaryEmail" title="Primary Email" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="primaryEmail" />
+    </ng-template>
+  </kendo-grid-column>
+
+
+
+  <!-- Primary Phone Type -->
+  <kendo-grid-column field="primaryPhoneType" title="Primary Phone Type" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="primaryPhoneType" />
+    </ng-template>
+  </kendo-grid-column>
+
+
+  <!-- LMP Lead Id -->
+  <kendo-grid-column field="lmpLeadId" title="LMP Lead Id" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="lmpLeadId" />
+    </ng-template>
+  </kendo-grid-column>
+
+
+  <!-- Appointment Type -->
+  <kendo-grid-column field="appointmentType" title="Appointment Type" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="appointmentType" />
+    </ng-template>
+  </kendo-grid-column>
+
+
+
+  <!-- Booking Agency -->
+  <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200" [editable]="true">
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+      <input kendoTextBox formControlName="bookingAgency" />
+    </ng-template>
+  </kendo-grid-column>
+
+
+  <kendo-grid-pdf fileName="GridData.pdf" [repeatHeaders]="true"></kendo-grid-pdf>
+  <kendo-grid-excel fileName="GridData.xlsx"></kendo-grid-excel>
+</kendo-grid>

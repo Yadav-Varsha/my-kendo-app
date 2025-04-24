@@ -16,9 +16,11 @@ export class DataService {
   //   const url="http://localhost:3000/users";
   //   return this.http.get(url)
   // }
-  updateUser(user: any) {
+  updateUser(user: any): Observable<any> {
+    const id = user.id || user.recordId; 
     return this.http.put(`http://localhost:3000/users/${user.id}`, user);
   }
+  
   deleteUser(id: number) {
     const url = `http://localhost:3000/users/${id}`;
     return this.http.delete(url);

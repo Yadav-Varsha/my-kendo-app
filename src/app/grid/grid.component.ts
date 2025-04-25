@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormControl, FormsModule, Validators } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
@@ -11,18 +11,28 @@ import {
   KENDO_GRID_PDF_EXPORT,
   GridComponent as KendoGridComponent
 } from "@progress/kendo-angular-grid";
+import {
+  
+  CellClickEvent,
+  CellCloseEvent,
+  AddEvent,
+  CancelEvent,
+  SaveEvent,
+  RemoveEvent,
+  GridDataResult
+} from '@progress/kendo-angular-grid';
 import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
-import { process } from "@progress/kendo-data-query";
+import { process, State } from "@progress/kendo-data-query";
 import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
 // import { employees } from "./employee";
 // import { DataService } from '../data.service';
 import { DataService } from '../service/data.service';
-import { HttpClient } from '@angular/common/http';
-import { DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { GridModule } from '@progress/kendo-angular-grid';
-import { EditingModule } from '@progress/kendo-angular-grid'; 
-import { images } from "./images";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { FormBuilder, FormGroup,Validator } from "@angular/forms";
+
 
 @Component({
   selector: "app-grid",
@@ -34,16 +44,21 @@ import { images } from "./images";
     KENDO_INPUTS,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,
-    FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, EditingModule,
-   
-    
-   
-  ],
+    FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, 
+   ],
    templateUrl: './grid.component.html',
   styleUrl: './grid.component.css'
 })
 export class GridComponent implements OnInit {
+  public formGroup!: FormGroup;
+  public view: Observable<GridDataResult> | undefined;
+  public gridState: State = { skip: 0, take: 5 };
+  private cellClickEvent!: CellClickEvent;
+
+  public changes = {};
+
   
+
  
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: KendoGridComponent;
@@ -53,87 +68,9 @@ export class GridComponent implements OnInit {
   selectedPreference = 'Select Saved Preferences';
   searchText = '';
   activeView: string = 'non-intl';
-  public gridData: any[] = [];
-  public skip = 0;
-  public selectedRowIndex: number | null = null;
-  public editingRow: any = null;
-  public dataState: any = {
-    skip: 0,
-    take: 20,
-    sort: [],
-    filter: []
-  };
-
-  constructor(private dataService: DataService, private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.loadGridData();
-  }
-  dataStateChange(event: DataStateChangeEvent): void {
-    this.dataState.skip = event.skip;
-    this.dataState.take = event.take;
-    this.dataState.sort = event.sort;
-    this.dataState.filter = event.filter;
-    
-    // You may want to reload the grid data based on the updated data state
-    this.loadGridData();
-  }
-
-  ngAfterViewInit(): void {
-    // Adding a click listener on the grid to detect when user clicks outside the grid
-    document.addEventListener('click', (event) => this.onGridClick(event));
-  }
-
-  // Load data from your service (JSON server)
-  loadGridData(): void {
-    this.dataService.getUsers().subscribe((data: any[]) => {
-      this.gridData = data;
-    });
-  }
-
-  // This will allow inline editing when clicking on a cell
-  onCellClick(event: any): void {
-    const field = event.column.field;
-    const rowIndex = event.rowIndex;
-    const fieldValue = event.dataItem[field];
-
-    // Make the field editable when clicked
-    this.selectedRowIndex = rowIndex;
-    this.editingRow = { ...event.dataItem }; // Create a copy of the data item for editing
-  }
-
-  // Save the updated user when the focus moves out of the row
-  onGridClick(event: MouseEvent): void {
-    if (!this.myGrid || !this.selectedRowIndex) return;
-
-    const clickedInsideGrid =this.myGrid.wrapper.nativeElement.contains(event.target);
-
-    
-    if (!clickedInsideGrid) {
-      this.saveChanges(this.editingRow);
-    }
-  }
-
-  // Save changes to the user using the data service
-  saveChanges(updatedUser: any): void {
-    if (updatedUser) {
-      this.dataService.updateUser(updatedUser).subscribe(() => {
-        // Optionally, reload the data or update the row in the grid
-        this.loadGridData();
-        this.selectedRowIndex = null; // Reset the selected row index
-      });
-    }
-  }
-
-  // When row is clicked, start editing if it's not already being edited
-  onRowClick(event: any): void {
-    const rowIndex = event.rowIndex;
-
-    if (this.selectedRowIndex !== rowIndex) {
-      this.selectedRowIndex = rowIndex;
-      this.editingRow = { ...event.dataItem };
-    }
-  }
+  grid: any;
+hasChanges: any;
+  
 
 toggleView(view: string): void {
   this.activeView = view;
@@ -159,25 +96,183 @@ public areaList: Array<string> = [
     "Shipper Type-National Account",
   
   ];
-//   public editedRowIndex: number | null = null;
-// public editedItem: any;
-
-//   public gridData: any[] = [];
+ 
+  
   public gridView: any[] = [];
-
-  public mySelection: string[] = [];
+ public mySelection: string[] = [];
   public pdfSVG: SVGIcon = filePdfIcon;
   public excelSVG: SVGIcon = fileExcelIcon;
+  public gridData: any[] = [];
+ 
+ 
+  constructor(public dataService: DataService, private fb: FormBuilder) {}
+  ngOnInit(): void {
+    this.dataService.subscribe(data => {
+      this.gridData = data;
+    });
+    this.dataService.read(); // Fetch the data
+  }
+
+  onStateChange(state: State): void {
+    this.gridState = state;
+    this.dataService.read();
+  }
+
+  // cellClickHandler(args: CellClickEvent): void {
+  //   this.cellClickEvent = args;
+  // }
+  cellClickHandler(args: any): void {
+    this.cellClickEvent = args;
+  }
+  // onDblClick(): void {
+  //   const args = this.cellClickEvent;
+  //   if (!args.isEdited) {
+  //     args.sender.editCell(
+  //       args.rowIndex,
+  //       args.columnIndex,
+  //       this.createFormGroup(args.dataItem)
+  //     );
+  //   }
+  // }
+  onDblClick(): void {
+    const args = this.cellClickEvent;
+    if (!args.isEdited) {
+      args.sender.editCell(
+        args.rowIndex,
+        args.columnIndex,
+        this.createFormGroup(args.dataItem)
+      );
+    }
+  }
+  cellCloseHandler(args: CellCloseEvent): void {
+    if (!args.formGroup.valid) {
+      args.preventDefault();
+    } else if (args.formGroup.dirty) {
+      this.dataService.assignValues(args.dataItem, args.formGroup.value);
+      this.dataService.update(args.dataItem);
+    }
+  }
+
+  addHandler(args: AddEvent): void {
+    args.sender.addRow(this.createFormGroup({}));
+  }
+
+  cancelHandler(args: CancelEvent): void {
+    args.sender.closeRow(args.rowIndex);
+  }
+
+  saveHandler(args: SaveEvent): void {
+    if (args.formGroup.valid) {
+      this.dataService.create(args.formGroup.value);
+      args.sender.closeRow(args.rowIndex);
+    }
+  }
+
+  removeHandler(args: RemoveEvent): void {
+    this.dataService.remove(args.dataItem);
+  }
+
+  createFormGroup(data: any): FormGroup {
+    return this.fb.group({
+      id: data.id,
+      name: [data.name, Validators.required],
+      email: [data.email, [Validators.required, Validators.email]],
+      gender: [data.gender, Validators.required],
+      status: [data.status, Validators.required],
+    });
+  }
+  public saveChanges(): void {
+    if (this.grid) {
+      this.grid.closeCell();
+      this.grid.cancelCell();
+    }
+    this.dataService.saveChanges();
+  }
+
+  public cancelChanges(): void {
+    if (this.grid) {
+      this.grid.cancelCell();
+    }
+    this.dataService.cancelChanges();
+  }
 
   
-  // constructor(private dataService: DataService) {}
 
-  // ngOnInit(): void {
-  //   this.dataService.getUsers().subscribe((data: any) => {
-  //     this.gridData = data;
-  //     this.gridView = data;
+   
+  
+  
+  // public createFormGroup(dataItem: any): FormGroup {
+  //   return new FormGroup({
+  //     id: new FormControl(dataItem.id),
+  //     firstName: new FormControl(dataItem.firstName, Validators.required),
+  //     lastName: new FormControl(dataItem.lastName, Validators.required),
+  //     email: new FormControl(dataItem.email, [Validators.required, Validators.email])
   //   });
   // }
+  
+  
+  
+
+   // Add this to get reference to your grid
+
+  //  onCellClick(e: any): void {
+  //   if (this.editedRowIndex !== e.rowIndex) {
+  //     this.saveEdit();  // optional
+  //     this.formGroup = this.createFormGroup(e.dataItem);
+  //     this.myGrid.editRow(e.rowIndex, this.formGroup); // very important
+  //     this.editedRowIndex = e.rowIndex;
+  //   }
+  //   console.log(this.formGroup)
+  // }
+  // onCellEdit(event: any): void {
+  //   // Optionally handle when the cell enters edit mode
+  //   console.log("Cell Edit: ", event);
+  // }
+  
+  // onCellClose(event: any): void {
+  //   if (event.formGroup.valid) {
+  //     // Save the updated data
+  //     const updatedItem = event.formGroup.value;
+  //     // Implement save logic (e.g., send the updated data to an API)
+  //     console.log("Data Saved: ", updatedItem);
+  //   } else {
+  //     console.log("Form invalid, canceling edit.");
+  //   }
+  // }
+  
+  
+  // onCellClose(e: any): void {
+  //   if (e.formGroup?.valid && e.formGroup?.dirty) {
+  //     const updatedUser = e.formGroup.value;
+  
+  //     console.log('Saving user:', updatedUser); // ✅ Add this to debug
+     
+  //     this.dataService.updateUser(updatedUser).subscribe(() => {
+  //       this.gridData[this.editedRowIndex!] = updatedUser;
+  //     });
+  //   }
+  
+  //   this.editedRowIndex = null;
+  //   console.log(e.formGroup.value)
+  // }
+ 
+  
+
+  // saveEdit(): void {
+  //   if (this.formGroup && this.formGroup.dirty) {
+  //     const updatedUser = this.formGroup.value;
+  //     console.log('Saving user:', updatedUser); // 👈 DEBUG LOG
+  //     this.dataService.updateUser(updatedUser).subscribe(() => {
+  //       this.gridData[this.editedRowIndex!] = updatedUser;
+  //     });
+  //   }
+  //   this.editedRowIndex = null;
+  // }
+  // onCellCancel(e: any): void {
+  //   this.editedRowIndex = null;
+  // }  
+  
+ 
   
   public onFilter(value: Event): void {
     const inputValue = value;
@@ -218,25 +313,12 @@ public areaList: Array<string> = [
     this.dataBinding.skip = 0;
   }
 
-  public photoURL(dataItem: { img_id: string; gender: string }): string {
-    const code: string = dataItem.img_id + dataItem.gender;
-    const image: { [Key: string]: string } = images;
-
-    return image[code];
-  }
-
-  public flagURL(dataItem: { country: string }): string {
-    const code: string = dataItem.country;
-    const image: { [Key: string]: string } = images;
-
-    return image[code];
-  }
+ 
   
   public exportExcel(): void {
     this.myGrid.saveAsExcel();
 
 }
-
 // addUser(): void {
 //   const newUser = {
 //     id: null, 
@@ -249,48 +331,6 @@ public areaList: Array<string> = [
 
 //   this.editedRowIndex = 0;
 //   this.editedItem = { ...newUser };
-// }
-
-// onEdit(dataItem: any, rowIndex: number): void {
-//   this.editedRowIndex = rowIndex;
-//   this.editedItem = { ...dataItem };
-// }
-
-// cancelEdit(): void {
-//   this.editedRowIndex = null;
-//   this.editedItem = null;
-// }
-
-// saveEdit(rowIndex: number): void {
-//   const updatedItem = { ...this.gridView[rowIndex], ...this.editedItem };
-
-//   if (updatedItem.id == null) {
-//     // New user 
-//     this.dataService.addUser(updatedItem).subscribe((res: any) => {
-//       this.gridView[rowIndex] = res;
-//       this.gridView = [...this.gridView];
-//       this.editedRowIndex = null;
-//       this.editedItem = null;
-//     });
-//   } else {
-//     // Existing user 
-//     this.dataService.updateUser(updatedItem).subscribe((res: any) => {
-//       this.gridView[rowIndex] = res;
-//       this.gridView = [...this.gridView];
-//       this.editedRowIndex = null;
-//       this.editedItem = null;
-//     });
-//   }
-// }
-
-// onDelete(dataItem: any): void {
-//   const confirmed = window.confirm('Are you sure you want to delete this item?');
-
-//   if (confirmed) {
-//     this.dataService.deleteUser(dataItem.id).subscribe(() => {
-//       this.gridView = this.gridView.filter(item => item.id !== dataItem.id);
-//     });
-//   }
 // }
 
 

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormsModule } from "@angular/forms";
+import { FormControl, FormsModule, Validators } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
@@ -11,16 +11,27 @@ import {
   KENDO_GRID_PDF_EXPORT,
   GridComponent as KendoGridComponent
 } from "@progress/kendo-angular-grid";
+import {
+  
+  CellClickEvent,
+  CellCloseEvent,
+  AddEvent,
+  CancelEvent,
+  SaveEvent,
+  RemoveEvent,
+  GridDataResult
+} from '@progress/kendo-angular-grid';
 import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
-import { process } from "@progress/kendo-data-query";
+import { process, State } from "@progress/kendo-data-query";
 import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
 // import { employees } from "./employee";
 // import { DataService } from '../data.service';
 import { DataService } from '../service/data.service';
 import { GridModule } from '@progress/kendo-angular-grid';
-
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { FormBuilder, FormGroup,Validator } from "@angular/forms";
 
 
 @Component({
@@ -40,6 +51,13 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 })
 export class GridComponent implements OnInit {
   public formGroup!: FormGroup;
+  public view: Observable<GridDataResult> | undefined;
+  public gridState: State = { skip: 0, take: 5 };
+  private cellClickEvent!: CellClickEvent;
+
+  public changes = {};
+
+  
 
  
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
@@ -50,6 +68,8 @@ export class GridComponent implements OnInit {
   selectedPreference = 'Select Saved Preferences';
   searchText = '';
   activeView: string = 'non-intl';
+  grid: any;
+hasChanges: any;
   
 
 toggleView(view: string): void {
@@ -83,74 +103,174 @@ public areaList: Array<string> = [
   public pdfSVG: SVGIcon = filePdfIcon;
   public excelSVG: SVGIcon = fileExcelIcon;
   public gridData: any[] = [];
-  public editedRowIndex: number | null = null;
-
-  constructor(private dataService: DataService, private fb: FormBuilder) {}
-
-
+ 
+ 
+  constructor(public dataService: DataService, private fb: FormBuilder) {}
   ngOnInit(): void {
-    this.loadUsers();
-  }
-
-  loadUsers(): void {
-    this.dataService.getUsers().subscribe((data) => {
+    this.dataService.subscribe(data => {
       this.gridData = data;
     });
+    this.dataService.read(); // Fetch the data
   }
-  createFormGroup(dataItem: any): FormGroup {
-    return new FormGroup({
-      id: new FormControl(dataItem.id),
-      recordId: new FormControl(dataItem.recordId),
-      lastName: new FormControl(dataItem.lastName),
-      firstName: new FormControl(dataItem.firstName),
-      primaryEmail: new FormControl(dataItem.primaryEmail),
-      primaryPhoneType: new FormControl(dataItem.primaryPhoneType),
-      lmpLeadId: new FormControl(dataItem.lmpLeadId),
-      appointmentType: new FormControl(dataItem.appointmentType),
-      bookingAgency: new FormControl(dataItem.bookingAgency)
+
+  onStateChange(state: State): void {
+    this.gridState = state;
+    this.dataService.read();
+  }
+
+  // cellClickHandler(args: CellClickEvent): void {
+  //   this.cellClickEvent = args;
+  // }
+  cellClickHandler(args: any): void {
+    this.cellClickEvent = args;
+  }
+  // onDblClick(): void {
+  //   const args = this.cellClickEvent;
+  //   if (!args.isEdited) {
+  //     args.sender.editCell(
+  //       args.rowIndex,
+  //       args.columnIndex,
+  //       this.createFormGroup(args.dataItem)
+  //     );
+  //   }
+  // }
+  onDblClick(): void {
+    const args = this.cellClickEvent;
+    if (!args.isEdited) {
+      args.sender.editCell(
+        args.rowIndex,
+        args.columnIndex,
+        this.createFormGroup(args.dataItem)
+      );
+    }
+  }
+  cellCloseHandler(args: CellCloseEvent): void {
+    if (!args.formGroup.valid) {
+      args.preventDefault();
+    } else if (args.formGroup.dirty) {
+      this.dataService.assignValues(args.dataItem, args.formGroup.value);
+      this.dataService.update(args.dataItem);
+    }
+  }
+
+  addHandler(args: AddEvent): void {
+    args.sender.addRow(this.createFormGroup({}));
+  }
+
+  cancelHandler(args: CancelEvent): void {
+    args.sender.closeRow(args.rowIndex);
+  }
+
+  saveHandler(args: SaveEvent): void {
+    if (args.formGroup.valid) {
+      this.dataService.create(args.formGroup.value);
+      args.sender.closeRow(args.rowIndex);
+    }
+  }
+
+  removeHandler(args: RemoveEvent): void {
+    this.dataService.remove(args.dataItem);
+  }
+
+  createFormGroup(data: any): FormGroup {
+    return this.fb.group({
+      id: data.id,
+      name: [data.name, Validators.required],
+      email: [data.email, [Validators.required, Validators.email]],
+      gender: [data.gender, Validators.required],
+      status: [data.status, Validators.required],
     });
   }
+  public saveChanges(): void {
+    if (this.grid) {
+      this.grid.closeCell();
+      this.grid.cancelCell();
+    }
+    this.dataService.saveChanges();
+  }
+
+  public cancelChanges(): void {
+    if (this.grid) {
+      this.grid.cancelCell();
+    }
+    this.dataService.cancelChanges();
+  }
+
+  
+
+   
+  
+  
+  // public createFormGroup(dataItem: any): FormGroup {
+  //   return new FormGroup({
+  //     id: new FormControl(dataItem.id),
+  //     firstName: new FormControl(dataItem.firstName, Validators.required),
+  //     lastName: new FormControl(dataItem.lastName, Validators.required),
+  //     email: new FormControl(dataItem.email, [Validators.required, Validators.email])
+  //   });
+  // }
+  
+  
   
 
    // Add this to get reference to your grid
 
-onCellClick(e: any): void {
-  if (this.editedRowIndex !== e.rowIndex) {
-    this.saveEdit(); // Save previous edit if any
+  //  onCellClick(e: any): void {
+  //   if (this.editedRowIndex !== e.rowIndex) {
+  //     this.saveEdit();  // optional
+  //     this.formGroup = this.createFormGroup(e.dataItem);
+  //     this.myGrid.editRow(e.rowIndex, this.formGroup); // very important
+  //     this.editedRowIndex = e.rowIndex;
+  //   }
+  //   console.log(this.formGroup)
+  // }
+  // onCellEdit(event: any): void {
+  //   // Optionally handle when the cell enters edit mode
+  //   console.log("Cell Edit: ", event);
+  // }
+  
+  // onCellClose(event: any): void {
+  //   if (event.formGroup.valid) {
+  //     // Save the updated data
+  //     const updatedItem = event.formGroup.value;
+  //     // Implement save logic (e.g., send the updated data to an API)
+  //     console.log("Data Saved: ", updatedItem);
+  //   } else {
+  //     console.log("Form invalid, canceling edit.");
+  //   }
+  // }
+  
+  
+  // onCellClose(e: any): void {
+  //   if (e.formGroup?.valid && e.formGroup?.dirty) {
+  //     const updatedUser = e.formGroup.value;
+  
+  //     console.log('Saving user:', updatedUser); // ✅ Add this to debug
+     
+  //     this.dataService.updateUser(updatedUser).subscribe(() => {
+  //       this.gridData[this.editedRowIndex!] = updatedUser;
+  //     });
+  //   }
+  
+  //   this.editedRowIndex = null;
+  //   console.log(e.formGroup.value)
+  // }
+ 
+  
 
-    this.editedRowIndex = e.rowIndex;
-    this.formGroup = this.createFormGroup(e.dataItem);
-
-    // This is the key step that was missing
-    this.myGrid.editRow(e.rowIndex, this.formGroup);
-  }
-}
-
-  onCellClose(e: any): void {
-    if (e.formGroup.valid && e.formGroup.dirty) {
-      const updatedUser = e.formGroup.value;
-
-      this.dataService.updateUser(updatedUser).subscribe(() => {
-        this.gridData[this.editedRowIndex!] = updatedUser;
-      });
-    }
-
-    this.editedRowIndex = null;
-  }
-
-  saveEdit(): void {
-    if (this.formGroup && this.formGroup.dirty) {
-      const updatedUser = this.formGroup.value;
-      console.log('Saving user:', updatedUser); // 👈 DEBUG LOG
-      this.dataService.updateUser(updatedUser).subscribe(() => {
-        this.gridData[this.editedRowIndex!] = updatedUser;
-      });
-    }
-    this.editedRowIndex = null;
-  }
-  onCellCancel(e: any): void {
-    this.editedRowIndex = null;
-  }  
+  // saveEdit(): void {
+  //   if (this.formGroup && this.formGroup.dirty) {
+  //     const updatedUser = this.formGroup.value;
+  //     console.log('Saving user:', updatedUser); // 👈 DEBUG LOG
+  //     this.dataService.updateUser(updatedUser).subscribe(() => {
+  //       this.gridData[this.editedRowIndex!] = updatedUser;
+  //     });
+  //   }
+  //   this.editedRowIndex = null;
+  // }
+  // onCellCancel(e: any): void {
+  //   this.editedRowIndex = null;
+  // }  
   
  
   

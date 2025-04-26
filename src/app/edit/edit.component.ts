@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
+import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { FormControl, FormsModule, Validators } from "@angular/forms";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import {
@@ -15,7 +14,6 @@ import {
 } from "@progress/kendo-angular-grid";
 import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
-import { process, State } from "@progress/kendo-data-query";
 @Component({
   selector: 'app-edit',
   imports: [ CommonModule,
@@ -29,8 +27,8 @@ import { process, State } from "@progress/kendo-data-query";
   styleUrl: './edit.component.css'
 })
 export class EditComponent implements OnInit  {
-gridData: any[];
-mySelection: any;
+  public gridData: any[] = [];
+  public mySelection: string[] = [];
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }

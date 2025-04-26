@@ -30,16 +30,24 @@
   [resizable]="true"
   [height]="500"
   [columnMenu]="{ filter: true }"
-  (dataStateChange)="onStateChange($event)"
   (cellClick)="cellClickHandler($event)"
-  (dblclick)="onDblClick()"
-  (cellClose)="cellCloseHandler($event)"
-  (cancel)="cancelHandler($event)"
-  (save)="saveHandler($event)"
-  (remove)="removeHandler($event)"
-  (add)="addHandler($event)"
+  (add)="addHandler()"
+  (dblclick)="saveRow(dataItem)"
 >
   <ng-template kendoGridToolbarTemplate>
+
+    @if (!formGroup) {
+      <button kendoGridAddCommand>Add new</button>
+      } @if (formGroup) {
+      <div>
+        <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow(dataItem)">
+          Save
+        </button>
+        <button kendoButton themeColor="primary" (click)="cancelHandler()">
+          Cancel
+        </button>
+      </div>
+      }
     <kendo-dropdownlist
       [data]="leadsOptions"
       [(ngModel)]="selectedLead"
@@ -91,21 +99,7 @@
         <i class="bi bi-list"></i>
       </button>
     </div>
-    <button kendoGridAddCommand>Add User</button>
-    <button
-      kendoButton
-      [disabled]="!dataService.hasChanges()"
-      (click)="saveChanges()"
-    >
-      Save Changes
-    </button>
-    <button
-      kendoButton
-      [disabled]="!dataService.hasChanges()"
-      (click)="cancelChanges()"
-    >
-      Cancel Changes
-    </button>
+   
   </ng-template>
 
   <!-- <kendo-grid-column field="actions" title="Actions" [width]="250">
@@ -119,10 +113,10 @@
         </button>
       </ng-container> 
 <ng-template #normalActions>
-        <button class="btn btn-sm btn-warning me-1" (click)="onEdit(dataItem, rowIndex)">
+        <button class="btn btn-sm btn-warning me-1"">
           <i class="bi bi-pencil"></i>
         </button>
-        <button class="btn btn-sm btn-danger me-1" (click)="onDelete(dataItem)">
+        <button class="btn btn-sm btn-danger me-1">
           <i class="bi bi-trash"></i>
         </button>
         <kendo-dropdownlist [data]="areaList" defaultItem="Actions" class="large"></kendo-dropdownlist>
@@ -130,14 +124,7 @@
       </ng-template>
        </ng-template>
     </kendo-grid-column>  -->
-  <kendo-grid-command-column title="Actions" [width]="180">
-    <ng-template kendoGridCellTemplate>
-      <button kendoGridRemoveCommand>Remove</button>
-      <button kendoGridSaveCommand>Save</button>
-      <button kendoGridCancelCommand>Cancel</button>
-    </ng-template>
-  </kendo-grid-command-column>
-
+  
   <kendo-grid-checkbox-column
     [width]="45"
     [headerClass]="{ 'text-center': true }"
@@ -147,135 +134,41 @@
     [showSelectAll]="true"
   ></kendo-grid-checkbox-column>
   <!-- Actions -->
-
-  <kendo-grid-column field="recordId" title="Record Id" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.recordId }}
+  <kendo-grid-column field="area" title="Area" [width]="180">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div class="d-flex align-items-center gap-2">
+        <kendo-icon name="gear" size="default"></kendo-icon>
+        <kendo-dropdownlist 
+          [data]="areaList" 
+          [defaultItem]="'Actions'" 
+          class="large">
+        </kendo-dropdownlist>
       </div>
     </ng-template>
+  </kendo-grid-column>
+  
+
+  <kendo-grid-column field="recordId" editor="numeric" title="Record Id" [width]="200"  >
   </kendo-grid-column>
 
   <kendo-grid-column field="lastName" title="Last Name" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.lastname }}
-      </div>
-    </ng-template>
   </kendo-grid-column>
 
   <kendo-grid-column field="firstName" title="First Name" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.firstName }}
-      </div>
-    </ng-template>
   </kendo-grid-column>
 
   <kendo-grid-column field="primaryEmail" title="Primary Email" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.primaryEmail }}
-      </div>
-    </ng-template>
   </kendo-grid-column>
 
   <kendo-grid-column
     field="primaryPhoneType"
     title="Primary Phone Type"
+    editor="numeric"
     [width]="200"
   >
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.primaryPhoneType }}
-      </div>
-    </ng-template>
   </kendo-grid-column>
 
-  <kendo-grid-column field="lmpLeadId" title="LMP Lead Id" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.lmpLeadId }}
-      </div>
-    </ng-template>
+  <kendo-grid-column field="lmpLeadId" editor="numeric" title="LMP Lead Id" [width]="200">
   </kendo-grid-column>
 
   <kendo-grid-column
@@ -283,45 +176,9 @@
     title="Appointment Type"
     [width]="200"
   >
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.appointmentType }}
-      </div>
-    </ng-template>
   </kendo-grid-column>
 
   <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200">
-    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <div
-        (click)="
-          cellClickHandler({
-            dataItem: dataItem,
-            rowIndex: rowIndex,
-            columnIndex: 0,
-            isEdited: false,
-            sender: myGrid,
-            column: null,
-            originalEvent: $event,
-            type: 'cellclick'
-          })
-        "
-      >
-        {{ dataItem.recordId }}
-      </div>
-    </ng-template>
   </kendo-grid-column>
 
   <kendo-grid-pdf

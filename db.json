@@ -1,30 +1,81 @@
 {
-  "users": [
+  "employees": [
     {
-      "id": null,
-      "name": "",
-      "email": "",
-      "recordId": "xcghjk",
-      "lastName": "fgh",
-      "firstName": "vbnm",
-      "primaryEmail": "bnm,",
-      "primaryPhoneType": "bnm,",
-      "lmpLeadId": "bnm,",
-      "appointmentType": "bnm",
-      "bookingAgency": "bnm"
+      "id": "1001",
+      "recordId": 100176775,
+      "lastName": "knh",
+      "firstName": "Johna",
+      "primaryEmail": "john.doe@example.com",
+      "primaryPhoneType": 2,
+      "lmpLeadId": 124,
+      "appointmentType": "Consultation",
+      "bookingAgency": "AgencyX"
     },
     {
-      "id": null,
-      "name": "",
-      "email": "",
-      "recordId": "xcghjk",
-      "lastName": "fghsdfghnm",
-      "firstName": "vbnm",
-      "primaryEmail": "bnm,",
-      "primaryPhoneType": "bnm,",
-      "lmpLeadId": "bnm,",
-      "appointmentType": "bnm",
-      "bookingAgency": "bnm"
+      "id": "1002",
+      "recordId": 1002445646,
+      "lastName": "Smith",
+      "firstName": "JaneBGBG",
+      "primaryEmail": "jane.smith@example.com",
+      "primaryPhoneType": 2,
+      "lmpLeadId": 102,
+      "appointmentType": "Offline",
+      "bookingAgency": "Agency B"
+    },
+    {
+      "id": "1003",
+      "recordId": 1003,
+      "lastName": "aaaa",
+      "firstName": "bbb",
+      "primaryEmail": "Johnaa",
+      "primaryPhoneType": 2,
+      "lmpLeadId": 3,
+      "appointmentType": "bbbbb",
+      "bookingAgency": "ffvfvv"
+    },
+    {
+      "id": "1004",
+      "recordId": 1004,
+      "lastName": "bbb",
+      "firstName": "bbb",
+      "primaryEmail": "asddd",
+      "primaryPhoneType": 2,
+      "lmpLeadId": 2,
+      "appointmentType": "bnn",
+      "bookingAgency": "mmmm"
+    },
+    {
+      "id": "1005",
+      "recordId": 1005,
+      "lastName": "aaaa",
+      "firstName": "bbbb",
+      "primaryEmail": "cccc",
+      "primaryPhoneType": 2,
+      "lmpLeadId": 2,
+      "appointmentType": "dddd",
+      "bookingAgency": "ffff"
+    },
+    {
+      "id": "1007",
+      "recordId": 1007,
+      "lastName": "xyz",
+      "firstName": "neh",
+      "primaryEmail": "neh@.com",
+      "primaryPhoneType": 4,
+      "lmpLeadId": 6,
+      "appointmentType": "hhhh",
+      "bookingAgency": "kkkkk"
+    },
+    {
+      "id": "1006",
+      "recordId": 1006,
+      "lastName": "aaaaaa",
+      "firstName": "bbb",
+      "primaryEmail": "cccc",
+      "primaryPhoneType": 4,
+      "lmpLeadId": 6,
+      "appointmentType": "hhhh",
+      "bookingAgency": "kkkkk"
     }
   ]
 }

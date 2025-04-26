@@ -1,8 +1,20 @@
-<kendo-grid #myGrid [kendoGridBinding]="gridData" kendoGridSelectBy="id" [(selectedKeys)]="mySelection"
-  [selectable]="{ mode: 'multiple', drag: true }" [pageSize]="20" [pageable]="true" [sortable]="true"
-  [groupable]="false" [reorderable]="true" [resizable]="true" [height]="500" [columnMenu]="{ filter: true }"  (cellClick)="cellClickHandler($event)"
-  (add)="addHandler()">
-
+<kendo-grid
+  #myGrid
+  [kendoGridBinding]="gridData"
+  kendoGridSelectBy="id"
+  [(selectedKeys)]="mySelection"
+  [selectable]="{ mode: 'multiple', drag: true }"
+  [pageSize]="20"
+  [pageable]="true"
+  [sortable]="true"
+  [groupable]="false"
+  [reorderable]="true"
+  [resizable]="true"
+  [height]="500"
+  [columnMenu]="{ filter: true }"
+  (cellClick)="cellClickHandler($event)"
+  (add)="addHandler()"
+>
   <ng-template kendoGridToolbarTemplate>
     @if (!formGroup) {
     <button kendoGridAddCommand>Add new</button>
@@ -11,6 +23,43 @@
       <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow()">
         Save
       </button>
-    </ng-template>
-    
+      <button kendoButton themeColor="primary" (click)="cancelHandler()">
+        Cancel
+      </button>
+    </div>
+    }
+  </ng-template>
+
+  <kendo-grid-column field="recordId" editor="numeric" title="Record Id" [width]="200"  >
+  </kendo-grid-column>
+
+  <kendo-grid-column field="lastName" title="Last Name" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column field="firstName" title="First Name" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column field="primaryEmail" title="Primary Email" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="primaryPhoneType"
+    title="Primary Phone Type"
+    editor="numeric"
+    [width]="200"
+  >
+  </kendo-grid-column>
+
+  <kendo-grid-column field="lmpLeadId" editor="numeric" title="LMP Lead Id" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="appointmentType"
+    title="Appointment Type"
+    [width]="200"
+  >
+  </kendo-grid-column>
+
+  <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200">
+  </kendo-grid-column>
 </kendo-grid>

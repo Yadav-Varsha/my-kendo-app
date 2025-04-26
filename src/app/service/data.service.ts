@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class DataService extends BehaviorSubject<any[]> {
-  // private apiUrl = 'http://localhost:3000/users'; // JSON Server URL
+   private apiUrl = 'http://localhost:3000/employee'; // JSON Server URL
   private data: any[] = [];
   private originalData: any[] = [];
 
@@ -23,22 +23,22 @@ export class DataService extends BehaviorSubject<any[]> {
   //   this.http.get<any[]>( 'http://localhost:3000/users').subscribe(data => this.next(data));
   // }
   public read(): void {
-    this.http.get<any[]>('http://localhost:3000/users').subscribe(data => {
+    this.http.get<any[]>('http://localhost:3000/employee').subscribe(data => {
       console.log('Fetched data:', data); // Debug line
       this.next(data);
     });
   }
 
   public create(item: any): void {
-    this.http.post( 'http://localhost:3000/users', item).subscribe(() => this.read());
+    this.http.post( '', item).subscribe(() => this.read());
   }
 
   public update(item: any): void {
-    this.http.put(`${ 'http://localhost:3000/users'}/${item.id}`, item).subscribe(() => this.read());
+    this.http.put(`${ 'http://localhost:3000/employee'}/${item.id}`, item).subscribe(() => this.read());
   }
 
   public remove(item: any): void {
-    this.http.delete(`http://localhost:3000/users/${item.id}`).subscribe(() => this.read());
+    this.http.delete(`http://localhost:3000/employee/${item.id}`).subscribe(() => this.read());
   }
 
   public assignValues(target: any, source: any): void {

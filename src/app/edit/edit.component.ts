@@ -1,8 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
+import { Component, OnInit, ViewChild } from '@angular/core';
+
 
 import { FormControl, FormGroup, FormsModule, Validators } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
+
+
+
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import {  EmployeeService } from '../service/employee.service';
@@ -18,7 +22,6 @@ import {
 } from "@progress/kendo-angular-grid";
 import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
-import { process, State } from "@progress/kendo-data-query";
 @Component({
   selector: 'app-edit',
   imports: [ CommonModule,
@@ -42,6 +45,8 @@ export class EditComponent implements OnInit  {
   @ViewChild('myGrid') myGrid!: GridComponent;
 
   constructor(private employeeService: EmployeeService) {}
+
+
 
   ngOnInit(): void {
     this.employeeService.getAll().subscribe((res) => {

@@ -24,11 +24,10 @@
 
   .text-bold {
     font-weight: 600;
-  }
-
-  .btn-all{
+  } 
+   /* .btn-all{
   background-color:  #7ec241;
-  }
+  }  */
   .text-all{
     color:  #7ec241;
   }
@@ -40,9 +39,9 @@
     width: 100px;
   }
 
-  .btn{
+    .btn-grid{
     background-color: #7ec241;
-  }
+  }  
   .toggle-wrapper {
     background-color: #002366; /* Dark blue */
     border-radius: 50px;

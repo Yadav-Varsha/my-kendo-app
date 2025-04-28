@@ -6,19 +6,21 @@
       <input type="checkbox" id="viewBoardCheck" />
       <label for="viewBoardCheck" class="mb-0 ms-2"> Board View</label>
     </div>
-    <button type="button" class="btn btn-all" (click)="exportExcel()">
+    <button type="button" class="btn btn-grid" (click)="exportExcel()">
       <i class="bi bi-file-earmark-excel"></i> Export to Excel
     </button>
     <!-- 
     <button type="button" class="btn btn-all" (click)="addUser()">
       Create
     </button>  -->
+    <!-- filepath: d:\Angular\my-kendo-app\src\app\grid\grid.component.html -->
+<button class="btn" (click)="toggleTheme()">Toggle Theme</button>
   </div>
 </div>
 
 <kendo-grid
   #myGrid
-  [kendoGridBinding]="gridData"
+  [kendoGridBinding]="gridView.length ? gridView : gridData"
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
@@ -59,16 +61,18 @@
       defaultItem="Select Saved Preferences"
       class="large-dropdown"
     ></kendo-dropdownlist>
-
+    
     <kendo-textbox
-      [style.width.px]="165"
-      placeholder="Search in all columns..."
-      (valueChange)="onFilter($event)"
-    >
-    </kendo-textbox>
-    <button class="btn">
-      <i class="bi bi-search"></i>
-    </button>
+    [style.width.px]="165"
+    placeholder="Search in all columns..."
+    (valueChange)="onFilter($event)"
+  >
+  </kendo-textbox>
+  <button class="btn">
+    <i class="bi bi-search"></i>
+  </button>
+  
+   
     <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
       <!-- Toggle Buttons -->
       <div class="toggle-wrapper d-inline-flex p-1 rounded-pill">
@@ -90,9 +94,9 @@
       </div>
 
       <!-- Action Buttons -->
-      <button class="btn">Clear Filters</button>
-      <button class="btn">Bulk Edit</button>
-      <button class="btn">Save Preferences</button>
+      <button class="btn  btn-success">Clear Filters</button>
+      <button class="btn  btn-success ">Bulk Edit</button>
+      <button class="btn  btn-success">Save Preferences</button>
 
       <!-- Menu Icon Button -->
       <button class="btn border" style="padding: 4px 8px">

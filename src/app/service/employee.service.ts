@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 })
 export class EmployeeService {
   private apiUrl = 'http://localhost:3000/employees';
-
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<any[]> {

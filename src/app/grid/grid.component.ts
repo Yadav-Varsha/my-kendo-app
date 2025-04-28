@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormsModule, Validators,FormGroup } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
-import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
+import { KENDO_CHARTS, } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import {
   DataBindingDirective,
@@ -16,9 +16,8 @@ import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
 import { process, State } from "@progress/kendo-data-query";
 import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
-
-import { DataService } from '../service/data.service';
-import {  EmployeeService } from '../service/employee.service'
+import {  EmployeeService } from '../service/employee.service';
+import { TheamService } from '../service/theam.service';
 import { GridModule } from '@progress/kendo-angular-grid';
 
 
@@ -63,6 +62,8 @@ export class GridComponent implements OnInit {
   @ViewChild('myGrid') myGrid!: KendoGridComponent;
 dataItem: any;
 
+
+
   // leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   // selectedLead = 'All Leads';
   // selectedPreference = 'Select Saved Preferences';
@@ -103,7 +104,15 @@ dataItem: any;
 //   public gridData: any[] = [];
  
  
-constructor(private employeeService: EmployeeService)  {}
+constructor(public theamService: TheamService,private employeeService: EmployeeService)  {}
+ // Call toggleTheme from the service
+//  toggleTheme(): void {
+//   this.theamService.toggleTheme();
+// }
+toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+}
+
   ngOnInit(): void {
     this.employeeService.getAll().subscribe((res) => {
       this.gridData = res;
@@ -190,49 +199,42 @@ constructor(private employeeService: EmployeeService)  {}
       bookingAgency: new FormControl(dataItem?.bookingAgency || '', Validators.required),
     });
   }
+   public onFilter(value: string): void {
+    const inputValue = value.toLowerCase();  // small/capital ka problem na ho
   
-
-   
-  
- 
-   
-  
-  public onFilter(value: Event): void {
-    const inputValue = value;
-
     this.gridView = process(this.gridData, {
       filter: {
         logic: "or",
         filters: [
           {
-            field: "full_name",
+            field: "lastName",
             operator: "contains",
             value: inputValue,
           },
           {
-            field: "job_title",
+            field: "firstName",
             operator: "contains",
             value: inputValue,
           },
-          {
-            field: "budget",
-            operator: "contains",
-            value: inputValue,
-          },
-          {
-            field: "phone",
-            operator: "contains",
-            value: inputValue,
-          },
-          {
-            field: "address",
-            operator: "contains",
-            value: inputValue,
-          },
+          // {
+          //   field: "primaryEmail",
+          //   operator: "contains",
+          //   value: inputValue,
+          // },
+          // {
+          //   field: "primaryPhoneType",
+          //   operator: "eq",
+          //   value: inputValue, // ya to convert string/number ka dhyan rakhna
+          // },
+          // {
+          //   field: "appointmentType", // yahan galat tha tumhara ("AppointmentType")
+          //   operator: "contains",
+          //   value: inputValue,
+          // },
         ],
       },
     }).data;
-
+  
     this.dataBinding.skip = 0;
   }
 

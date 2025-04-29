@@ -1,170 +1,92 @@
 /* You can add global styles to this file, and also import other style files */
 
-body.dark-theme {
+
+/* === DEFAULT (Light Mode) === */
+body {
+  background-color: #ffffff;
+  color: #212529;
+}
+
+.btn-all {
+  background-color: #012a6b ;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+/* === DARK MODE === */
+body.dark-mode {
   background-color: #121212;
-  color: #ffffff;
+  color: #e0e0e0;
 }
 
-body.dark-theme h2,
-body.dark-theme h1,
-body.dark-theme h3,
-body.dark-theme h4,
-body.dark-theme h5,
-body.dark-theme h6 {
-  color: #ffffff;
+body.dark-mode .btn-all {
+  background-color:  #012a6b ; /* A lighter blue */
+  color: #fff;
+  border: 1px solid  #012a6b ;
 }
 
-body.dark-theme .btn {
-  background-color: #333333;
-  color: #ffffff;
-  border-color: #444444;
+body.dark-mode .btn-success {
+  background-color: #66bb6a; /* A lighter green */
+  color: #fff;
+  border: 1px solid #66bb6a;
 }
 
-body.dark-theme .btn:hover {
-  background-color: #444444;
+body.dark-mode .btn-outline-secondary {
+  border-color: #ccc;
+  color: #ccc;
 }
 
-body.dark-theme .kendo-grid {
+body.dark-mode .k-grid,
+body.dark-mode .k-grid-header,
+body.dark-mode .k-grid-content {
   background-color: #1e1e1e;
-  color: #ffffff;
+  color: #fff;
 }
 
-body.dark-theme .kendo-grid .k-grid-header {
-  background-color: #2a2a2a;
+body.dark-mode .k-button {
+  background-color: #2e2e2e;
+  color: #eee;
+}
+/* Base light mode (default) */
+body.light-mode {
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
-body.dark-theme .kendo-grid .k-grid-content {
-  background-color: #1e1e1e;
+body.light-mode .navbar {
+  background-color: #f8f9fa !important;
 }
 
-body.dark-theme .kendo-grid .k-grid-toolbar {
-  background-color: #2a2a2a;
-}
-/* Importatnt(toggle command)
- /* Light Theme (Default) */
-/* .light-theme {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --navbar-bg: #f8f9fa;
-  --btn-bg: #0d6efd;
-  --btn-color: #ffffff;
+body.light-mode .btn-all {
+  background-color: #012a6b ;
+  color: white;
 }
 
-
-.dark-theme {
-  --bg-color: #1e1e2d;
-  --text-color: #ffffff;
-  --navbar-bg: #343a40;
-  --btn-bg: #198754;
-  --btn-color: #ffffff;
+body.light-mode .btn-success {
+  background-color: #198754;
+  color: white;
 }
 
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+/* Dark mode */
+body.dark-mode {
+  background-color: #212529;
+  color: #f8f9fa;
 }
 
-
-.navbar {
-  background-color: var(--navbar-bg) !important;
+body.dark-mode .navbar {
+  background-color: #343a40 !important;
 }
 
-
-
-.k-grid {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+body.dark-mode .btn-all {
+  background-color: #012a6b ;
+  color: white;
 }
 
-
-.k-grid-header {
-  background-color: var(--navbar-bg);
-}
-
-
-input, select, textarea {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  border: 1px solid var(--text-color);
-}
-
-.k-dropdown, .k-textbox {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}  */
-/* styles.css or styles.scss */
-
-:root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --btn-bg:  #012a6b ;
-  --btn-text: #ffffff;
-  --grid-bg: #ffffff;
-  --grid-header-bg: #f8f9fa;
-  --grid-text-color: #000000;
-  --btn-success-bg: #28a745; 
-}
-
-.dark-mode {
-  --bg-color: #1e1e2d;
-  --text-color: #ffffff;
-  --btn-bg: #343a40;
-  --btn-text: #ffffff;
-  --grid-bg: #2b2b3c;
-  --grid-header-bg: #3a3a50;
-  --grid-text-color: #ffffff;
-}
-
-/* Apply variables globally */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-/* Buttons */
-.btn,
-.k-button {
-  background-color: var(--btn-bg) !important;
-  color: var(--btn-text) !important;
-  border: none;
-}
-
-/* Navbars */
-.navbar {
-  background-color: var(--bg-color) !important;
-  color: var(--text-color) !important;
-}
-
-/* Kendo Grid background */
-.k-grid {
-  background-color: var(--grid-bg) !important;
-  color: var(--grid-text-color) !important;
-}
-
-/* Kendo Grid Header */
-.k-grid-header,
-.k-grid-header th {
-  background-color: var(--grid-header-bg) !important;
-  color: var(--grid-text-color) !important;
-}
-
-/* Kendo Grid Toolbar */
-.k-grid-toolbar {
-  background-color: var(--grid-bg) !important;
-  color: var(--grid-text-color) !important;
-}
-
-/* Kendo Dropdowns, Inputs */
-.k-input,
-.k-dropdown,
-.k-textbox {
-  background-color: var(--grid-bg) !important;
-  color: var(--grid-text-color) !important;
-}
-
-/* Dropdown Menus */
-.dropdown-menu {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+body.dark-mode .btn-success {
+  background-color: #20c997;
+  color: black;
 }

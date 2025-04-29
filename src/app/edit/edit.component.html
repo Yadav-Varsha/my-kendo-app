@@ -4,17 +4,29 @@
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
-  [pageSize]="20"
   [pageable]="true"
   [sortable]="true"
-  [groupable]="false"
+  [filterable]="true"
   [reorderable]="true"
   [resizable]="true"
   [height]="500"
   [columnMenu]="{ filter: true }"
   (cellClick)="cellClickHandler($event)"
   (add)="addHandler()"
+  [sort]="state.sort"
+  [skip]="state.skip"
+  [pageSize]="state.take"
+  [filter]="state.filter"
+  [group]="state.group"
+  (dataStateChange)="dataStateChange($event)"
 >
+  <!-- <kendo-grid-column
+    *ngFor="let col of gridSettings.columnsConfig"
+    [field]="col.field"
+    [title]="col.title"
+    [width]="col.width"
+    ...
+  ></kendo-grid-column> -->
   <ng-template kendoGridToolbarTemplate>
     @if (!formGroup) {
     <button kendoGridAddCommand>Add new</button>
@@ -28,9 +40,36 @@
       </button>
     </div>
     }
+
+    <!-- <button kendoButton (click)="saveGridSettings(grid)">
+      Save current state
+    </button>
+
+    <button
+      kendoButton
+      *ngIf="savedStateExists"
+      (click)="
+        grid1Settings = mapGridSettings(persistingService.get('gridSettings'))
+      "
+    >
+      Load saved state
+    </button> -->
+    <button kendoButton (click)="saveGridSettings()">Save Preferences</button>
+    <button
+      kendoButton
+      *ngIf="savedStateExists"
+      (click)="loadGridSettings()"
+    >
+      Load Preferences
+    </button>
   </ng-template>
 
-  <kendo-grid-column field="recordId" editor="numeric" title="Record Id" [width]="200"  >
+  <kendo-grid-column
+    field="recordId"
+    editor="numeric"
+    title="Record Id"
+    [width]="200"
+  >
   </kendo-grid-column>
 
   <kendo-grid-column field="lastName" title="Last Name" [width]="200">
@@ -50,7 +89,12 @@
   >
   </kendo-grid-column>
 
-  <kendo-grid-column field="lmpLeadId" editor="numeric" title="LMP Lead Id" [width]="200">
+  <kendo-grid-column
+    field="lmpLeadId"
+    editor="numeric"
+    title="LMP Lead Id"
+    [width]="200"
+  >
   </kendo-grid-column>
 
   <kendo-grid-column

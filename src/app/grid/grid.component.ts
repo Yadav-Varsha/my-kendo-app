@@ -110,13 +110,15 @@ constructor(public theamService: TheamService,private employeeService: EmployeeS
 //   this.theamService.toggleTheme();
 // }
 toggleTheme() {
-  document.body.classList.toggle('dark-mode');
+  this.theamService.toggleTheme();
 }
+
 
   ngOnInit(): void {
     this.employeeService.getAll().subscribe((res) => {
       this.gridData = res;
     });
+    this.theamService.applySavedTheme();
   }
   loadGridData(): void {
     this.employeeService.getAll().subscribe(data => {
@@ -133,6 +135,7 @@ toggleTheme() {
   }
 
   public saveRow(dataItem:any): void {
+    debugger
     if (this.formGroup && this.formGroup.valid) {
       this.saveCurrent();
     }
@@ -216,21 +219,7 @@ toggleTheme() {
             operator: "contains",
             value: inputValue,
           },
-          // {
-          //   field: "primaryEmail",
-          //   operator: "contains",
-          //   value: inputValue,
-          // },
-          // {
-          //   field: "primaryPhoneType",
-          //   operator: "eq",
-          //   value: inputValue, // ya to convert string/number ka dhyan rakhna
-          // },
-          // {
-          //   field: "appointmentType", // yahan galat tha tumhara ("AppointmentType")
-          //   operator: "contains",
-          //   value: inputValue,
-          // },
+     
         ],
       },
     }).data;

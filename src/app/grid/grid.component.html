@@ -6,15 +6,18 @@
       <input type="checkbox" id="viewBoardCheck" />
       <label for="viewBoardCheck" class="mb-0 ms-2"> Board View</label>
     </div>
-    <button type="button" class="btn btn-grid" (click)="exportExcel()">
+    <button type="button" class="btn btn-success" (click)="exportExcel()">
       <i class="bi bi-file-earmark-excel"></i> Export to Excel
     </button>
     <!-- 
     <button type="button" class="btn btn-all" (click)="addUser()">
       Create
     </button>  -->
-    <!-- filepath: d:\Angular\my-kendo-app\src\app\grid\grid.component.html -->
-<button class="btn" (click)="toggleTheme()">Toggle Theme</button>
+   
+    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 " (click)="toggleTheme()">
+      <i class="fas" [ngClass]="theamService.isDarkMode() ? 'fa-sun' : 'fa-moon'"></i>
+      <span> {{ theamService.isDarkMode() ? '' : '' }}</span>
+    </button> 
   </div>
 </div>
 
@@ -68,7 +71,7 @@
     (valueChange)="onFilter($event)"
   >
   </kendo-textbox>
-  <button class="btn">
+  <button class="btn btn-success">
     <i class="bi bi-search"></i>
   </button>
   
@@ -138,7 +141,7 @@
     [showSelectAll]="true"
   ></kendo-grid-checkbox-column>
   <!-- Actions -->
-  <kendo-grid-column field="area" title="Area" [width]="180">
+  <kendo-grid-column field="Actions" title="Actions" [width]="180">
     <ng-template kendoGridCellTemplate let-dataItem>
       <div class="d-flex align-items-center gap-2">
         <kendo-icon name="gear" size="default"></kendo-icon>

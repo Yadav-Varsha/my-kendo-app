@@ -4,15 +4,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class PersistingService {
-
-  constructor() { }
-
-  public set(key: string, value: any): void {
+  set(key: string, value: any): void {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  public get(key: string): any {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
+  get(key: string): any {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
   }
 }

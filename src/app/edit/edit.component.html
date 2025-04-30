@@ -1,68 +1,59 @@
 <kendo-grid
   #myGrid
+  [data]="gridSettings.gridData"
   [kendoGridBinding]="gridData"
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
   [pageable]="true"
+  [pageSize]="gridSettings.state.take"
+  [skip]="gridSettings.state.skip"
   [sortable]="true"
+  [sort]="gridSettings.state.sort"
   [filterable]="true"
+  [filter]="gridSettings.state.filter"
+  [groupable]="true"
+  [group]="gridSettings.state.group"
   [reorderable]="true"
   [resizable]="true"
   [height]="500"
   [columnMenu]="{ filter: true }"
   (cellClick)="cellClickHandler($event)"
   (add)="addHandler()"
-  [sort]="state.sort"
-  [skip]="state.skip"
-  [pageSize]="state.take"
-  [filter]="state.filter"
-  [group]="state.group"
   (dataStateChange)="dataStateChange($event)"
 >
-  <!-- <kendo-grid-column
-    *ngFor="let col of gridSettings.columnsConfig"
-    [field]="col.field"
-    [title]="col.title"
-    [width]="col.width"
-    ...
-  ></kendo-grid-column> -->
+ 
   <ng-template kendoGridToolbarTemplate>
-    @if (!formGroup) {
-    <button kendoGridAddCommand>Add new</button>
-    } @if (formGroup) {
-    <div>
-      <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow()">
-        Save
-      </button>
-      <button kendoButton themeColor="primary" (click)="cancelHandler()">
-        Cancel
-      </button>
+    <button *ngIf="!formGroup" kendoGridAddCommand>Add new</button>
+  
+    <div *ngIf="formGroup">
+      <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow()">Save</button>
+      <button kendoButton themeColor="primary" (click)="cancelHandler()">Cancel</button>
     </div>
-    }
-
-    <!-- <button kendoButton (click)="saveGridSettings(grid)">
-      Save current state
-    </button>
-
-    <button
-      kendoButton
-      *ngIf="savedStateExists"
-      (click)="
-        grid1Settings = mapGridSettings(persistingService.get('gridSettings'))
-      "
-    >
-      Load saved state
-    </button> -->
-    <button kendoButton (click)="saveGridSettings()">Save Preferences</button>
-    <button
-      kendoButton
-      *ngIf="savedStateExists"
-      (click)="loadGridSettings()"
-    >
-      Load Preferences
-    </button>
+  
+   
+    <div >
+      <button kendoButton (click)="saveGridSettings(myGrid)">Save current state</button>
+      <button *ngIf="savedStateExists" kendoButton (click)="loadSavedState(myGrid)">Load saved state</button>
+    </div>
   </ng-template>
+  
+  
+ 
+
+  <!-- <ng-container *ngFor="let col of gridSettings.columnsConfig; trackBy: trackColumn">
+    <kendo-grid-column
+      [field]="col.field"
+      [title]="col.title"
+      [width]="col.width"
+      [filter]="col.filter"
+      [filterable]="col.filterable"
+      [hidden]="col.hidden"
+      [format]="col.format"
+    >
+    </kendo-grid-column>
+  </ng-container> -->
+ 
 
   <kendo-grid-column
     field="recordId"

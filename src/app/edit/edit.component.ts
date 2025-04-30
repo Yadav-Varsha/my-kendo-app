@@ -11,6 +11,8 @@ import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import {  EmployeeService } from '../service/employee.service';
 import { PersistingService  } from '../service/persisting.service';
+import { ColumnSettings } from "./column-settings.interface";
+import { GridSettings } from "./grid-settings.interface";
 import {
   CellClickEvent,
   DataBindingDirective,
@@ -32,7 +34,7 @@ import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
       KENDO_INPUTS,
       KENDO_GRID_PDF_EXPORT,
       KENDO_GRID_EXCEL_EXPORT,
-      FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, ],
+      FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule ],
       templateUrl: './edit.component.html',
   styleUrl: './edit.component.css'
 })
@@ -134,114 +136,183 @@ export class EditComponent implements OnInit  {
   @ViewChild('myGrid') myGrid!: GridComponent;
   public employees: any[] = [];
   public gridView: any[] = [];
-  state: State = {
-    skip: 0,
-    take: 10,
-    sort: [],
-    group: [],
-    filter: {
-      logic: 'and',
-      filters: []
-    }
-  };
-  
  
-  constructor(private employeeService: EmployeeService, public persistingService: PersistingService) {}
-
-//   public dataStateChange(state: State): void {
-//     this.gridSettings.state = state;
-//     this.gridSettings.gridData = process(sampleProducts, state);
-// }
-// public saveGridSettings(grid: GridComponent): void {
-//   const columns = grid.columns;
-
-//   //add only the required column properties to save local storage space
-//   const gridConfig = {
-//       state: this.gridSettings.state,
-//       columnsConfig: columns.toArray().map((item) => {
-//           return <ColumnSettings>{
-//               field: item['field'],
-//               width: item['width'],
-//               title: item['title'],
-//               filter: item['filter'],
-//               format: item['format'],
-//               filterable: item['filterable'],
-//               orderIndex: item['orderIndex']
-//           };
-//       })
-//   };
-
-//   this.persistingService.set('gridSettings', gridConfig);
-// }
-
-// public mapGridSettings(gridSettings: GridSettings): GridSettings {
-//   const state = gridSettings.state;
-
-//   return {
-//       state,
-//       columnsConfig: gridSettings.columnsConfig.sort((a, b) => a.orderIndex - b.orderIndex),
-//       gridData: process(this.gridData, state)
-//   };
-// }
-  ngOnInit(): void {
-    this.employeeService.getAll().subscribe((res) => {
-      this.gridData = res;
-    });
-
-    this.employeeService.getEmployees().subscribe((data: any[]) => {
-      this.employees = data;
-
-      // Load from storage if exists
-      const saved = this.persistingService.get('gridState');
-      if (saved) {
-        this.state = saved.state;
-        this.gridView = process(this.employees, this.state);
-      } else {
-        this.gridView = process(this.employees, this.state);
-      }
-    });
-  }
-  loadGridData(): void {
-    this.employeeService.getAll().subscribe(data => {
-      this.gridData = data;
-    });
-
-    
-  }
-  public dataStateChange(state: State): void {
-    this.state = state;
-    this.gridView = process(this.employees, this.state);
-  }
-
-  public saveGridSettings(): void {
-    const columns = this.grid.columns.toArray().map(col => ({
-      field: col.field,
-      title: col.title,
-      hidden: col.hidden,
-      width: col.width,
-      orderIndex: col.orderIndex,
-      filter: col.filter,
-      filterable: col.filterable,
-      format: col.format,
-    }));
-
-    this.persistingService.set('gridState', {
-      state: this.state,
-      columnsConfig: columns,
-    });
-  }
-  public loadGridSettings(): void {
-    const saved = this.persistingService.get('gridState');
-    if (saved) {
-      this.state = saved.state;
-      this.grid.columns.reset(saved.columnsConfig); // Optional if you want to restore order/widths
-      this.gridView = process(this.employees, this.state);
+  public gridSettings: any = {
+    state: {
+      skip: 0,
+      take: 5,
+      filter: { logic: 'and', filters: [] },
+      group: [],
+    },
+ 
+    gridData: [],  // Initialize with an empty array for the data
+    columnsConfig: [
+            {
+              field: "recordId",
+              title: "Record ID",
+              filterable: false,
+              filter: "numeric",
+              width: 60,
+              hidden: false,
+            },
+            {
+              field: "lastName",
+              title: "Last Name",
+              filterable: true,
+              filter: "text",
+              width: 300,
+              hidden: false,
+            },
+            {
+              field: "firstName",
+              title: "First Name",
+              filter: "text",
+              format: "{0:d}",
+              width: 240,
+              filterable: true,
+              hidden: false,
+            },
+            {
+              field: "primaryEmail",
+              title: "Primary Email",
+              filter: "text",
+              format: "{0:c}",
+              width: 180,
+              filterable: true,
+              hidden: false,
+            },
+            {
+              field: "primaryPhoneType",
+              title: "Primary Phone Type",
+              filter: "numeric",
+              width: 120,
+              filterable: true,
+              hidden: false,
+            },
+           
+       {
+              field: "lmpLeadId",
+              title: "LMP Lead ID",
+              filter: "numeric",
+              width: 120,
+              filterable: true,
+              hidden: false,
+            },
+      
+            {
+              field: "bookingAgency",
+              title: "Booking Agency",
+              filter: "text",
+              width: 120,
+              filterable: true,
+              hidden: false,
+            },
+          ],
+    // columnsConfig: [
+    //   { field: 'recordId', title: 'ID', filterable: false, width: 60 },
+    //   { field: 'EmployeeName', title: 'Employee Name', filterable: true, width: 300 },
+    //   { field: 'DateOfJoining', title: 'Date of Joining', filterable: true, width: 240 },
+    //   { field: 'Salary', title: 'Salary', filterable: true, width: 180 },
+    //   { field: 'IsActive', title: 'Active', filterable: true, width: 120 },
+    // ],
+  };
+ 
+  constructor(private employeeService: EmployeeService, public persistingService: PersistingService) {
+    const gridSettings = this.persistingService.get('gridSettings');
+    if (gridSettings) {
+      this.gridSettings = this.mapGridSettings(gridSettings);
     }
   }
-
   public get savedStateExists(): boolean {
-    return !!this.persistingService.get('gridState');
+    return !!this.persistingService.get("gridSettings");
   }
+  ngOnInit(): void {
+    this.employeeService.getAll().subscribe(data => {
+      this.gridSettings.gridData = process(data, this.gridSettings.state);
+    });
+  
+   }
+
+// ngOnInit(): void {
+//   this.employeeService.getAll().subscribe((res) => {
+//     this.gridData = res;
+   
+//       this.gridSettings.gridData = process(data, this.gridSettings.state); 
+//   });
+
+//  }
+loadGridData(): void {
+  this.employeeService.getAll().subscribe(data => {
+    this.gridData = data;
+  });
+}
+public dataStateChange(state: State): void {
+  this.gridSettings.state = state;
+  // Re-process the employee data when the state changes (e.g., sorting, filtering)
+  this.employeeService.getAll().subscribe(data => {
+    this.gridSettings.gridData = process(data, state);
+  });
+}
+
+public saveGridSettings(grid: GridComponent): void {
+  const columns = grid.columns;
+  const gridConfig = {
+    state: this.gridSettings.state,
+    columnsConfig: columns.toArray().map((col: any) => ({
+      field: col['field'],
+      title: col['title'],
+      width: col['width'],
+      filter: col['filter'],
+      format: col['format'],
+      filterable: col['filterable'],
+      hidden: col['hidden'],
+    })),
+  };
+  this.persistingService.set('gridSettings', gridConfig);
+}
+  
+// public loadSavedState(grid: GridComponent): void {
+//   const savedSettings = this.persistingService.get('gridSettings');
+//   if (savedSettings) {
+//     this.gridSettings = this.mapGridSettings(savedSettings);
+//   }
+// }
+public loadSavedState(grid: GridComponent): void {
+  const savedSettings = this.persistingService.get('gridSettings');
+  if (savedSettings) {
+    this.gridSettings = this.mapGridSettings(savedSettings);
+
+    // ✅ Re-fetch and apply the state to grid data
+    this.employeeService.getAll().subscribe(data => {
+      this.gridSettings.gridData = process(data, this.gridSettings.state);
+    });
+  }
+}
+
+private mapGridSettings(savedSettings: any): any {
+  const state = savedSettings.state;
+  this.mapDateFilter(state.filter);
+
+  return {
+    state,
+    columnsConfig: savedSettings.columnsConfig.sort((a: any, b: any) => a.orderIndex - b.orderIndex),
+    gridData: [],  // Placeholder for now
+  };
+}
+
+private mapDateFilter = (descriptor: any) => {
+  const filters = descriptor.filters || [];
+  filters.forEach((filter: any) => {
+    if (filter.filters) {
+      this.mapDateFilter(filter);
+    } else if (filter.field === 'DateOfJoining' && filter.value) {
+      filter.value = new Date(filter.value);
+    }
+  });
+};
+trackColumn(index: number, item: any): any {
+  return item.field;
+}
 
   public addHandler(): void {
     this.closeEditor();

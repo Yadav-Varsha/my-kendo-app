@@ -32,13 +32,26 @@
     </div>
   
    
-    <div >
+    <!-- <div >
       <button kendoButton (click)="saveGridSettings(myGrid)">Save current state</button>
       <button *ngIf="savedStateExists" kendoButton (click)="loadSavedState(myGrid)">Load saved state</button>
-    </div>
+    </div> -->
+
+    <kendo-dropdownlist
+    [data]="savedStateNames"
+    [(ngModel)]="selectedState"
+    [defaultItem]="'Select state'"
+    (valueChange)="loadSelectedGridState(myGrid, selectedState)"
+  ></kendo-dropdownlist>
+
+  <input type="text" [(ngModel)]="stateName" placeholder="Enter state name" class="k-textbox" />
+
+  <button kendoButton (click)="saveGridStateAs(myGrid,stateName)">Save</button>
+
   </ng-template>
   
-  
+ 
+
  
 
   <!-- <ng-container *ngFor="let col of gridSettings.columnsConfig; trackBy: trackColumn">

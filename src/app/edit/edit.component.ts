@@ -4,9 +4,6 @@ import { State, process } from '@progress/kendo-data-query';
 
 import { FormControl, FormGroup, FormsModule, Validators } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
-
-
-
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import {  EmployeeService } from '../service/employee.service';
@@ -132,6 +129,13 @@ export class EditComponent implements OnInit  {
   public formGroup!: FormGroup;
   private editedRowIndex: number | undefined;
   private isNew: boolean | undefined;
+  public stateName: string = '';
+ 
+public selectedState: string = '';
+public savedStateNames: string[] = [];
+public selectedStateName: string = '';
+public newStateName: string = '';
+
 
   @ViewChild('myGrid') myGrid!: GridComponent;
   public employees: any[] = [];
@@ -208,13 +212,7 @@ export class EditComponent implements OnInit  {
               hidden: false,
             },
           ],
-    // columnsConfig: [
-    //   { field: 'recordId', title: 'ID', filterable: false, width: 60 },
-    //   { field: 'EmployeeName', title: 'Employee Name', filterable: true, width: 300 },
-    //   { field: 'DateOfJoining', title: 'Date of Joining', filterable: true, width: 240 },
-    //   { field: 'Salary', title: 'Salary', filterable: true, width: 180 },
-    //   { field: 'IsActive', title: 'Active', filterable: true, width: 120 },
-    // ],
+  
   };
  
   constructor(private employeeService: EmployeeService, public persistingService: PersistingService) {
@@ -230,6 +228,9 @@ export class EditComponent implements OnInit  {
     this.employeeService.getAll().subscribe(data => {
       this.gridSettings.gridData = process(data, this.gridSettings.state);
     });
+    this.loadSavedStateNames();
+    this.loadSelectedGridState(this.myGrid, this.selectedStateName);
+
   
    }
 
@@ -254,7 +255,41 @@ public dataStateChange(state: State): void {
   });
 }
 
-public saveGridSettings(grid: GridComponent): void {
+// public saveGridSettings(grid: GridComponent): void {
+//   const columns = grid.columns;
+//   const gridConfig = {
+//     state: this.gridSettings.state,
+//     columnsConfig: columns.toArray().map((col: any) => ({
+//       field: col['field'],
+//       title: col['title'],
+//       width: col['width'],
+//       filter: col['filter'],
+//       format: col['format'],
+//       filterable: col['filterable'],
+//       hidden: col['hidden'],
+//     })),
+//   };
+//   this.persistingService.set('gridSettings', gridConfig);
+// }
+  
+
+// public loadSavedState(grid: GridComponent): void {
+//   const savedSettings = this.persistingService.get('gridSettings');
+//   if (savedSettings) {
+//     this.gridSettings = this.mapGridSettings(savedSettings);
+
+//     // ✅ Re-fetch and apply the state to grid data
+//     this.employeeService.getAll().subscribe(data => {
+//       this.gridSettings.gridData = process(data, this.gridSettings.state);
+//     });
+//   }
+// }
+public saveGridStateAs(grid: GridComponent, stateName: string): void {
+  if (!stateName) {
+    alert('Please enter a name for the state.');
+    return;
+  }
+
   const columns = grid.columns;
   const gridConfig = {
     state: this.gridSettings.state,
@@ -268,26 +303,39 @@ public saveGridSettings(grid: GridComponent): void {
       hidden: col['hidden'],
     })),
   };
-  this.persistingService.set('gridSettings', gridConfig);
+
+  // Save to localStorage or wherever your service stores it
+  this.persistingService.set(`gridSettings_${stateName}`, gridConfig);
+
+  // 💡 Add this line to update the dropdown list
+  this.loadSavedStateNames();
+
+  // Optionally clear the input field
+  this.newStateName = '';
 }
-  
-// public loadSavedState(grid: GridComponent): void {
-//   const savedSettings = this.persistingService.get('gridSettings');
-//   if (savedSettings) {
-//     this.gridSettings = this.mapGridSettings(savedSettings);
-//   }
-// }
-public loadSavedState(grid: GridComponent): void {
-  const savedSettings = this.persistingService.get('gridSettings');
+
+
+public loadSelectedGridState(grid: GridComponent, selectedStateName: string): void {
+  const allStates = JSON.parse(localStorage.getItem('gridStates') || '{}');
+  const savedSettings = allStates[selectedStateName];
+
   if (savedSettings) {
     this.gridSettings = this.mapGridSettings(savedSettings);
 
-    // ✅ Re-fetch and apply the state to grid data
     this.employeeService.getAll().subscribe(data => {
       this.gridSettings.gridData = process(data, this.gridSettings.state);
     });
   }
 }
+loadSavedStateNames(): void {
+  const keys = Object.keys(localStorage);
+  this.savedStateNames = keys
+    .filter(key => key.startsWith('gridSettings_'))
+    .map(key => key.replace('gridSettings_', ''));
+}
+
+
+
 
 private mapGridSettings(savedSettings: any): any {
   const state = savedSettings.state;
@@ -388,96 +436,8 @@ trackColumn(index: number, item: any): any {
       bookingAgency: new FormControl(dataItem?.bookingAgency || '', Validators.required),
     });
   }
-  // private createFormGroup(dataItem?: any): FormGroup {
-  //   return new FormGroup({
-  //     recordId: new FormControl(dataItem?.recordId || 0, Validators.required),
-  //     lastName: new FormControl(dataItem?.lastName || '', Validators.required),
-  //     firstName: new FormControl(dataItem?.firstName || '', Validators.required),
-  //     primaryEmail: new FormControl(dataItem?.primaryEmail || '', Validators.required),
-  //     primaryPhoneType: new FormControl(dataItem?.primaryPhoneType || '', Validators.required),
-  //     lmpLeadId: new FormControl(dataItem?.lmpLeadId || 0, Validators.required),
-  //     appointmentType: new FormControl(dataItem?.appointmentType || '', Validators.required),
-  //     bookingAgency: new FormControl(dataItem?.bookingAgency || '', Validators.required),
-  //   });
-  // }
- 
-//   public gridData: any[] = [];
- 
-//   public gridView: any[] = [];
-//  public mySelection: string[] = [];
- 
- 
 
-
-//   ngOnInit(): void {
-//     throw new Error('Method not implemented.');
-//   }
- 
-//   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
-//   @ViewChild('myGrid') myGrid!: KendoGridComponent;
-//   public formGroup!: FormGroup;
-//   private editedRowIndex: number | undefined;
-//   private isNew: boolean | undefined;
-//   constructor(public employeeService: EmployeeService) {}
-
-//   public addHandler(): void {
-//     this.closeEditor();
-
-//     this.formGroup = createFormGroup({
-//       Discontinued: false,
-//       ProductName: "",
-//       UnitPrice: 0,
-//       UnitsInStock: "",
-//     });
-//     this.isNew = true;
-
-//     this.grid.addRow(this.formGroup);
-//   }
-//   public saveRow(): void {
-//     if (this.formGroup && this.formGroup.valid) {
-//       this.saveCurrent();
-//     }
-//   }
-//   private saveCurrent(): void {
-//     if (this.formGroup) {
-//       this.service.save(this.formGroup.value, this.isNew);
-//       this.closeEditor();
-//     }
-//   }
-//   public cellClickHandler({
-//     isEdited,
-//     dataItem,
-//     rowIndex,
-//   }: CellClickEvent): void {
-//     if (isEdited || (this.formGroup && !this.formGroup.valid)) {
-//       return;
-//     }
-
-//     if (this.isNew) {
-//       rowIndex += 1;
-//     }
-
-//     this.saveCurrent();
-
-//     this.formGroup = createFormGroup(dataItem);
-//     this.editedRowIndex = rowIndex;
-
-//     this.grid.editRow(rowIndex, this.formGroup);
-//   }
-
-//   public cancelHandler(): void {
-//     this.closeEditor();
-//   }
-
-//   private closeEditor(): void {
-//     this.grid.closeRow(this.editedRowIndex);
-
-//     this.isNew = false;
-//     this.editedRowIndex = undefined;
-//     this.formGroup = undefined;
-//   }
-
-}
+ }
 
 
 

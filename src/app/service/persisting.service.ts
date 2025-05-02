@@ -13,3 +13,4 @@ export class PersistingService {
     return data ? JSON.parse(data) : null;
   }
 }
+  

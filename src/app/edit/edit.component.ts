@@ -285,54 +285,55 @@ public dataStateChange(state: State): void {
 //   }
 // }
 public saveGridStateAs(grid: GridComponent, stateName: string): void {
-  if (!stateName) {
+  if (!stateName.trim()) {
     alert('Please enter a name for the state.');
     return;
   }
 
-  const columns = grid.columns;
-  const gridConfig = {
+  const columns = grid.columns.toArray().map((col: any) => ({
+    field: col.field,
+    title: col.title,
+    width: col.width,
+    filter: col.filter,
+    format: col.format,
+    filterable: col.filterable,
+    hidden: col.hidden
+  }));
+
+  const savedStates = this.persistingService.get('savedGridStates') || {};
+  savedStates[stateName] = {
     state: this.gridSettings.state,
-    columnsConfig: columns.toArray().map((col: any) => ({
-      field: col['field'],
-      title: col['title'],
-      width: col['width'],
-      filter: col['filter'],
-      format: col['format'],
-      filterable: col['filterable'],
-      hidden: col['hidden'],
-    })),
+    columnsConfig: columns
   };
 
-  // Save to localStorage or wherever your service stores it
-  this.persistingService.set(`gridSettings_${stateName}`, gridConfig);
-
-  // 💡 Add this line to update the dropdown list
-  this.loadSavedStateNames();
-
-  // Optionally clear the input field
-  this.newStateName = '';
+  this.persistingService.set('savedGridStates', savedStates);
+  this.loadSavedStateNames(); // Refresh dropdown
+  this.stateName = ''; // Clear input
 }
 
 
-public loadSelectedGridState(grid: GridComponent, selectedStateName: string): void {
-  const allStates = JSON.parse(localStorage.getItem('gridStates') || '{}');
-  const savedSettings = allStates[selectedStateName];
 
-  if (savedSettings) {
-    this.gridSettings = this.mapGridSettings(savedSettings);
-
-    this.employeeService.getAll().subscribe(data => {
-      this.gridSettings.gridData = process(data, this.gridSettings.state);
-    });
+public loadSelectedGridState(grid: GridComponent, stateName: string): void {
+  const savedStates = this.persistingService.get('savedGridStates');
+  if (!savedStates || !savedStates[stateName]) {
+    alert(`No saved state found for '${stateName}'`);
+    return;
   }
+
+  const config = savedStates[stateName];
+  this.gridSettings = this.mapGridSettings(config);
+
+  // Re-apply the data with the new state
+  this.employeeService.getAll().subscribe(data => {
+    this.gridSettings.gridData = process(data, this.gridSettings.state);
+  });
 }
-loadSavedStateNames(): void {
-  const keys = Object.keys(localStorage);
-  this.savedStateNames = keys
-    .filter(key => key.startsWith('gridSettings_'))
-    .map(key => key.replace('gridSettings_', ''));
+
+public loadSavedStateNames(): void {
+  const savedStates = this.persistingService.get('savedGridStates') || {};
+  this.savedStateNames = Object.keys(savedStates);
 }
+
 
 
 

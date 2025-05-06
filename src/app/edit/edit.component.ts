@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+1import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { State, process } from '@progress/kendo-data-query';
 
@@ -147,6 +147,7 @@ public newStateName: string = '';
       take: 5,
       filter: { logic: 'and', filters: [] },
       group: [],
+      sort: []
     },
  
     gridData: [],  // Initialize with an empty array for the data
@@ -166,24 +167,27 @@ public newStateName: string = '';
               filter: "text",
               width: 300,
               hidden: false,
+              sort: null 
             },
             {
               field: "firstName",
               title: "First Name",
               filter: "text",
-              format: "{0:d}",
+              // format: "{0:d}",
               width: 240,
               filterable: true,
               hidden: false,
+              sort: null
             },
             {
               field: "primaryEmail",
               title: "Primary Email",
               filter: "text",
-              format: "{0:c}",
+              // format: "{0:c}",
               width: 180,
               filterable: true,
               hidden: false,
+              sort: null
             },
             {
               field: "primaryPhoneType",
@@ -192,6 +196,7 @@ public newStateName: string = '';
               width: 120,
               filterable: true,
               hidden: false,
+              sort: null
             },
            
        {
@@ -201,6 +206,7 @@ public newStateName: string = '';
               width: 120,
               filterable: true,
               hidden: false,
+              sort: null
             },
       
             {
@@ -210,6 +216,7 @@ public newStateName: string = '';
               width: 120,
               filterable: true,
               hidden: false,
+              sort: null
             },
           ],
   
@@ -229,31 +236,30 @@ public newStateName: string = '';
       this.gridSettings.gridData = process(data, this.gridSettings.state);
     });
     this.loadSavedStateNames();
-    this.loadSelectedGridState(this.myGrid, this.selectedStateName);
+   
 
   
    }
 
-// ngOnInit(): void {
-//   this.employeeService.getAll().subscribe((res) => {
-//     this.gridData = res;
-   
-//       this.gridSettings.gridData = process(data, this.gridSettings.state); 
-//   });
 
-//  }
 loadGridData(): void {
   this.employeeService.getAll().subscribe(data => {
     this.gridData = data;
   });
 }
+
 public dataStateChange(state: State): void {
   this.gridSettings.state = state;
-  // Re-process the employee data when the state changes (e.g., sorting, filtering)
+  this.persistingService.set('gridSettings', {
+    state: this.gridSettings.state,
+    columnsConfig: this.gridSettings.columnsConfig,
+  });
+
   this.employeeService.getAll().subscribe(data => {
     this.gridSettings.gridData = process(data, state);
   });
 }
+
 
 // public saveGridSettings(grid: GridComponent): void {
 //   const columns = grid.columns;
@@ -297,58 +303,64 @@ public saveGridStateAs(grid: GridComponent, stateName: string): void {
     filter: col.filter,
     format: col.format,
     filterable: col.filterable,
-    hidden: col.hidden
+    hidden: col.hidden,
+    sort: col.sort
   }));
 
-  const savedStates = this.persistingService.get('savedGridStates') || {};
+  const savedStates = this.persistingService.get('namedGridStates') || {};
+
   savedStates[stateName] = {
     state: this.gridSettings.state,
     columnsConfig: columns
   };
 
-  this.persistingService.set('savedGridStates', savedStates);
-  this.loadSavedStateNames(); // Refresh dropdown
-  this.stateName = ''; // Clear input
+  this.persistingService.set('namedGridStates', savedStates);
+  this.loadSavedStateNames();
+  alert(`Grid state "${stateName}" saved successfully.`);
 }
+
 
 
 
 public loadSelectedGridState(grid: GridComponent, stateName: string): void {
-  const savedStates = this.persistingService.get('savedGridStates');
-  if (!savedStates || !savedStates[stateName]) {
-    alert(`No saved state found for '${stateName}'`);
-    return;
-  }
+  if (!stateName) return;
 
-  const config = savedStates[stateName];
-  this.gridSettings = this.mapGridSettings(config);
+  const savedStates = this.persistingService.get('namedGridStates');
+  if (savedStates && savedStates[stateName]) {
+    this.gridSettings.state = savedStates[stateName].state;
+    this.gridSettings.columnsConfig = savedStates[stateName].columnsConfig;
 
-  // Re-apply the data with the new state
-  this.employeeService.getAll().subscribe(data => {
-    this.gridSettings.gridData = process(data, this.gridSettings.state);
+   // Apply column visibility and sort order
+   grid.columns.toArray().forEach((col: any) => {
+    const savedColumn = this.gridSettings.columnsConfig.find((c: any) => c.field === col.field);
+    if (savedColumn) {
+      col.hidden = savedColumn.hidden;
+      col.sort = savedColumn.sort;
+    }
   });
+
+ 
+
+    this.employeeService.getAll().subscribe(data => {
+      this.gridSettings.gridData = process(data, this.gridSettings.state);
+    });
+  }
 }
 
+
+
 public loadSavedStateNames(): void {
-  const savedStates = this.persistingService.get('savedGridStates') || {};
+  const savedStates = this.persistingService.get('namedGridStates') || {};
   this.savedStateNames = Object.keys(savedStates);
 }
 
-
-
-
-
-private mapGridSettings(savedSettings: any): any {
-  const state = savedSettings.state;
-  this.mapDateFilter(state.filter);
-
+private mapGridSettings(settings: any): GridSettings {
   return {
-    state,
-    columnsConfig: savedSettings.columnsConfig.sort((a: any, b: any) => a.orderIndex - b.orderIndex),
-    gridData: [],  // Placeholder for now
+    state: settings.state,
+    gridData: [],
+    columnsConfig: settings.columnsConfig || []
   };
 }
-
 private mapDateFilter = (descriptor: any) => {
   const filters = descriptor.filters || [];
   filters.forEach((filter: any) => {
@@ -371,8 +383,7 @@ trackColumn(index: number, item: any): any {
   }
 
   public saveRow(): void {
-    debugger
-    console.log("testfusdhjf")
+   
     if (this.formGroup && this.formGroup.valid) {
       this.saveCurrent();
     }

@@ -1,6 +1,6 @@
 <kendo-grid
   #myGrid
-  [data]="gridSettings.gridData"
+  [data]="gridSettings.gridData.data"
   [kendoGridBinding]="gridData"
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
@@ -21,6 +21,7 @@
   (cellClick)="cellClickHandler($event)"
   (add)="addHandler()"
   (dataStateChange)="dataStateChange($event)"
+
 >
  
   <ng-template kendoGridToolbarTemplate>

@@ -1,11 +1,313 @@
+// import { CommonModule } from "@angular/common";
+// import { Component, OnInit, ViewChild } from "@angular/core";
+// import { FormsModule } from "@angular/forms";
+// import { ReactiveFormsModule } from "@angular/forms";
+// import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
+// import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+// import {
+//   DataBindingDirective,
+//   KENDO_GRID,
+//   KENDO_GRID_EXCEL_EXPORT,
+//   KENDO_GRID_PDF_EXPORT,
+//   GridComponent as KendoGridComponent
+// } from "@progress/kendo-angular-grid";
+// import { IconModule } from "@progress/kendo-angular-icons";
+// import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
+// import { process } from "@progress/kendo-data-query";
+// import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
+// // import { employees } from "./employee";
+// // import { DataService } from '../data.service';
+// import { DataService } from '../service/data.service';
+// import { HttpClient } from '@angular/common/http';
+// import { DataStateChangeEvent } from "@progress/kendo-angular-grid";
+// import { GridModule } from '@progress/kendo-angular-grid';
+
+// import { images } from "./images";
+
+// @Component({
+//   selector: "app-grid",
+//   standalone: true,
+//   imports: [
+//     CommonModule,
+//     KENDO_GRID,
+//     KENDO_CHARTS,
+//     KENDO_INPUTS,
+//     KENDO_GRID_PDF_EXPORT,
+//     KENDO_GRID_EXCEL_EXPORT,
+//     FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, 
+   
+    
+   
+//   ],
+//    templateUrl: './grid.component.html',
+//   styleUrl: './grid.component.css'
+// })
+// export class GridComponent implements OnInit {
+  
+ 
+//   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
+//   @ViewChild('myGrid') myGrid!: KendoGridComponent;
+
+//   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
+//   selectedLead = 'All Leads';
+//   selectedPreference = 'Select Saved Preferences';
+//   searchText = '';
+//   activeView: string = 'non-intl';
+//   // public gridData: any[] = [];
+//   // public skip = 0;
+//   // public selectedRowIndex: number | null = null;
+//   // public editingRow: any = null;
+//   // public dataState: any = {
+//   //   skip: 0,
+//   //   take: 20,
+//   //   sort: [],
+//   //   filter: []
+//   // };
+
+//   // constructor(private dataService: DataService, private http: HttpClient) {}
+
+//   // ngOnInit(): void {
+//   //   this.loadGridData();
+//   // }
+//   // dataStateChange(event: DataStateChangeEvent): void {
+//   //   this.dataState.skip = event.skip;
+//   //   this.dataState.take = event.take;
+//   //   this.dataState.sort = event.sort;
+//   //   this.dataState.filter = event.filter;
+    
+    
+//   //   this.loadGridData();
+//   // }
+
+//   // ngAfterViewInit(): void {
+   
+//   //   document.addEventListener('click', (event) => this.onGridClick(event));
+//   // }
+
+//   // loadGridData(): void {
+//   //   this.dataService.getUsers().subscribe((data: any[]) => {
+//   //     this.gridData = data;
+//   //   });
+//   // }
+
+ 
+//   // onCellClick(event: any): void {
+//   //   const field = event.column.field;
+//   //   const rowIndex = event.rowIndex;
+//   //   const fieldValue = event.dataItem[field];
+
+    
+//   //   this.selectedRowIndex = rowIndex;
+//   //   this.editingRow = { ...event.dataItem }; 
+//   // }
+
+//   // onGridClick(event: MouseEvent): void {
+//   //   if (!this.myGrid || !this.selectedRowIndex) return;
+
+//   //   const clickedInsideGrid =this.myGrid.wrapper.nativeElement.contains(event.target);
+
+    
+//   //   if (!clickedInsideGrid) {
+//   //     this.saveChanges(this.editingRow);
+//   //   }
+//   // }
+
+
+//   // saveChanges(updatedUser: any): void {
+//   //   if (updatedUser) {
+//   //     this.dataService.updateUser(updatedUser).subscribe(() => {
+        
+//   //       this.loadGridData();
+//   //       this.selectedRowIndex = null; 
+//   //     });
+//   //   }
+//   // }
+
+//   // onRowClick(event: any): void {
+//   //   const rowIndex = event.rowIndex;
+
+//   //   if (this.selectedRowIndex !== rowIndex) {
+//   //     this.selectedRowIndex = rowIndex;
+//   //     this.editingRow = { ...event.dataItem };
+//   //   }
+//   // }
+
+// toggleView(view: string): void {
+//   this.activeView = view;
+// }
+
+// public selectedAction: string = 'Action';
+
+// public areaList: Array<string> = [
+// "Edit",
+// "Delete", 
+// "View",
+// ];
+
+
+  
+//   public someList: Array<string> = [
+//     "avg smf",
+//     "canada",
+//     "App.setter",
+//     "Canada Filter",
+//     "Interstate",
+//     "lostvswon",
+//     "Shipper Type-National Account",
+  
+//   ];
+//   public editedRowIndex: number | null = null;
+// public editedItem: any;
+
+//   public gridData: any[] = [];
+//   public gridView: any[] = [];
+
+//   public mySelection: string[] = [];
+//   public pdfSVG: SVGIcon = filePdfIcon;
+//   public excelSVG: SVGIcon = fileExcelIcon;
+
+  
+//   constructor(private dataService: DataService) {}
+
+//   ngOnInit(): void {
+//     this.dataService.getUsers().subscribe((data: any) => {
+//       this.gridData = data;
+//       this.gridView = data;
+//     });
+//   }
+  
+//   public onFilter(value: Event): void {
+//     const inputValue = value;
+
+//     this.gridView = process(this.gridData, {
+//       filter: {
+//         logic: "or",
+//         filters: [
+//           {
+//             field: "full_name",
+//             operator: "contains",
+//             value: inputValue,
+//           },
+//           {
+//             field: "job_title",
+//             operator: "contains",
+//             value: inputValue,
+//           },
+//           {
+//             field: "budget",
+//             operator: "contains",
+//             value: inputValue,
+//           },
+//           {
+//             field: "phone",
+//             operator: "contains",
+//             value: inputValue,
+//           },
+//           {
+//             field: "address",
+//             operator: "contains",
+//             value: inputValue,
+//           },
+//         ],
+//       },
+//     }).data;
+
+//     this.dataBinding.skip = 0;
+//   }
+
+ 
+  
+//   public exportExcel(): void {
+//     this.myGrid.saveAsExcel();
+
+// }
+
+// addUser(): void {
+//   const newUser = {
+//     id: null, 
+//     name: '',
+//     email: '',
+//   };
+
+//   this.gridView.unshift(newUser); 
+//   this.gridView = [...this.gridView]; 
+
+//   this.editedRowIndex = 0;
+//   this.editedItem = { ...newUser };
+// }
+
+// onEdit(dataItem: any, rowIndex: number): void {
+//   this.editedRowIndex = rowIndex;
+//   this.editedItem = { ...dataItem };
+// }
+
+// cancelEdit(): void {
+//   this.editedRowIndex = null;
+//   this.editedItem = null;
+// }
+
+// saveEdit(rowIndex: number): void {
+//   const updatedItem = { ...this.gridView[rowIndex], ...this.editedItem };
+
+//   if (updatedItem.id == null) {
+//     // New user 
+//     this.dataService.addUser(updatedItem).subscribe((res: any) => {
+//       this.gridView[rowIndex] = res;
+//       this.gridView = [...this.gridView];
+//       this.editedRowIndex = null;
+//       this.editedItem = null;
+//     });
+//   } else {
+//     // Existing user 
+//     this.dataService.updateUser(updatedItem).subscribe((res: any) => {
+//       this.gridView[rowIndex] = res;
+//       this.gridView = [...this.gridView];
+//       this.editedRowIndex = null;
+//       this.editedItem = null;
+//     });
+//   }
+// }
+
+// onDelete(dataItem: any): void {
+//   const confirmed = window.confirm('Are you sure you want to delete this item?');
+
+//   if (confirmed) {
+//     this.dataService.deleteUser(dataItem.id).subscribe(() => {
+//       this.gridView = this.gridView.filter(item => item.id !== dataItem.id);
+//     });
+//   }
+// }
+
+
+
+// }
+
+
+
+
+
+
+
+
+
+
+
 import { CommonModule } from "@angular/common";
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { State, process } from '@progress/kendo-data-query';
+
+import { FormControl, FormGroup, FormsModule, Validators } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import { KENDO_CHARTS } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import {  EmployeeService } from '../service/employee.service';
+import { PersistingService  } from '../service/persisting.service';
+
 import {
+  CellClickEvent,
   DataBindingDirective,
+  GridComponent,
+  GridModule,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
   KENDO_GRID_PDF_EXPORT,
@@ -13,272 +315,413 @@ import {
 } from "@progress/kendo-angular-grid";
 import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
-import { process } from "@progress/kendo-data-query";
-import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
-// import { employees } from "./employee";
-// import { DataService } from '../data.service';
-import { DataService } from '../service/data.service';
-import { HttpClient } from '@angular/common/http';
-import { DataStateChangeEvent } from "@progress/kendo-angular-grid";
-import { GridModule } from '@progress/kendo-angular-grid';
-
-import { images } from "./images";
 
 @Component({
-  selector: "app-grid",
-  standalone: true,
-  imports: [
-    CommonModule,
-    KENDO_GRID,
-    KENDO_CHARTS,
-    KENDO_INPUTS,
-    KENDO_GRID_PDF_EXPORT,
-    KENDO_GRID_EXCEL_EXPORT,
-    FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, 
-   
-    
-   
-  ],
-   templateUrl: './grid.component.html',
-  styleUrl: './grid.component.css'
+  selector: 'app-edit',
+  imports: [ CommonModule,
+      KENDO_GRID,
+      KENDO_CHARTS,
+      KENDO_INPUTS,
+      KENDO_GRID_PDF_EXPORT,
+      KENDO_GRID_EXCEL_EXPORT,
+      FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule ],
+      templateUrl: './edit.component.html',
+  styleUrl: './edit.component.css'
 })
-export class GridComponent implements OnInit {
-  
+export class EditComponent implements OnInit  {
+//   public gridSettings: GridSettings = {
+//     state: {
+//       skip: 0,
+//       take: 5,
+
+//       // Initial filter descriptor
+//       filter: {
+//         logic: "and",
+//         filters: [],
+//       },
+//       group: [],
+//     },
+//     gridData: process(sampleProducts, {
+//       skip: 0,
+//       take: 5,
+//       // Initial filter descriptor
+//       filter: {
+//         logic: "and",
+//         filters: [],
+//       },
+//       group: [],
+//     }),
+//     columnsConfig: [
+//       {
+//         field: "recordId",
+//         title: "Record ID",
+//         filterable: false,
+//         filter: "numeric",
+//         width: 60,
+//         hidden: false,
+//       },
+//       {
+//         field: "lastName",
+//         title: "Last Name",
+//         filterable: true,
+//         filter: "text",
+//         width: 300,
+//         hidden: false,
+//       },
+//       {
+//         field: "firstName",
+//         title: "First Name",
+//         filter: "text",
+//         format: "{0:d}",
+//         width: 240,
+//         filterable: true,
+//         hidden: false,
+//       },
+//       {
+//         field: "primaryEmail",
+//         title: "Primary Email",
+//         filter: "text",
+//         format: "{0:c}",
+//         width: 180,
+//         filterable: true,
+//         hidden: false,
+//       },
+//       {
+//         field: "primaryPhoneType",
+//         title: "Primary Phone Type",
+//         filter: "numeric",
+//         width: 120,
+//         filterable: true,
+//         hidden: false,
+//       },
+     
+//  {
+//         field: "lmpLeadId",
+//         title: "LMP Lead ID",
+//         filter: "numeric",
+//         width: 120,
+//         filterable: true,
+//         hidden: false,
+//       },
+
+//       {
+//         field: "bookingAgency",
+//         title: "Booking Agency",
+//         filter: "text",
+//         width: 120,
+//         filterable: true,
+//         hidden: false,
+//       },
+//     ],
+//   };
  
-  @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
-  @ViewChild('myGrid') myGrid!: KendoGridComponent;
 
-  leadsOptions = ['All Leads', 'My Leads', 'Archived'];
-  selectedLead = 'All Leads';
-  selectedPreference = 'Select Saved Preferences';
-  searchText = '';
-  activeView: string = 'non-intl';
-  // public gridData: any[] = [];
-  // public skip = 0;
-  // public selectedRowIndex: number | null = null;
-  // public editingRow: any = null;
-  // public dataState: any = {
-  //   skip: 0,
-  //   take: 20,
-  //   sort: [],
-  //   filter: []
-  // };
-
-  // constructor(private dataService: DataService, private http: HttpClient) {}
-
-  // ngOnInit(): void {
-  //   this.loadGridData();
-  // }
-  // dataStateChange(event: DataStateChangeEvent): void {
-  //   this.dataState.skip = event.skip;
-  //   this.dataState.take = event.take;
-  //   this.dataState.sort = event.sort;
-  //   this.dataState.filter = event.filter;
-    
-    
-  //   this.loadGridData();
-  // }
-
-  // ngAfterViewInit(): void {
-   
-  //   document.addEventListener('click', (event) => this.onGridClick(event));
-  // }
-
-  // loadGridData(): void {
-  //   this.dataService.getUsers().subscribe((data: any[]) => {
-  //     this.gridData = data;
-  //   });
-  // }
-
- 
-  // onCellClick(event: any): void {
-  //   const field = event.column.field;
-  //   const rowIndex = event.rowIndex;
-  //   const fieldValue = event.dataItem[field];
-
-    
-  //   this.selectedRowIndex = rowIndex;
-  //   this.editingRow = { ...event.dataItem }; 
-  // }
-
-  // onGridClick(event: MouseEvent): void {
-  //   if (!this.myGrid || !this.selectedRowIndex) return;
-
-  //   const clickedInsideGrid =this.myGrid.wrapper.nativeElement.contains(event.target);
-
-    
-  //   if (!clickedInsideGrid) {
-  //     this.saveChanges(this.editingRow);
-  //   }
-  // }
-
-
-  // saveChanges(updatedUser: any): void {
-  //   if (updatedUser) {
-  //     this.dataService.updateUser(updatedUser).subscribe(() => {
-        
-  //       this.loadGridData();
-  //       this.selectedRowIndex = null; 
-  //     });
-  //   }
-  // }
-
-  // onRowClick(event: any): void {
-  //   const rowIndex = event.rowIndex;
-
-  //   if (this.selectedRowIndex !== rowIndex) {
-  //     this.selectedRowIndex = rowIndex;
-  //     this.editingRow = { ...event.dataItem };
-  //   }
-  // }
-
-toggleView(view: string): void {
-  this.activeView = view;
-}
-
-public selectedAction: string = 'Action';
-
-public areaList: Array<string> = [
-"Edit",
-"Delete", 
-"View",
-];
-
-
-  
-  public someList: Array<string> = [
-    "avg smf",
-    "canada",
-    "App.setter",
-    "Canada Filter",
-    "Interstate",
-    "lostvswon",
-    "Shipper Type-National Account",
-  
-  ];
-  public editedRowIndex: number | null = null;
-public editedItem: any;
 
   public gridData: any[] = [];
-  public gridView: any[] = [];
-
   public mySelection: string[] = [];
-  public pdfSVG: SVGIcon = filePdfIcon;
-  public excelSVG: SVGIcon = fileExcelIcon;
-
-  
-  constructor(private dataService: DataService) {}
-
-  ngOnInit(): void {
-    this.dataService.getUsers().subscribe((data: any) => {
-      this.gridData = data;
-      this.gridView = data;
-    });
-  }
-  
-  public onFilter(value: Event): void {
-    const inputValue = value;
-
-    this.gridView = process(this.gridData, {
-      filter: {
-        logic: "or",
-        filters: [
-          {
-            field: "full_name",
-            operator: "contains",
-            value: inputValue,
-          },
-          {
-            field: "job_title",
-            operator: "contains",
-            value: inputValue,
-          },
-          {
-            field: "budget",
-            operator: "contains",
-            value: inputValue,
-          },
-          {
-            field: "phone",
-            operator: "contains",
-            value: inputValue,
-          },
-          {
-            field: "address",
-            operator: "contains",
-            value: inputValue,
-          },
-        ],
-      },
-    }).data;
-
-    this.dataBinding.skip = 0;
-  }
-
+  public formGroup!: FormGroup;
+  private editedRowIndex: number | undefined;
+  private isNew: boolean | undefined;
+  public stateName: string = '';
  
-  
-  public exportExcel(): void {
-    this.myGrid.saveAsExcel();
+public selectedState: string = '';
+public savedStateNames: string[] = [];
+public selectedStateName: string = '';
+public newStateName: string = '';
 
+
+  @ViewChild('myGrid') myGrid!: GridComponent;
+  public employees: any[] = [];
+  public gridView: any[] = [];
+ 
+  public gridSettings: any = {
+    state: {
+      skip: 0,
+      take: 5,
+      filter: { logic: 'and', filters: [] },
+      group: [],
+    },
+ 
+    gridData: [],  // Initialize with an empty array for the data
+    columnsConfig: [
+            {
+              field: "recordId",
+              title: "Record ID",
+              filterable: false,
+              filter: "numeric",
+              width: 60,
+              hidden: false,
+            },
+            {
+              field: "lastName",
+              title: "Last Name",
+              filterable: true,
+              filter: "text",
+              width: 300,
+              hidden: false,
+            },
+            {
+              field: "firstName",
+              title: "First Name",
+              filter: "text",
+              format: "{0:d}",
+              width: 240,
+              filterable: true,
+              hidden: false,
+            },
+            {
+              field: "primaryEmail",
+              title: "Primary Email",
+              filter: "text",
+              format: "{0:c}",
+              width: 180,
+              filterable: true,
+              hidden: false,
+            },
+            {
+              field: "primaryPhoneType",
+              title: "Primary Phone Type",
+              filter: "numeric",
+              width: 120,
+              filterable: true,
+              hidden: false,
+            },
+           
+       {
+              field: "lmpLeadId",
+              title: "LMP Lead ID",
+              filter: "numeric",
+              width: 120,
+              filterable: true,
+              hidden: false,
+            },
+      
+            {
+              field: "bookingAgency",
+              title: "Booking Agency",
+              filter: "text",
+              width: 120,
+              filterable: true,
+              hidden: false,
+            },
+          ],
+  
+  };
+ 
+  constructor(private employeeService: EmployeeService, public persistingService: PersistingService) {
+    const gridSettings = this.persistingService.get('gridSettings');
+    if (gridSettings) {
+      this.gridSettings = this.mapGridSettings(gridSettings);
+    }
+  }
+  public get savedStateExists(): boolean {
+    return !!this.persistingService.get("gridSettings");
+  }
+  ngOnInit(): void {
+    this.employeeService.getAll().subscribe(data => {
+      this.gridSettings.gridData = process(data, this.gridSettings.state);
+    });
+    this.loadSavedStateNames();
+   
+
+  
+   }
+
+
+loadGridData(): void {
+  this.employeeService.getAll().subscribe(data => {
+    this.gridData = data;
+  });
+}
+public dataStateChange(state: State): void {
+  this.gridSettings.state = state;
+  this.persistingService.set('gridSettings', {
+    state: this.gridSettings.state,
+    columnsConfig: this.gridSettings.columnsConfig,
+  });
+
+  this.employeeService.getAll().subscribe(data => {
+    this.gridSettings.gridData = process(data, state);
+  });
 }
 
-addUser(): void {
-  const newUser = {
-    id: null, 
-    name: '',
-    email: '',
+
+// public saveGridSettings(grid: GridComponent): void {
+//   const columns = grid.columns;
+//   const gridConfig = {
+//     state: this.gridSettings.state,
+//     columnsConfig: columns.toArray().map((col: any) => ({
+//       field: col['field'],
+//       title: col['title'],
+//       width: col['width'],
+//       filter: col['filter'],
+//       format: col['format'],
+//       filterable: col['filterable'],
+//       hidden: col['hidden'],
+//     })),
+//   };
+//   this.persistingService.set('gridSettings', gridConfig);
+// }
+  
+
+// public loadSavedState(grid: GridComponent): void {
+//   const savedSettings = this.persistingService.get('gridSettings');
+//   if (savedSettings) {
+//     this.gridSettings = this.mapGridSettings(savedSettings);
+
+//     // ✅ Re-fetch and apply the state to grid data
+//     this.employeeService.getAll().subscribe(data => {
+//       this.gridSettings.gridData = process(data, this.gridSettings.state);
+//     });
+//   }
+// }
+public saveGridStateAs(grid: GridComponent, stateName: string): void {
+  if (!stateName.trim()) {
+    alert('Please enter a name for the state.');
+    return;
+  }
+
+  const columns = grid.columns.toArray().map((col: any) => ({
+    field: col.field,
+    title: col.title,
+    width: col.width,
+    filter: col.filter,
+    format: col.format,
+    filterable: col.filterable,
+    hidden: col.hidden
+  }));
+
+  const savedStates = this.persistingService.get('namedGridStates') || {};
+
+  savedStates[stateName] = {
+    state: this.gridSettings.state,
+    columnsConfig: columns
   };
 
-  this.gridView.unshift(newUser); 
-  this.gridView = [...this.gridView]; 
-
-  this.editedRowIndex = 0;
-  this.editedItem = { ...newUser };
+  this.persistingService.set('namedGridStates', savedStates);
+  this.loadSavedStateNames();
+  alert(`Grid state "${stateName}" saved successfully.`);
 }
 
-onEdit(dataItem: any, rowIndex: number): void {
-  this.editedRowIndex = rowIndex;
-  this.editedItem = { ...dataItem };
-}
 
-cancelEdit(): void {
-  this.editedRowIndex = null;
-  this.editedItem = null;
-}
 
-saveEdit(rowIndex: number): void {
-  const updatedItem = { ...this.gridView[rowIndex], ...this.editedItem };
 
-  if (updatedItem.id == null) {
-    // New user 
-    this.dataService.addUser(updatedItem).subscribe((res: any) => {
-      this.gridView[rowIndex] = res;
-      this.gridView = [...this.gridView];
-      this.editedRowIndex = null;
-      this.editedItem = null;
-    });
-  } else {
-    // Existing user 
-    this.dataService.updateUser(updatedItem).subscribe((res: any) => {
-      this.gridView[rowIndex] = res;
-      this.gridView = [...this.gridView];
-      this.editedRowIndex = null;
-      this.editedItem = null;
-    });
-  }
-}
+public loadSelectedGridState(grid: GridComponent, stateName: string): void {
+  if (!stateName) return;
 
-onDelete(dataItem: any): void {
-  const confirmed = window.confirm('Are you sure you want to delete this item?');
+  const savedStates = this.persistingService.get('namedGridStates');
+  if (savedStates && savedStates[stateName]) {
+    this.gridSettings.state = savedStates[stateName].state;
+    this.gridSettings.columnsConfig = savedStates[stateName].columnsConfig;
 
-  if (confirmed) {
-    this.dataService.deleteUser(dataItem.id).subscribe(() => {
-      this.gridView = this.gridView.filter(item => item.id !== dataItem.id);
+    this.employeeService.getAll().subscribe(data => {
+      this.gridSettings.gridData = process(data, this.gridSettings.state);
     });
   }
 }
 
 
 
+public loadSavedStateNames(): void {
+  const savedStates = this.persistingService.get('namedGridStates') || {};
+  this.savedStateNames = Object.keys(savedStates);
 }
+private mapGridSettings(settings: any): GridSettings {
+  return {
+    state: settings.state,
+    gridData: [],
+    columnsConfig: settings.columnsConfig || []
+  };
+}
+private mapDateFilter = (descriptor: any) => {
+  const filters = descriptor.filters || [];
+  filters.forEach((filter: any) => {
+    if (filter.filters) {
+      this.mapDateFilter(filter);
+    } else if (filter.field === 'DateOfJoining' && filter.value) {
+      filter.value = new Date(filter.value);
+    }
+  });
+};
+trackColumn(index: number, item: any): any {
+  return item.field;
+}
+
+  public addHandler(): void {
+    this.closeEditor();
+    this.formGroup = this.createFormGroup();
+    this.isNew = true;
+    this.myGrid.addRow(this.formGroup);
+  }
+
+  public saveRow(): void {
+   
+    if (this.formGroup && this.formGroup.valid) {
+      this.saveCurrent();
+    }
+  }
+
+  private saveCurrent(): void {
+    if (this.formGroup) {
+      const item = this.formGroup.value;
+  
+      // Ensure it has an 'id' field for editing
+      if (!item.id && item.recordId) {
+        item.id = item.recordId;
+      }
+  
+      this.employeeService.save(item, this.isNew!).subscribe(() => {
+        this.employeeService.getAll().subscribe((res) => {
+          this.gridData = res;
+          this.closeEditor();
+        });
+      });
+    }
+  }
+ 
+
+  public cellClickHandler({ isEdited, dataItem, rowIndex }: any): void {
+    if (isEdited || (this.formGroup && !this.formGroup.valid)) {
+      return;
+    }
+
+    if (this.isNew) {
+      rowIndex += 1;
+    }
+
+    this.saveCurrent();
+
+    this.formGroup = this.createFormGroup(dataItem);
+    this.editedRowIndex = rowIndex;
+
+    this.myGrid.editRow(rowIndex, this.formGroup);
+  }
+
+  public cancelHandler(): void {
+    this.closeEditor();
+  }
+
+  private closeEditor(): void {
+    this.myGrid.closeRow(this.editedRowIndex);
+    this.isNew = false;
+    this.editedRowIndex = undefined;
+    this.formGroup = undefined!;
+  }
+  private createFormGroup(dataItem?: any): FormGroup {
+    return new FormGroup({
+      id: new FormControl(dataItem?.id), // added
+      recordId: new FormControl(dataItem?.recordId || 0, Validators.required),
+      lastName: new FormControl(dataItem?.lastName || '', Validators.required),
+      firstName: new FormControl(dataItem?.firstName || '', Validators.required),
+      primaryEmail: new FormControl(dataItem?.primaryEmail || '', Validators.required),
+      primaryPhoneType: new FormControl(dataItem?.primaryPhoneType || '', Validators.required),
+      lmpLeadId: new FormControl(dataItem?.lmpLeadId || 0, Validators.required),
+      appointmentType: new FormControl(dataItem?.appointmentType || '', Validators.required),
+      bookingAgency: new FormControl(dataItem?.bookingAgency || '', Validators.required),
+    });
+  }
+
+ }
+
+
 

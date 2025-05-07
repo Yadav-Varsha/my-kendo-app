@@ -1,7 +1,6 @@
 <kendo-grid
   #myGrid
-  [data]="gridSettings.gridData.data"
-  [kendoGridBinding]="gridData"
+  [data]="gridSettings.gridData"
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
@@ -21,6 +20,7 @@
   (cellClick)="cellClickHandler($event)"
   (add)="addHandler()"
   (dataStateChange)="dataStateChange($event)"
+  
 
 >
  
@@ -31,7 +31,9 @@
       <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow()">Save</button>
       <button kendoButton themeColor="primary" (click)="cancelHandler()">Cancel</button>
     </div>
-  
+    <!-- <button class="k-button k-flat k-primary" (click)="clearFilters()">Clear Filters</button> -->
+
+    <button kendoButton (click)="clearFilters()">Clear Filters</button>
    
     <!-- <div >
       <button kendoButton (click)="saveGridSettings(myGrid)">Save current state</button>
@@ -45,9 +47,9 @@
     (valueChange)="loadSelectedGridState(myGrid, selectedState)"
   ></kendo-dropdownlist>
 
-  <input type="text" [(ngModel)]="stateName" placeholder="Enter state name" class="k-textbox" />
+ 
 
-  <button kendoButton (click)="saveGridStateAs(myGrid,stateName)">Save</button>
+  <button kendoButton (click)="saveGridStateAs(myGrid)">Save Grid State</button>
 
   </ng-template>
   

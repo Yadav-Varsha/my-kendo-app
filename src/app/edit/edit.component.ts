@@ -121,27 +121,21 @@ export class EditComponent implements OnInit  {
 //       },
 //     ],
 //   };
- 
-
-
   public gridData: any[] = [];
   public mySelection: string[] = [];
   public formGroup!: FormGroup;
   private editedRowIndex: number | undefined;
   private isNew: boolean | undefined;
   public stateName: string = '';
- 
-public selectedState: string = '';
+ public selectedState: string = '';
 public savedStateNames: string[] = [];
 public selectedStateName: string = '';
 public newStateName: string = '';
 
 
   @ViewChild('myGrid') myGrid!: GridComponent;
-  public employees: any[] = [];
-  public gridView: any[] = [];
  
-  public gridSettings: any = {
+ public gridSettings: any = {
     state: {
       skip: 0,
       take: 5,
@@ -149,8 +143,14 @@ public newStateName: string = '';
       group: [],
       sort: []
     },
- 
-    gridData: [],  // Initialize with an empty array for the data
+    gridData: process(this.gridData, {
+      skip: 0,
+      take: 5,
+      filter: { logic: 'and', filters: [] },
+      group: [],
+      sort: []
+    }),
+    // gridData: [],  // Initialize with an empty array for the data
     columnsConfig: [
             {
               field: "recordId",
@@ -236,17 +236,19 @@ public newStateName: string = '';
       this.gridSettings.gridData = process(data, this.gridSettings.state);
     });
     this.loadSavedStateNames();
-   
-
-  
    }
-
+// loadGridData(): void {
+//   this.employeeService.getAll().subscribe(data => {
+//     this.gridData = data;
+//   });
+// }
 
 loadGridData(): void {
   this.employeeService.getAll().subscribe(data => {
-    this.gridData = data;
+    this.gridSettings.gridData = process(data, this.gridSettings.state);
   });
 }
+
 
 public dataStateChange(state: State): void {
   this.gridSettings.state = state;
@@ -257,54 +259,40 @@ public dataStateChange(state: State): void {
 
   this.employeeService.getAll().subscribe(data => {
     this.gridSettings.gridData = process(data, state);
+    console.log('Grid data after state change:', this.gridSettings.gridData);
   });
 }
 
 
-// public saveGridSettings(grid: GridComponent): void {
-//   const columns = grid.columns;
-//   const gridConfig = {
-//     state: this.gridSettings.state,
-//     columnsConfig: columns.toArray().map((col: any) => ({
-//       field: col['field'],
-//       title: col['title'],
-//       width: col['width'],
-//       filter: col['filter'],
-//       format: col['format'],
-//       filterable: col['filterable'],
-//       hidden: col['hidden'],
-//     })),
-//   };
-//   this.persistingService.set('gridSettings', gridConfig);
-// }
-  
+public saveGridStateAs(grid: GridComponent): void {
+  const stateName = prompt('Enter a name for the state:');
 
-// public loadSavedState(grid: GridComponent): void {
-//   const savedSettings = this.persistingService.get('gridSettings');
-//   if (savedSettings) {
-//     this.gridSettings = this.mapGridSettings(savedSettings);
-
-//     // ✅ Re-fetch and apply the state to grid data
-//     this.employeeService.getAll().subscribe(data => {
-//       this.gridSettings.gridData = process(data, this.gridSettings.state);
-//     });
-//   }
-// }
-public saveGridStateAs(grid: GridComponent, stateName: string): void {
-  if (!stateName.trim()) {
+  if (!stateName || !stateName.trim()) {
     alert('Please enter a name for the state.');
     return;
   }
 
-  const columns = grid.columns.toArray().map((col: any) => ({
-    field: col.field,
-    title: col.title,
-    width: col.width,
-    filter: col.filter,
-    format: col.format,
-    filterable: col.filterable,
-    hidden: col.hidden,
-    sort: col.sort
+  // const columns = grid.columns.toArray().map((col: any) => ({
+  //   field: col.field,
+  //   title: col.title,
+  //   width: col.width,
+  //   filter: col.filter,
+  //   format: col.format,
+  //   filterable: col.filterable,
+  //   hidden: col.hidden,
+  //   sort: col.sort
+  // const columns = grid.columns.toArray().map(item => ({
+    const columns = grid.columns.toArray().map(item => ({
+        field: (item as any).field,
+        width:(item as any).width,
+        title: (item as any).title,
+        filter:(item as any).filter,
+        format:(item as any).format,
+        filterable:(item as any).filterable,
+        orderIndex:item.orderIndex,
+        hidden:(item as any).hidden,
+        sort:(item as any).sort
+  
   }));
 
   const savedStates = this.persistingService.get('namedGridStates') || {};
@@ -313,7 +301,7 @@ public saveGridStateAs(grid: GridComponent, stateName: string): void {
     state: this.gridSettings.state,
     columnsConfig: columns
   };
-
+console.log('Saved states:', savedStates);
   this.persistingService.set('namedGridStates', savedStates);
   this.loadSavedStateNames();
   alert(`Grid state "${stateName}" saved successfully.`);
@@ -336,6 +324,7 @@ public loadSelectedGridState(grid: GridComponent, stateName: string): void {
     if (savedColumn) {
       col.hidden = savedColumn.hidden;
       col.sort = savedColumn.sort;
+     col.orderIndex= (savedColumn as any).orderIndex;
     }
   });
 
@@ -347,20 +336,29 @@ public loadSelectedGridState(grid: GridComponent, stateName: string): void {
   }
 }
 
-
-
 public loadSavedStateNames(): void {
   const savedStates = this.persistingService.get('namedGridStates') || {};
   this.savedStateNames = Object.keys(savedStates);
 }
 
-private mapGridSettings(settings: any): GridSettings {
-  return {
-    state: settings.state,
-    gridData: [],
-    columnsConfig: settings.columnsConfig || []
-  };
-}
+// private mapGridSettings(settings: any): GridSettings {
+//   return {
+//     state: settings.state,
+//     gridData: [],
+//     columnsConfig: settings.columnsConfig || []
+//   };
+// }
+private mapGridSettings(savedSettings: any): any {
+    const state = savedSettings.state;
+    this.mapDateFilter(state.filter);
+  
+    return {
+      state,
+      columnsConfig: savedSettings.columnsConfig.sort((a: any, b: any) => a.orderIndex - b.orderIndex),
+       gridData:process(this.gridData,state), // Placeholder for now
+     };
+    }
+
 private mapDateFilter = (descriptor: any) => {
   const filters = descriptor.filters || [];
   filters.forEach((filter: any) => {
@@ -374,6 +372,40 @@ private mapDateFilter = (descriptor: any) => {
 trackColumn(index: number, item: any): any {
   return item.field;
 }
+
+clearFilters(): void {
+  // Make a clean clone of the current state
+  const newState: State = {
+    ...this.gridSettings.state,
+    filter: null // Remove filters safely
+  };
+
+  this.gridSettings.state = newState;
+
+  // Get fresh data and re-process with new (no-filter) state
+  this.employeeService.getAll().subscribe(data => {
+    if (data) {
+      this.gridSettings.gridData = process(data, newState);
+    } else {
+      this.gridSettings.gridData = []; // fallback to empty array to prevent UI crash
+    }
+  });
+
+  // Save updated state
+  this.persistingService.set('gridSettings', {
+    state: newState,
+    columnsConfig: this.gridSettings.columnsConfig,
+  });
+
+  console.log('Filters cleared:', newState.filter);
+}
+
+
+
+
+
+
+
 
   public addHandler(): void {
     this.closeEditor();

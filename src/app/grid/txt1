@@ -725,3 +725,47 @@ trackColumn(index: number, item: any): any {
 
 
 
+//  public saveGridStateAs(grid: GridComponent, stateName: string): void {
+//   if (!stateName.trim()) {
+//     alert('Please enter a name for the state.');
+//     return;
+//   }
+
+//   const columns = grid.columns.toArray().map((item) => ({
+//     field: (item as any)['field'],
+//     width:(item as any)['width'],
+//     title: (item as any)['title'],
+//     filter:(item as any)['filter'],
+//     format:(item as any)['format'],
+//     filterable:(item as any)['filterable'],
+//     orderIndex:(item as any)['orderIndex'],
+//     hidden:(item as any)['hidden'],
+//     sort:(item as any)['sort']
+   
+  
+
+//   }));
+
+//   const savedStates = this.persistingService.get('namedGridStates') || {};
+
+//   savedStates[stateName] = {
+//     state: this.gridSettings.state,
+//     columnsConfig: columns
+//   };
+
+//   this.persistingService.set('namedGridStates', savedStates);
+//   this.loadSavedStateNames();
+//   alert(`Grid state "${stateName}" saved successfully.`);
+// }
+
+
+// private mapGridSettings(savedSettings: any): any {
+//   const state = savedSettings.state;
+//   this.mapDateFilter(state.filter);
+
+//   return {
+//     state,
+//     columnsConfig: savedSettings.columnsConfig.sort((a: any, b: any) => a.orderIndex - b.orderIndex),
+//     gridData: [],  // Placeholder for now
+//   };
+// }

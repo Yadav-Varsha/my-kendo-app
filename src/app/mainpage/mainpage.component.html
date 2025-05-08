@@ -175,25 +175,52 @@
     <ng-template kendoGridCellTemplate let-dataItem>
       <!-- <div class="d-flex align-items-center gap-2"> -->
         <div ngbDropdown container="body" class="d-inline-block position-relative">
-          <button class="btn btn-outline-success dropdown-toggle" ngbDropdownToggle>
-           Actions
+          <button class="btn btn-success dropdown-toggle " ngbDropdownToggle>
+            <i class="bi bi-gear me-1"></i>Actions
           </button>
-          <div ngbDropdownMenu class="p-2 shadow" style="columns: 2;">
-            <button ngbDropdownItem>View Lead</button>
-            <button ngbDropdownItem>Edit Lead</button>
-            <button ngbDropdownItem>Assign to Sales Rep</button>
-            <button ngbDropdownItem>Schedule Appointment</button>
-            <button ngbDropdownItem>Possible Matches</button>
-            <button ngbDropdownItem>Tie and Untie Qualified Leads</button>
-            <button ngbDropdownItem>Audit Trail</button>
-            <button ngbDropdownItem>Estimates</button>
-            <button ngbDropdownItem>Lead Documents</button>
-            <button ngbDropdownItem>Register With STS</button>
-            <button ngbDropdownItem>Survey List</button>
-            <button ngbDropdownItem>Duplicate Lead</button>
-            <button ngbDropdownItem>Chat</button>
+          <div ngbDropdownMenu class="p-2 shadow" style="columns: 2; width: 400px; font-size: 0.875rem;">
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> View Lead
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Edit Lead
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Assign to Sales Rep
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Schedule Appointment
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Possible Matches
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Tie and Untie Qualified Leads
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Audit Trail
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Estimates
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Lead Documents
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Register With STS
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Survey List
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Duplicate Lead
+            </button>
+            <button ngbDropdownItem class="d-flex align-items-center">
+              <span class="green-arrow"></span> Chat
+            </button>
           </div>
         </div>
+        
         
         <!-- <kendo-icon name="gear" size="default"></kendo-icon>
         <kendo-dropdownlist 
@@ -238,6 +265,17 @@
 
   <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200">
   </kendo-grid-column>
+  <kendo-grid-column
+  field="firstOrderedOn"
+  title="First Ordered On"
+  filter="date"
+  format="{0:d}"
+  [filterable]="true"
+  [width]="240"
+  [hidden]="false"
+>
+</kendo-grid-column>
+
 
   <kendo-grid-pdf
     fileName="GridData.pdf"

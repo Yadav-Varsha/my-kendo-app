@@ -73,3 +73,14 @@ background-color:  #7ec241;
   color: white !important;
   font-weight: bold;
 }
+
+.green-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-right: 6px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid #76b82a; /* green */
+}
+

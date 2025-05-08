@@ -15,6 +15,7 @@ import { FormControl, FormsModule, Validators,FormGroup } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import { KENDO_CHARTS, } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   DataBindingDirective,
   GridComponent,
@@ -42,7 +43,7 @@ import { GridModule } from '@progress/kendo-angular-grid';
     KENDO_INPUTS,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,
-    FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, 
+    FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, NgbDropdownModule,
    ],
    templateUrl: './mainpage.component.html',
    styleUrl: './mainpage.component.css'
@@ -373,6 +374,10 @@ public get savedStateExists(): boolean {
   };
   trackColumn(index: number, item: any): any {
     return item.field;
+  }
+
+  public clearFilters(): void {
+    window.location.reload();
   }
 
   toggleTheme() {

@@ -126,7 +126,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <button class="btn  btn-success">Clear Filters</button>
+      <button class="btn  btn-success" (click)="clearFilters()">Clear Filters</button>
       <button class="btn  btn-success ">Bulk Edit</button>
       <button class="btn  btn-success" (click)="saveGridStateAs(myGrid)" >Save Preferences</button>
 
@@ -173,14 +173,35 @@
   <!-- Actions -->
   <kendo-grid-column field="Actions" title="Actions" [width]="180" [sticky]="true">
     <ng-template kendoGridCellTemplate let-dataItem>
-      <div class="d-flex align-items-center gap-2">
-        <kendo-icon name="gear" size="default"></kendo-icon>
+      <!-- <div class="d-flex align-items-center gap-2"> -->
+        <div ngbDropdown container="body" class="d-inline-block position-relative">
+          <button class="btn btn-outline-success dropdown-toggle" ngbDropdownToggle>
+           Actions
+          </button>
+          <div ngbDropdownMenu class="p-2 shadow" style="columns: 2;">
+            <button ngbDropdownItem>View Lead</button>
+            <button ngbDropdownItem>Edit Lead</button>
+            <button ngbDropdownItem>Assign to Sales Rep</button>
+            <button ngbDropdownItem>Schedule Appointment</button>
+            <button ngbDropdownItem>Possible Matches</button>
+            <button ngbDropdownItem>Tie and Untie Qualified Leads</button>
+            <button ngbDropdownItem>Audit Trail</button>
+            <button ngbDropdownItem>Estimates</button>
+            <button ngbDropdownItem>Lead Documents</button>
+            <button ngbDropdownItem>Register With STS</button>
+            <button ngbDropdownItem>Survey List</button>
+            <button ngbDropdownItem>Duplicate Lead</button>
+            <button ngbDropdownItem>Chat</button>
+          </div>
+        </div>
+        
+        <!-- <kendo-icon name="gear" size="default"></kendo-icon>
         <kendo-dropdownlist 
           [data]="areaList" 
           [defaultItem]="'Actions'" 
           class="large">
-        </kendo-dropdownlist>
-      </div>
+        </kendo-dropdownlist> -->
+      <!-- </div> -->
     </ng-template>
   </kendo-grid-column>
   

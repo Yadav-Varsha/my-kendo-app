@@ -1,0 +1,225 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h2 class="text-all fw-bold mb-0">Lead Management</h2>
+  <!-- <span class="lead p-2">Leads</span> -->
+  <div class="d-flex align-items-center gap-2 ms-auto">
+    <div>
+      <input type="checkbox" id="viewBoardCheck" />
+      <label for="viewBoardCheck" class="mb-0 ms-2"> Board View</label>
+    </div>
+    <button type="button" class="btn btn-success" (click)="exportExcel()">
+      <i class="bi bi-file-earmark-excel"></i> Export to Excel
+    </button>
+    <!-- 
+    <button type="button" class="btn btn-all" (click)="addUser()">
+      Create
+    </button>  -->
+   
+    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 " (click)="toggleTheme()">
+      <i class="fas" [ngClass]="theamService.isDarkMode() ? 'fa-sun' : 'fa-moon'"></i>
+      <span> {{ theamService.isDarkMode() ? '' : '' }}</span>
+    </button> 
+  </div>
+</div>
+
+<kendo-grid
+  #myGrid
+ 
+  kendoGridSelectBy="id"
+  [(selectedKeys)]="mySelection"
+  [selectable]="{ mode: 'multiple', drag: true }"
+  [pageSize]="20"
+  [pageable]="true"
+  [pageSize]="gridSettings.state.take"
+  [skip]="gridSettings.state.skip"
+  [sortable]="true"
+  [sort]="gridSettings.state.sort"
+  [filterable]="true"
+  [filter]="gridSettings.state.filter"
+  [groupable]="true"
+  [group]="gridSettings.state.group"
+  [reorderable]="true"
+  [resizable]="true"
+  [height]="500"
+  [columnMenu]="{ filter: true }"
+  (cellClick)="cellClickHandler($event)"
+  (add)="addHandler()"
+  (dblclick)="saveRow(dataItem)"
+  (dataStateChange)="dataStateChange($event)"
+>
+  <ng-template kendoGridToolbarTemplate>
+
+    @if (!formGroup) {
+      <button kendoGridAddCommand>Add new</button>
+      } @if (formGroup) {
+      <div>
+        <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow(dataItem)">
+          Save
+        </button>
+        <button kendoButton themeColor="primary" (click)="cancelHandler()">
+          Cancel
+        </button>
+      </div>
+      }
+    <kendo-dropdownlist
+      [data]="leadsOptions"
+      [(ngModel)]="selectedLead"
+      class="large-dropdown"
+    >
+    </kendo-dropdownlist>
+    <!-- <kendo-dropdownlist
+      [data]="someList"
+      defaultItem="Select Saved Preferences"
+      class="large-dropdown"
+    ></kendo-dropdownlist> -->
+    <kendo-dropdownlist
+    [data]="savedStateNames"
+    [(ngModel)]="selectedState"
+    [defaultItem]="'Select Saved Preferences'"
+    class="large-dropdown"
+    [valuePrimitive]="true"
+   
+    (valueChange)="loadSelectedGridState(myGrid, selectedState)"
+  >
+    <ng-template kendoDropDownListItemTemplate let-dataItem>
+      <span class="d-flex justify-content-between align-items-center w-100">
+        <span>{{ dataItem }}</span>
+        <span *ngIf="dataItem !== 'Select state'" class="ml-2 text-danger"
+              (click)="deleteState($event, dataItem)" title="Delete">
+          <i class="fa fa-trash"></i>
+        </span>
+        </span>
+    </ng-template>
+  </kendo-dropdownlist>
+
+  <button kendoButton (click)="saveGridStateAs(myGrid)">Save Grid State</button>
+    
+    <kendo-textbox
+    [style.width.px]="165"
+    placeholder="Search in all columns..."
+    (valueChange)="onFilter($event)"
+  >
+  </kendo-textbox>
+  <button class="btn btn-success">
+    <i class="bi bi-search"></i>
+  </button>
+  
+   
+    <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+      <!-- Toggle Buttons -->
+      <div class="toggle-wrapper d-inline-flex p-1 rounded-pill">
+        <button
+          class="toggle-btn"
+          [ngClass]="{ 'active-btn': activeView === 'non-intl' }"
+          (click)="toggleView('non-intl')"
+        >
+          Non-Intl.
+        </button>
+
+        <button
+          class="toggle-btn"
+          [ngClass]="{ 'active-btn': activeView === 'intl' }"
+          (click)="toggleView('intl')"
+        >
+          Intl.
+        </button>
+      </div>
+
+      <!-- Action Buttons -->
+      <button class="btn  btn-success">Clear Filters</button>
+      <button class="btn  btn-success ">Bulk Edit</button>
+      <button class="btn  btn-success">Save Preferences</button>
+
+      <!-- Menu Icon Button -->
+      <button class="btn border" style="padding: 4px 8px">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+   
+  </ng-template>
+
+  <!-- <kendo-grid-column field="actions" title="Actions" [width]="250">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <ng-container *ngIf="editedRowIndex === rowIndex; else normalActions">
+        <button class="btn btn-sm btn-success me-1" (click)="saveEdit(rowIndex)">
+          <i class="bi bi-check-lg"></i>
+        </button>
+        <button class="btn btn-sm btn-secondary me-1" (click)="cancelEdit()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </ng-container> 
+<ng-template #normalActions>
+        <button class="btn btn-sm btn-warning me-1"">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button class="btn btn-sm btn-danger me-1">
+          <i class="bi bi-trash"></i>
+        </button>
+        <kendo-dropdownlist [data]="areaList" defaultItem="Actions" class="large"></kendo-dropdownlist>
+   
+      </ng-template>
+       </ng-template>
+    </kendo-grid-column>  -->
+  
+  <kendo-grid-checkbox-column
+    [width]="45"
+    [headerClass]="{ 'text-center': true }"
+    [class]="{ 'text-center': true }"
+    [resizable]="false"
+    [columnMenu]="false"
+    [showSelectAll]="true"
+    [sticky]="true"
+  ></kendo-grid-checkbox-column>
+  <!-- Actions -->
+  <kendo-grid-column field="Actions" title="Actions" [width]="180" [sticky]="true">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div class="d-flex align-items-center gap-2">
+        <kendo-icon name="gear" size="default"></kendo-icon>
+        <kendo-dropdownlist 
+          [data]="areaList" 
+          [defaultItem]="'Actions'" 
+          class="large">
+        </kendo-dropdownlist>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  
+
+  <kendo-grid-column field="recordId" editor="numeric" title="Record Id" [width]="200"  >
+  </kendo-grid-column>
+
+  <kendo-grid-column field="lastName" title="Last Name" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column field="firstName" title="First Name" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column field="primaryEmail" title="Primary Email" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="primaryPhoneType"
+    title="Primary Phone Type"
+    editor="numeric"
+    [width]="200"
+  >
+  </kendo-grid-column>
+
+  <kendo-grid-column field="lmpLeadId" editor="numeric" title="LMP Lead Id" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="appointmentType"
+    title="Appointment Type"
+    [width]="200"
+  >
+  </kendo-grid-column>
+
+  <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200">
+  </kendo-grid-column>
+
+  <kendo-grid-pdf
+    fileName="GridData.pdf"
+    [repeatHeaders]="true"
+  ></kendo-grid-pdf>
+  <kendo-grid-excel fileName="GridData.xlsx"></kendo-grid-excel>
+</kendo-grid>

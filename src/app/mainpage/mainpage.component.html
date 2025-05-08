@@ -23,21 +23,29 @@
 
 <kendo-grid
   #myGrid
+  [data]="gridSettings.gridData"
   [kendoGridBinding]="gridView.length ? gridView : gridData"
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
   [pageSize]="20"
   [pageable]="true"
+  [pageSize]="gridSettings.state.take"
+  [skip]="gridSettings.state.skip"
   [sortable]="true"
-  [groupable]="false"
+  [sort]="gridSettings.state.sort"
+  [filterable]="true"
+  [filter]="gridSettings.state.filter"
+  [groupable]="true"
+  [group]="gridSettings.state.group"
   [reorderable]="true"
   [resizable]="true"
   [height]="500"
   [columnMenu]="{ filter: true }"
   (cellClick)="cellClickHandler($event)"
   (add)="addHandler()"
-  (dblclick)="saveRow(dataItem)"
+  (dblclick)="saveRow($event)"
+  (dataStateChange)="dataStateChange($event)"
 >
   <ng-template kendoGridToolbarTemplate>
 
@@ -45,7 +53,7 @@
       <button kendoGridAddCommand>Add new</button>
       } @if (formGroup) {
       <div>
-        <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow(dataItem)">
+        <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow($event)">
           Save
         </button>
         <button kendoButton themeColor="primary" (click)="cancelHandler()">
@@ -59,11 +67,32 @@
       class="large-dropdown"
     >
     </kendo-dropdownlist>
-    <kendo-dropdownlist
+    <!-- <kendo-dropdownlist
       [data]="someList"
       defaultItem="Select Saved Preferences"
       class="large-dropdown"
-    ></kendo-dropdownlist>
+    ></kendo-dropdownlist> -->
+    <kendo-dropdownlist
+    [data]="savedStateNames"
+    [(ngModel)]="selectedState"
+    [defaultItem]="'Select Saved Preferences'"
+    class="large-dropdown"
+    [valuePrimitive]="true"
+   
+    (valueChange)="loadSelectedGridState(myGrid, selectedState)"
+  >
+    <ng-template kendoDropDownListItemTemplate let-dataItem>
+      <span class="d-flex justify-content-between align-items-center w-100">
+        <span>{{ dataItem }}</span>
+        <span *ngIf="dataItem !== 'Select Saved Preferences'" class="ml-2 text-danger"
+              (click)="deleteState($event, dataItem)" title="Delete">
+          <i class="fa fa-trash"></i>
+        </span>
+        </span>
+    </ng-template>
+  </kendo-dropdownlist>
+
+  <!-- <button kendoButton (click)="saveGridStateAs(myGrid)">Save Grid State</button> -->
     
     <kendo-textbox
     [style.width.px]="165"
@@ -99,7 +128,7 @@
       <!-- Action Buttons -->
       <button class="btn  btn-success">Clear Filters</button>
       <button class="btn  btn-success ">Bulk Edit</button>
-      <button class="btn  btn-success">Save Preferences</button>
+      <button class="btn  btn-success" (click)="saveGridStateAs(myGrid)" >Save Preferences</button>
 
       <!-- Menu Icon Button -->
       <button class="btn border" style="padding: 4px 8px">
@@ -139,6 +168,7 @@
     [resizable]="false"
     [columnMenu]="false"
     [showSelectAll]="true"
+    [sticky]="true"
   ></kendo-grid-checkbox-column>
   <!-- Actions -->
   <kendo-grid-column field="Actions" title="Actions" [width]="180" [sticky]="true">
@@ -194,3 +224,4 @@
   ></kendo-grid-pdf>
   <kendo-grid-excel fileName="GridData.xlsx"></kendo-grid-excel>
 </kendo-grid>
+

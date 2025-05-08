@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { GridComponent } from "./grid/grid.component";
 import { NavBar3Component } from './updatenav/nav-bar.component';
 import { EditComponent } from "./edit/edit.component";
+import { MainpageComponent } from './mainpage/mainpage.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, GridComponent, NavBar3Component, EditComponent],
+  imports: [RouterOutlet, NavBar3Component,EditComponent,MainpageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

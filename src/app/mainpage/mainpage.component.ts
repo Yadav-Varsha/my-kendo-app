@@ -29,17 +29,16 @@ import {
   KENDO_GRID_PDF_EXPORT,
 } from '@progress/kendo-angular-grid';
 
+import { formatDate } from '@angular/common';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { IconModule } from '@progress/kendo-angular-icons';
 import { KENDO_INPUTS } from '@progress/kendo-angular-inputs';
-import { process, State,filterBy } from '@progress/kendo-data-query';
+import { process, State } from '@progress/kendo-data-query';
 import { fileExcelIcon, filePdfIcon, SVGIcon } from '@progress/kendo-svg-icons';
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
 import { TheamService } from '../service/theam.service';
-import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
-import { formatDate } from '@angular/common';
-import { FilterCellTemplateDirective } from '@progress/kendo-angular-grid'; // usually auto-imported
 @Component({
   selector: 'app-mainpage',
   standalone: true,
@@ -81,18 +80,13 @@ export class MainpageComponent implements OnInit {
   public selectedStateName: string = '';
   public newStateName: string = '';
   public originalData: any[] = [...this.gridData]; // store full data once on init/load
-  public createdSources: string[] = ['Website', 'Mobile']; // Example sources
-   public filterOptions = [
-    { text: 'Mobile', value: 'Mobile' },
-    { text: 'Website', value: 'Website' }
-  
-  ]; // Customize filter options as per your requirement
-  public state: State = {
-    skip: 0,
-    take: 10
-  };
   public createdSourceFilterValue: any = null;
 
+public createdSourceFilterOptions = [
+  { text: 'Mobile', value: 'Mobile' },
+  { text: 'Website', value: 'Website' }
+];
+ 
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: GridComponent;
   public gridSettings: any = {
@@ -583,6 +577,29 @@ export class MainpageComponent implements OnInit {
 //     };
 //   }
 // };
+onCreatedSourceFilterChange(value: any): void {
+  const filters = [];
 
+  if (value) {
+    filters.push({
+      field: 'createdSource',
+      operator: 'eq',
+      value: value
+    });
+  }
+
+  // Combine with any other existing filters
+  const existingFilters = this.gridSettings.state.filter?.filters || [];
+  const otherFilters = existingFilters.filter((f: any) => f.field !== 'createdSource');
+
+  const newFilters = [...otherFilters, ...filters];
+
+  this.gridSettings.state.filter = {
+    logic: 'and',
+    filters: newFilters
+  };
+
+  this.gridSettings.gridData = process(this.gridData, this.gridSettings.state);
+}
 
 }

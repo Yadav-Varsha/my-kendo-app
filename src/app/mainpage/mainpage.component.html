@@ -263,19 +263,63 @@
     [width]="200"
   >
   </kendo-grid-column>
-
+  
   <kendo-grid-column field="bookingAgency" title="Booking Agency" [width]="200">
   </kendo-grid-column>
-  <kendo-grid-column
-  field="firstOrderedOn"
-  title="First Ordered On"
-  filter="date"
-  format="{0:d}"
-  [filterable]="true"
-  [width]="240"
-  [hidden]="false"
->
+
+  <kendo-grid-column field="leadStatus" title="Lead Status" [width]="200" >
+  <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+    <kendo-dropdownlist
+      [formControl]="formGroup.get('leadStatus')"
+      [data]="leadStatusOptions"
+      [valuePrimitive]="true"
+    >
+    </kendo-dropdownlist>
+  </ng-template>
 </kendo-grid-column>
+
+<!-- 
+   <kendo-grid-column field="createdSource" title="Created Source" [width]="200">
+  </kendo-grid-column> -->
+
+  <kendo-grid-column field="createdSource" title="Created Source" [width]="200" [filterable]="true">
+  <ng-template kendoGridFilterMenuTemplate let-column let-filter="filter">
+    <kendo-dropdownlist
+      [data]="filterOptions"
+      [textField]="'text'"
+      [valueField]="'value'"
+      [(value)]="filter.value"
+      (valueChange)="onFilterChange($event, column)"
+    >
+    </kendo-dropdownlist>
+  </ng-template>
+</kendo-grid-column>
+
+
+<kendo-grid-column
+  field="assignedDate"
+  title="Assigned Date"
+  format="{0:MM-dd-yyyy}"
+  filter="date"
+  [filterable]="true"
+  [width]="200"
+>
+  <!-- Display formatted date -->
+  <ng-template kendoGridCellTemplate let-dataItem>
+    {{ dataItem.assignedDate | date: 'MM-dd-yyyy' }}
+  </ng-template>
+
+  <!-- Datepicker editor -->
+  <ng-template kendoGridEditTemplate let-formGroup="formGroup">
+    <kendo-datepicker
+      [formControl]="formGroup.get('assignedDate')"
+      format="MM-dd-yyyy"
+    ></kendo-datepicker>
+  </ng-template>
+</kendo-grid-column>
+
+
+
 
 
   <kendo-grid-pdf

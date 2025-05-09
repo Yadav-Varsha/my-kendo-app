@@ -9,30 +9,38 @@
 // export class MainpageComponent {
 
 // }
-import { CommonModule } from "@angular/common";
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { KENDO_CHARTS, } from "@progress/kendo-angular-charts";
-import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { KENDO_CHARTS } from '@progress/kendo-angular-charts';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import {
   DataBindingDirective,
   GridComponent,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
-  KENDO_GRID_PDF_EXPORT
-} from "@progress/kendo-angular-grid";
+  KENDO_GRID_PDF_EXPORT,
+} from '@progress/kendo-angular-grid';
 
 import { GridModule } from '@progress/kendo-angular-grid';
-import { IconModule } from "@progress/kendo-angular-icons";
-import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
-import { process, State } from "@progress/kendo-data-query";
-import { fileExcelIcon, filePdfIcon, SVGIcon } from "@progress/kendo-svg-icons";
+import { IconModule } from '@progress/kendo-angular-icons';
+import { KENDO_INPUTS } from '@progress/kendo-angular-inputs';
+import { process, State,filterBy } from '@progress/kendo-data-query';
+import { fileExcelIcon, filePdfIcon, SVGIcon } from '@progress/kendo-svg-icons';
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
 import { TheamService } from '../service/theam.service';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { formatDate } from '@angular/common';
 @Component({
-  selector: "app-mainpage",
+  selector: 'app-mainpage',
   standalone: true,
   imports: [
     CommonModule,
@@ -41,13 +49,17 @@ import { TheamService } from '../service/theam.service';
     KENDO_INPUTS,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,
-    FormsModule,DropDownsModule,IconModule,GridModule, ReactiveFormsModule, NgbDropdownModule,
-   ],
-   templateUrl: './mainpage.component.html',
-   styleUrl: './mainpage.component.css'
+    FormsModule,
+    DropDownsModule,
+    IconModule,
+    GridModule,
+    ReactiveFormsModule,
+    NgbDropdownModule, DateInputsModule
+  ],
+  templateUrl: './mainpage.component.html',
+  styleUrl: './mainpage.component.css',
 })
 export class MainpageComponent implements OnInit {
- 
   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   selectedLead = 'All Leads';
   // selectedPreference = 'Select Saved Preferences';
@@ -59,8 +71,8 @@ export class MainpageComponent implements OnInit {
   public formGroup!: FormGroup;
   public editedRowIndex: number | undefined;
   private isNew: boolean | undefined;
- public gridView: any[] = [];
- public pdfSVG: SVGIcon = filePdfIcon;
+  public gridView: any[] = [];
+  public pdfSVG: SVGIcon = filePdfIcon;
   public excelSVG: SVGIcon = fileExcelIcon;
   public stateName: string = '';
   public selectedState: string = '';
@@ -68,10 +80,16 @@ export class MainpageComponent implements OnInit {
   public selectedStateName: string = '';
   public newStateName: string = '';
   public originalData: any[] = [...this.gridData]; // store full data once on init/load
- 
-  
+   public filterOptions = [
+    { text: 'Option 1', value: 'Option 1' },
+    { text: 'Option 2', value: 'Option 2' },
+    { text: 'Option 3', value: 'Option 3' }
+  ]; // Customize filter options as per your requirement
+  public state: State = {
+    skip: 0,
+    take: 10
+  };
 
- 
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: GridComponent;
   public gridSettings: any = {
@@ -157,77 +175,92 @@ export class MainpageComponent implements OnInit {
         hidden: false,
         sort: null,
       },
-{
-  field:'assignedDate',
-  title:'Assigned Date',
-  filter:'date',
-  format:"{0:d}",
-  filterable:true,
-  hidden:false
-},
+      
+      {
+        field: 'leadStatus',
+        title: 'Lead Status',
+        filter: 'text',
+        width: 120,
+        filterable: true,
+        hidden: false,
+        sort: null,
+      },
+      {
+        field:'createdSource',
+        title:'Created Source',
+         filter: 'text',
+        width: 120,
+        filterable: true,
+        hidden: false,
+        sort: null,
+      },
+      {
+        field: 'assignedDate',
+        title: 'Assigned Date',
+        filter: 'date',
+        format: '{0:d}',
+        filterable: true,
+        hidden: false,
+      },
     ],
   };
   columns: any;
-
 
   // leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   // selectedLead = 'All Leads';
   // selectedPreference = 'Select Saved Preferences';
   // searchText = '';
   // activeView: string = 'non-intl';
- 
 
-// toggleView(view: string): void {
-//   this.activeView = view;
-// }
+  // toggleView(view: string): void {
+  //   this.activeView = view;
+  // }
 
-// public selectedAction: string = 'Action';
+  // public selectedAction: string = 'Action';
 
-// public areaList: Array<string> = [
-// "Edit",
-// "Delete", 
-// "View",
-// ];
+  // public areaList: Array<string> = [
+  // "Edit",
+  // "Delete",
+  // "View",
+  // ];
 
+  //   public someList: Array<string> = [
+  //     "avg smf",
+  //     "canada",
+  //     "App.setter",
+  //     "Canada Filter",
+  //     "Interstate",
+  //     "lostvswon",
+  //     "Shipper Type-National Account",
 
-  
-//   public someList: Array<string> = [
-//     "avg smf",
-//     "canada",
-//     "App.setter",
-//     "Canada Filter",
-//     "Interstate",
-//     "lostvswon",
-//     "Shipper Type-National Account",
-  
-//   ];
- 
-  
-//   public gridView: any[] = [];
-//  public mySelection: string[] = [];
-//   public pdfSVG: SVGIcon = filePdfIcon;
-//   public excelSVG: SVGIcon = fileExcelIcon;
-//   public gridData: any[] = [];
- 
- 
-constructor(public theamService: TheamService,private employeeService: EmployeeService, public persistingService: PersistingService)  {const gridSettings = this.persistingService.get('gridSettings');
-  if (gridSettings) {
-    this.gridSettings = this.mapGridSettings(gridSettings);
+  //   ];
+
+  //   public gridView: any[] = [];
+  //  public mySelection: string[] = [];
+  //   public pdfSVG: SVGIcon = filePdfIcon;
+  //   public excelSVG: SVGIcon = fileExcelIcon;
+  //   public gridData: any[] = [];
+
+  constructor(
+    public theamService: TheamService,
+    private employeeService: EmployeeService,
+    public persistingService: PersistingService
+  ) {
+    const gridSettings = this.persistingService.get('gridSettings');
+    if (gridSettings) {
+      this.gridSettings = this.mapGridSettings(gridSettings);
+    }
   }
-}
-public get savedStateExists(): boolean {
-  return !!this.persistingService.get('gridSettings');
-}
- // Call toggleTheme from the service
-//  toggleTheme(): void {
-//   this.theamService.toggleTheme();
-// }
-
+  public get savedStateExists(): boolean {
+    return !!this.persistingService.get('gridSettings');
+  }
+  // Call toggleTheme from the service
+  //  toggleTheme(): void {
+  //   this.theamService.toggleTheme();
+  // }
 
   ngOnInit(): void {
-    // this.employeeService.getAll().subscribe((res) => {
-    //   this.gridData = res;
-    // });
+   
     this.employeeService.getAll().subscribe((data) => {
       // this.originalData = data;
       this.gridData = data;
@@ -236,18 +269,16 @@ public get savedStateExists(): boolean {
 
       console.log('Fetched data:', data); // <-- Add this to confirm it's coming
     });
-    
+
     this.loadSavedStateNames();
     this.theamService.applySavedTheme();
   }
 
   loadGridData(): void {
-    // this.employeeService.getAll().subscribe(data => {
-    //   this.gridData = data;
-    // });
+    ;
     this.employeeService.getAll().subscribe((data) => {
       this.originalData = data; //  also store here if used for reload
-     this.gridSettings.gridData = process(data, this.gridSettings.state);
+      this.gridSettings.gridData = process(data, this.gridSettings.state);
     });
   }
 
@@ -271,17 +302,8 @@ public get savedStateExists(): boolean {
       return;
     }
 
-    // const columns = grid.columns.toArray().map((col: any) => ({
-    //   field: col.field,
-    //   title: col.title,
-    //   width: col.width,
-    //   filter: col.filter,
-    //   format: col.format,
-    //   filterable: col.filterable,
-    //   hidden: col.hidden,
-    //   sort: col.sort
-    // const columns = grid.columns.toArray().map(item => ({
-    const columns = grid.columns.toArray().map((item: { orderIndex: any; }) => ({
+
+    const columns = grid.columns.toArray().map((item: { orderIndex: any }) => ({
       field: (item as any).field,
       width: (item as any).width,
       title: (item as any).title,
@@ -336,7 +358,6 @@ public get savedStateExists(): boolean {
     this.savedStateNames = Object.keys(savedStates);
   }
 
-
   deleteState(event: MouseEvent, stateName: string): void {
     event.stopPropagation(); // Prevent the dropdown from selecting the item
     const index = this.savedStateNames.indexOf(stateName);
@@ -349,7 +370,6 @@ public get savedStateExists(): boolean {
       }
     }
   }
-
 
   private mapGridSettings(savedSettings: any): any {
     const state = savedSettings.state;
@@ -399,7 +419,7 @@ public get savedStateExists(): boolean {
 
   saveRow(event: any): void {
     const dataItem = event.dataItem;
-    
+
     if (this.formGroup && this.formGroup.valid) {
       this.saveCurrent();
     }
@@ -408,14 +428,19 @@ public get savedStateExists(): boolean {
   private saveCurrent(): void {
     if (this.formGroup) {
       const item = this.formGroup.value;
-  
+
       if (!item.id && item.recordId) {
         item.id = item.recordId;
       }
-  
+
+       // Format assignedDate to 'MM-dd-yyyy' before saving
+    if (item.assignedDate) {
+      item.assignedDate = formatDate(item.assignedDate, 'MM-dd-yyyy', 'en-US');
+    }
+
       // CLOSE editor immediately before API
       this.closeEditor();
-  
+
       // NOW call API safely
       this.employeeService.save(item, this.isNew!).subscribe(() => {
         this.employeeService.getAll().subscribe((res) => {
@@ -424,7 +449,6 @@ public get savedStateExists(): boolean {
       });
     }
   }
-  
 
   public cellClickHandler({ isEdited, dataItem, rowIndex }: any): void {
     if (isEdited || (this.formGroup && !this.formGroup.valid)) {
@@ -458,43 +482,61 @@ public get savedStateExists(): boolean {
       id: new FormControl(dataItem?.id), // added
       recordId: new FormControl(dataItem?.recordId || 0, Validators.required),
       lastName: new FormControl(dataItem?.lastName || '', Validators.required),
-      firstName: new FormControl(dataItem?.firstName || '', Validators.required),
-      primaryEmail: new FormControl(dataItem?.primaryEmail || '', Validators.required),
-      primaryPhoneType: new FormControl(dataItem?.primaryPhoneType || '', Validators.required),
+      firstName: new FormControl(
+        dataItem?.firstName || '',
+        Validators.required
+      ),
+      primaryEmail: new FormControl(
+        dataItem?.primaryEmail || '',
+        Validators.required
+      ),
+      primaryPhoneType: new FormControl(
+        dataItem?.primaryPhoneType || '',
+        Validators.required
+      ),
       lmpLeadId: new FormControl(dataItem?.lmpLeadId || 0, Validators.required),
-      appointmentType: new FormControl(dataItem?.appointmentType || '', Validators.required),
-      bookingAgency: new FormControl(dataItem?.bookingAgency || '', Validators.required),
-    });
+      appointmentType: new FormControl(
+        dataItem?.appointmentType || '',
+        Validators.required
+      ),
+      bookingAgency: new FormControl(
+        dataItem?.bookingAgency || '',
+        Validators.required
+      ),
+
+    leadStatus: new FormControl(dataItem?.leadStatus || '', Validators.required),
+    createdSource: new FormControl(dataItem?.createdSource || '', Validators.required),
+     assignedDate: new FormControl(dataItem?.assignedDate ? new Date(dataItem.assignedDate) : null,Validators.required
+)
+});
   }
-   public onFilter(value: string): void {
-    const inputValue = value.toLowerCase();  // small/capital ka problem na ho
-  
+  public onFilter(value: string): void {
+    const inputValue = value.toLowerCase(); // small/capital ka problem na ho
+
     this.gridView = process(this.gridData, {
       filter: {
-        logic: "or",
+        logic: 'or',
         filters: [
           {
-            field: "lastName",
-            operator: "contains",
+            field: 'lastName',
+            operator: 'contains',
             value: inputValue,
           },
           {
-            field: "firstName",
-            operator: "contains",
+            field: 'firstName',
+            operator: 'contains',
             value: inputValue,
           },
-     
         ],
       },
     }).data;
-  
+
     // this.gridSettings.state.skip = 0;
     this.dataBinding.skip = 0;
-
   }
   // public onFilter(value: string): void {
   //   const inputValue = value.toLowerCase();
-  
+
   //   const filteredData = process(this.gridSettings.gridData, {
   //     filter: {
   //       logic: "or",
@@ -504,42 +546,37 @@ public get savedStateExists(): boolean {
   //       ],
   //     },
   //   });
-  
+
   //   this.gridSettings.gridData = filteredData.data;
   //   this.gridSettings.state.skip = 0;
   // }
-  
+
   toggleView(view: string): void {
     this.activeView = view;
   }
-  
+
   public selectedAction: string = 'Action';
-  
-  public areaList: Array<string> = [
-  "Edit",
-  "Delete", 
-  "View",
-  ];
-  
-  
-    
-    // public someList: Array<string> = [
-    //   "avg smf",
-    //   "canada",
-    //   "App.setter",
-    //   "Canada Filter",
-    //   "Interstate",
-    //   "lostvswon",
-    //   "Shipper Type-National Account",
-    
-    // ];
-   
-  
+
   public exportExcel(): void {
     this.myGrid.saveAsExcel();
+  }
 
+  public leadStatusOptions: string[] = [
+    'New',
+    'In Progress',
+    'Qualified',
+    'Disqualified',
+    'Converted',
+  ];
+
+   public onFilterChange(value: any, column: any): void {
+    // Apply custom filter logic
+    column.filter = { value: value };
+    this.applyCustomFilter();
+  }
+   private applyCustomFilter(): void {
+    // Implement custom filtering logic
+    const filteredData = filterBy(this.gridData, this.state.filter);
+    this.gridData = filteredData;
+  }
 }
-
-
-}
-

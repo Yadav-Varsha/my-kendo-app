@@ -11,28 +11,26 @@
 // }
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormsModule, Validators,FormGroup } from "@angular/forms";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { KENDO_CHARTS, } from "@progress/kendo-angular-charts";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   DataBindingDirective,
   GridComponent,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
-  KENDO_GRID_PDF_EXPORT,
-  GridComponent as KendoGridComponent
+  KENDO_GRID_PDF_EXPORT
 } from "@progress/kendo-angular-grid";
 
+import { GridModule } from '@progress/kendo-angular-grid';
 import { IconModule } from "@progress/kendo-angular-icons";
 import { KENDO_INPUTS } from "@progress/kendo-angular-inputs";
 import { process, State } from "@progress/kendo-data-query";
-import { SVGIcon, fileExcelIcon, filePdfIcon } from "@progress/kendo-svg-icons";
+import { fileExcelIcon, filePdfIcon, SVGIcon } from "@progress/kendo-svg-icons";
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
 import { TheamService } from '../service/theam.service';
-import { GridModule } from '@progress/kendo-angular-grid';
 @Component({
   selector: "app-mainpage",
   standalone: true,
@@ -159,6 +157,14 @@ export class MainpageComponent implements OnInit {
         hidden: false,
         sort: null,
       },
+{
+  field:'assignedDate',
+  title:'Assigned Date',
+  filter:'date',
+  format:"{0:d}",
+  filterable:true,
+  hidden:false
+},
     ],
   };
   columns: any;

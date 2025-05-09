@@ -39,6 +39,7 @@ import { PersistingService } from '../service/persisting.service';
 import { TheamService } from '../service/theam.service';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { formatDate } from '@angular/common';
+import { FilterCellTemplateDirective } from '@progress/kendo-angular-grid'; // usually auto-imported
 @Component({
   selector: 'app-mainpage',
   standalone: true,
@@ -80,15 +81,17 @@ export class MainpageComponent implements OnInit {
   public selectedStateName: string = '';
   public newStateName: string = '';
   public originalData: any[] = [...this.gridData]; // store full data once on init/load
+  public createdSources: string[] = ['Website', 'Mobile']; // Example sources
    public filterOptions = [
-    { text: 'Option 1', value: 'Option 1' },
-    { text: 'Option 2', value: 'Option 2' },
-    { text: 'Option 3', value: 'Option 3' }
+    { text: 'Mobile', value: 'Mobile' },
+    { text: 'Website', value: 'Website' }
+  
   ]; // Customize filter options as per your requirement
   public state: State = {
     skip: 0,
     take: 10
   };
+  public createdSourceFilterValue: any = null;
 
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: GridComponent;
@@ -569,14 +572,17 @@ export class MainpageComponent implements OnInit {
     'Converted',
   ];
 
-   public onFilterChange(value: any, column: any): void {
-    // Apply custom filter logic
-    column.filter = { value: value };
-    this.applyCustomFilter();
-  }
-   private applyCustomFilter(): void {
-    // Implement custom filtering logic
-    const filteredData = filterBy(this.gridData, this.state.filter);
-    this.gridData = filteredData;
-  }
+
+// public createdSourceFilter = {
+//   ui: (filterArgs: FilterCellTemplateDirective) =>  {
+//     return {
+//       componentType: 'dropdown',
+//       data: this.createdSources,
+//       valueField: 'value',
+//       textField: 'text'
+//     };
+//   }
+// };
+
+
 }

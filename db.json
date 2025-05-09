@@ -78,9 +78,9 @@
       "primaryEmail": "neh@.com",
       "primaryPhoneType": 4,
       "lmpLeadId": 6,
-      "appointmentType": "hhhh",
+      "appointmentType": "abc",
       "bookingAgency": "kkkkk",
-      "leadStatus": "New",
+      "leadStatus": "In Progress",
       "createdSource": "Mobile",
       "assignedDate": "05-10-2025"
     },

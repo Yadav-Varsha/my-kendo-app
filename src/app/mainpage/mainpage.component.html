@@ -282,18 +282,20 @@
    <kendo-grid-column field="createdSource" title="Created Source" [width]="200">
   </kendo-grid-column> -->
 
-  <kendo-grid-column field="createdSource" title="Created Source" [width]="200" [filterable]="true">
-  <ng-template kendoGridFilterMenuTemplate let-column let-filter="filter">
+
+<kendo-grid-column field="createdSource" title="Created Source" [filterable]="true">
+  <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
     <kendo-dropdownlist
-      [data]="filterOptions"
-      [textField]="'text'"
-      [valueField]="'value'"
-      [(value)]="filter.value"
-      (valueChange)="onFilterChange($event, column)"
+      [data]="createdSources"
+      [value]="filter?.filters[0]?.value"
+      (valueChange)="filter.filters[0].value = $event"
+      [defaultItem]="'Select source'"
     >
     </kendo-dropdownlist>
   </ng-template>
 </kendo-grid-column>
+
+
 
 
 <kendo-grid-column

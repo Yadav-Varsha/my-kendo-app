@@ -34,7 +34,7 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { IconModule } from '@progress/kendo-angular-icons';
 import { KENDO_INPUTS } from '@progress/kendo-angular-inputs';
-import { process, State } from '@progress/kendo-data-query';
+import { process, State,CompositeFilterDescriptor } from '@progress/kendo-data-query';
 import { fileExcelIcon, filePdfIcon, SVGIcon } from '@progress/kendo-svg-icons';
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
@@ -80,12 +80,7 @@ export class MainpageComponent implements OnInit {
   public selectedStateName: string = '';
   public newStateName: string = '';
   public originalData: any[] = [...this.gridData]; // store full data once on init/load
-  public createdSourceFilterValue: any = null;
-
-public createdSourceFilterOptions = [
-  { text: 'Mobile', value: 'Mobile' },
-  { text: 'Website', value: 'Website' }
-];
+ 
  
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: GridComponent;
@@ -567,39 +562,8 @@ public createdSourceFilterOptions = [
   ];
 
 
-// public createdSourceFilter = {
-//   ui: (filterArgs: FilterCellTemplateDirective) =>  {
-//     return {
-//       componentType: 'dropdown',
-//       data: this.createdSources,
-//       valueField: 'value',
-//       textField: 'text'
-//     };
-//   }
-// };
-onCreatedSourceFilterChange(value: any): void {
-  const filters = [];
 
-  if (value) {
-    filters.push({
-      field: 'createdSource',
-      operator: 'eq',
-      value: value
-    });
-  }
 
-  // Combine with any other existing filters
-  const existingFilters = this.gridSettings.state.filter?.filters || [];
-  const otherFilters = existingFilters.filter((f: any) => f.field !== 'createdSource');
 
-  const newFilters = [...otherFilters, ...filters];
-
-  this.gridSettings.state.filter = {
-    logic: 'and',
-    filters: newFilters
-  };
-
-  this.gridSettings.gridData = process(this.gridData, this.gridSettings.state);
-}
 
 }

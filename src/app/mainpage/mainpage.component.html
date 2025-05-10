@@ -47,6 +47,7 @@
   (add)="addHandler()"
   (dblclick)="saveRow($event)"
   (dataStateChange)="dataStateChange($event)"
+ 
 >
   <ng-template kendoGridToolbarTemplate>
 
@@ -279,29 +280,9 @@
 </kendo-grid-column>
 
 
-    <!-- <kendo-grid-column field="createdSource" title="Created Source" [width]="200">
-  </kendo-grid-column>  -->
-
   
-  <kendo-grid-column field="createdSource" title="Created Source" [width]="150" [filterable]="true">
-    <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
-      <kendo-dropdownlist
-        [data]="createdSourceFilterOptions"
-        textField="text"
-        valueField="value"
-        [(ngModel)]="createdSourceFilterValue"
-        (valueChange)="onCreatedSourceFilterChange($event)"
-        [defaultItem]="{ text: 'All', value: null }"
-      >
-      </kendo-dropdownlist>
-    </ng-template>
+  <kendo-grid-column field="createdSource" title="Created Source">
   </kendo-grid-column>
-
-
-  
-
-
-
 <kendo-grid-column
   field="assignedDate"
   title="Assigned Date"

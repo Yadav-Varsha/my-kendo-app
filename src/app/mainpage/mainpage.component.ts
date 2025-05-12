@@ -26,7 +26,7 @@ import {
   GridComponent,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
-  KENDO_GRID_PDF_EXPORT,
+  KENDO_GRID_PDF_EXPORT
 } from '@progress/kendo-angular-grid';
 
 import { formatDate } from '@angular/common';
@@ -34,7 +34,7 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { IconModule } from '@progress/kendo-angular-icons';
 import { KENDO_INPUTS } from '@progress/kendo-angular-inputs';
-import { process, State,CompositeFilterDescriptor } from '@progress/kendo-data-query';
+import { process, State } from '@progress/kendo-data-query';
 import { fileExcelIcon, filePdfIcon, SVGIcon } from '@progress/kendo-svg-icons';
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
@@ -54,12 +54,14 @@ import { TheamService } from '../service/theam.service';
     IconModule,
     GridModule,
     ReactiveFormsModule,
-    NgbDropdownModule, DateInputsModule
+    NgbDropdownModule, DateInputsModule,
   ],
   templateUrl: './mainpage.component.html',
   styleUrl: './mainpage.component.css',
+
 })
 export class MainpageComponent implements OnInit {
+  
   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   selectedLead = 'All Leads';
   // selectedPreference = 'Select Saved Preferences';
@@ -75,6 +77,7 @@ export class MainpageComponent implements OnInit {
   public pdfSVG: SVGIcon = filePdfIcon;
   public excelSVG: SVGIcon = fileExcelIcon;
   public stateName: string = '';
+    
   public selectedState: string = '';
   public savedStateNames: string[] = [];
   public selectedStateName: string = '';
@@ -197,6 +200,7 @@ export class MainpageComponent implements OnInit {
     ],
   };
   columns: any;
+  
 
   // leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   // selectedLead = 'All Leads';
@@ -560,6 +564,7 @@ export class MainpageComponent implements OnInit {
     'Disqualified',
     'Converted',
   ];
+
 
 
 

@@ -29,7 +29,7 @@
   kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
-  [pageSize]="20"
+  
   [pageable]="true"
   [pageSize]="gridSettings.state.take"
   [skip]="gridSettings.state.skip"
@@ -305,7 +305,13 @@
   </ng-template>
 </kendo-grid-column>
 
+<kendo-grid-column field="createdSource" title="Created Source" [columnMenu]="columnMenuTemplate">
+</kendo-grid-column>
 
+<ng-template #columnMenuTemplate let-service="service">
+  <kendo-grid-columnmenu-sort [service]="service"></kendo-grid-columnmenu-sort>
+  <kendo-grid-columnmenu-filter [service]="service"></kendo-grid-columnmenu-filter>
+</ng-template>
 
 
 

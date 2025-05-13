@@ -25,31 +25,29 @@
 
 <kendo-grid
   #myGrid
-  [data]="gridSettings.gridData"
-  [kendoGridBinding]="gridView.length ? gridView : gridData"
-  kendoGridSelectBy="id"
+  [data]="gridSettings.gridData.data"
+ kendoGridSelectBy="id"
   [(selectedKeys)]="mySelection"
   [selectable]="{ mode: 'multiple', drag: true }"
-  
-  [pageable]="true"
+  [pageable]="false"
   [pageSize]="gridSettings.state.take"
   [skip]="gridSettings.state.skip"
   [sortable]="true"
   [sort]="gridSettings.state.sort"
-  [filterable]="true"
+  [filterable]="false"
   [filter]="gridSettings.state.filter"
-  [groupable]="true"
+  [groupable]="false"
   [group]="gridSettings.state.group"
   [reorderable]="true"
   [resizable]="true"
-  [height]="500"
+  [scrollable]="'scrollable'"
+  [height]="gridSettings.gridHeight"
   [columnMenu]="{ filter: true }"
   (cellClick)="cellClickHandler($event)"
   (add)="addHandler()"
   (dblclick)="saveRow($event)"
   (dataStateChange)="dataStateChange($event)"
- 
->
+ >
   <ng-template kendoGridToolbarTemplate>
 
     @if (!formGroup) {

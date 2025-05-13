@@ -91,120 +91,25 @@ export class MainpageComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: GridComponent;
 
-
-
-  public gridSettings: any = {
+public gridSettings: any = {
     state: {
       skip: 0,
-      take: 5,
+      take: 100,
       filter: { logic: 'and', filters: [] },
       group: [],
       sort: [],
     },
     gridData: process(this.gridData, {
       skip: 0,
-      take: 5,
+      take: 100,
       filter: { logic: 'and', filters: [] },
       group: [],
       sort: [],
     }),
     // gridData: [],  // Initialize with an empty array for the data
-    columnsConfig: [
-      {
-        field: 'recordId',
-        title: 'Record ID',
-        filterable: false,
-        filter: 'numeric',
-        width: 60,
-        hidden: false,
-      },
-      {
-        field: 'lastName',
-        title: 'Last Name',
-        filterable: true,
-        filter: 'text',
-        width: 300,
-        hidden: false,
-        sort: null,
-      },
-      {
-        field: 'firstName',
-        title: 'First Name',
-        filter: 'text',
-        // format: "{0:d}",
-        width: 240,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-      {
-        field: 'primaryEmail',
-        title: 'Primary Email',
-        filter: 'text',
-        // format: "{0:c}",
-        width: 180,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-      {
-        field: 'primaryPhoneType',
-        title: 'Primary Phone Type',
-        filter: 'numeric',
-        width: 120,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-
-      {
-        field: 'lmpLeadId',
-        title: 'LMP Lead ID',
-        filter: 'numeric',
-        width: 120,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-
-      {
-        field: 'bookingAgency',
-        title: 'Booking Agency',
-        filter: 'text',
-        width: 120,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-      
-      {
-        field: 'leadStatus',
-        title: 'Lead Status',
-        filter: 'text',
-        width: 120,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-      {
-        field:'createdSource',
-        title:'Created Source',
-         filter: 'text',
-        width: 120,
-        filterable: true,
-        hidden: false,
-        sort: null,
-      },
-      {
-        field: 'assignedDate',
-        title: 'Assigned Date',
-        filter: 'date',
-        format: '{0:d}',
-        filterable: true,
-        hidden: false,
-      },
-    ],
-  };
+     columnsConfig: []
+  
+   };
   columns: any;
 
  
@@ -228,6 +133,12 @@ export class MainpageComponent implements OnInit {
     this.employeeService.getAll().subscribe((data) => {
       // this.originalData = data;
       this.gridData = data;
+      // ✅ Force take to 1000 after data comes (override saved 5)
+    this.gridSettings.state = {
+      ...this.gridSettings.state,
+      skip: 0,
+      take: 1000
+    };
       this.gridSettings.gridData = process(data, this.gridSettings.state);
       console.log('Processed grid data:', this.gridSettings.gridData);
 

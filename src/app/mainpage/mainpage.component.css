@@ -30,6 +30,9 @@ background-color:  #7ec241;
 }  */
 .text-all{
   color:  #7ec241;
+   font-weight: 600;
+  font-size: 20px;
+  margin-left: 13px;
 }
 
 .large-dropdown{
@@ -41,7 +44,7 @@ background-color:  #7ec241;
 }
 
   .btn-grid{
-  background-color: #7ec241;
+  background-color:  #76b82a;
 }  
 .toggle-wrapper {
   background-color: #002366; /* Dark blue */
@@ -59,7 +62,7 @@ background-color:  #7ec241;
 }
 
 .toggle-btn.active-btn {
-  background-color: #8bc34a; /* Green */
+  background-color:  #76b82a; /* Green */
   color: #002366; /* Dark blue text on active */
 }
 
@@ -79,3 +82,16 @@ background-color:  #7ec241;
   border-left: 6px solid #76b82a; /* green */
 }
 
+.btn.btn-success{
+  background-color: #76b82a !important;
+  color: #fff !important;
+  border: none;
+}
+.lead{
+  font-size: 1rem;
+  font-weight: 600;
+  color:#76b82a ;
+}
+.text-secondary{
+  color: #76b82a;
+}

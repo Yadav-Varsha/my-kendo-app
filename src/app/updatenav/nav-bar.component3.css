@@ -22,3 +22,7 @@
   
   border: white 2px solid;
 }
+ .btn.btn-green{
+  background-color: #7ec241;
+  color: white;
+ }

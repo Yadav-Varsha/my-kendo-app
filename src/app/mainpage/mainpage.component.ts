@@ -64,29 +64,7 @@ import { TheamService } from '../service/theam.service';
 })
 
 export class MainpageComponent implements OnInit {
-  //   @Input() filter: CompositeFilterDescriptor | null = null;
-  // @Output() filterChange = new EventEmitter<CompositeFilterDescriptor>();
 
-  // public options: string[] = ['Manual', 'Imported'];
-
-  // public onChange(value: string): void {
-  //   const newFilter: CompositeFilterDescriptor = {
-  //     logic: 'and',
-  //     filters: value
-  //       ? [{
-  //           field: 'createdSource',
-  //           operator: 'eq',
-  //           value
-  //         } as FilterDescriptor]
-  //       : []
-  //   };
-  //   this.filterChange.emit(newFilter);
-  // }
-
-  // public get currentValue(): string {
-  //   const descriptor = this.filter?.filters?.[0] as FilterDescriptor;
-  //   return descriptor?.value || '';
-  // }
   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   selectedLead = 'All Leads';
   // selectedPreference = 'Select Saved Preferences';
@@ -244,11 +222,7 @@ export class MainpageComponent implements OnInit {
   public get savedStateExists(): boolean {
     return !!this.persistingService.get('gridSettings');
   }
-  // Call toggleTheme from the service
-  //  toggleTheme(): void {
-  //   this.theamService.toggleTheme();
-  // }
-
+  
   ngOnInit(): void {
    
     this.employeeService.getAll().subscribe((data) => {
@@ -524,22 +498,7 @@ export class MainpageComponent implements OnInit {
     // this.gridSettings.state.skip = 0;
     this.dataBinding.skip = 0;
   }
-  // public onFilter(value: string): void {
-  //   const inputValue = value.toLowerCase();
 
-  //   const filteredData = process(this.gridSettings.gridData, {
-  //     filter: {
-  //       logic: "or",
-  //       filters: [
-  //         { field: "lastName", operator: "contains", value: inputValue },
-  //         { field: "firstName", operator: "contains", value: inputValue },
-  //       ],
-  //     },
-  //   });
-
-  //   this.gridSettings.gridData = filteredData.data;
-  //   this.gridSettings.state.skip = 0;
-  // }
 
   toggleView(view: string): void {
     this.activeView = view;

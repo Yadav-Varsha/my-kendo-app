@@ -91,69 +91,166 @@ body.dark-mode .btn-success {
 }  */
 
 
+/* styles.css or styles.scss */
 
-/* Dark mode styles for the Kendo Grid */
-.dark-mode .k-grid {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
+/* ===== Light Mode Defaults ===== */
+/* :root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #0d6efd;
+  --btn-bg: #198754;
+  --dropdown-bg: #f8f9fa;
+  --grid-header-bg: #e9ecef;
+  --grid-header-text: #000000;
+  --grid-cell-bg: #ffffff;
+  --column-menu-bg: #ffffff;
+} */
 
-/* Grid headers: green background and white text */
-.dark-mode .k-grid-header {
-  background-color: #4caf50 !important;
+/* ===== Dark Mode Overrides ===== */
+/* .dark-mode {
+  --bg-color: #1e1e2f;
+  --text-color: #f8f9fa;
+  --primary-color: #0dcaf0;
+  --btn-bg: #2d6a4f;
+  --dropdown-bg: #2c2f3e;
+  --grid-header-bg: #198754; 
+  --grid-header-text: #ffffff;
+  --grid-cell-bg: #2a2a3c;
+  --column-menu-bg: #2d2f41;
+} */
+
+/* Global Body */
+/* body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+} */
+
+/* ==== Kendo Grid Styles ==== */
+/* .k-grid {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+} */
+
+/* Grid content cells */
+/* .k-grid td,
+.k-grid .k-grid-content td {
+  background-color: var(--grid-cell-bg);
+  color: var(--text-color);
+} */
+
+/* Grid header */
+/* .k-grid-header,
+.k-grid-toolbar {
+  background-color: var(--grid-header-bg);
+  color: var(--grid-header-text);
+} */
+
+/* .k-grid-header th,
+.k-header,
+.k-grid-header .k-link {
+  background-color: var(--grid-header-bg);
+  color: var(--grid-header-text) !important;
+  border-color: transparent;
+} */
+
+/* Column menu */
+/* .k-column-menu,
+.k-column-menu-content,
+.k-column-menu-item,
+.k-column-menu-item-wrapper {
+  background-color: var(--column-menu-bg);
+  color: var(--text-color);
+} */
+/* 
+.k-column-menu-item:hover,
+.k-column-menu-item.k-state-hover {
+  background-color: var(--primary-color);
+  color: white;
+} */
+
+/* Hover rows (optional) */
+/* .k-grid tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+} */
+
+/* ==== Action Column Buttons ==== */
+/* .k-grid .btn-success {
+  background-color: var(--btn-bg) !important;
   color: #fff !important;
+  border: none;
+} */
+
+/* Action Dropdown Menu */
+/* .k-grid .dropdown-menu {
+  background-color: var(--dropdown-bg);
+  color: var(--text-color);
+  border: 1px solid #444;
+} */
+
+/* Dropdown Items */
+/* .k-grid .dropdown-item,
+.k-grid button[ngbdropdownitem] {
+  background-color: transparent;
+  color: var(--text-color);
 }
 
-.dark-mode .k-grid-header .k-header {
-  background-color: #4caf50 !important;
-  color: #fff !important;
-  border-color: #4caf50 !important;
-}
-
-/* Grid rows */
-.dark-mode .k-grid tbody tr {
-  background-color: #2c2c2c;
+.k-grid .dropdown-item:hover,
+.k-grid button[ngbdropdownitem]:hover {
+  background-color: var(--primary-color);
   color: #fff;
+} */
+
+/* Apply dark mode to the entire grid */
+.dark-mode .k-grid {
+  background-color: #000 !important;
+  color: #fff !important;
 }
 
-/* Hover effect on rows */
+/* Header cells: black background with green text */
+.dark-mode .k-grid-header,
+.dark-mode .k-grid-header .k-header {
+  background-color:#76b82a !important;
+  color: #fff !important;
+  border-color: #222 !important;
+}
+
+/* Grid rows and cells */
+.dark-mode .k-grid td,
+.dark-mode .k-grid th {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #222 !important;
+}
+
+/* Hover effect on rows (optional: dark gray) */
 .dark-mode .k-grid tbody tr:hover {
-  background-color: #3a3a3a;
+  background-color: #111 !important;
 }
 
-/* Action button - stays green in dark mode */
+/* Action column button: green */
 .dark-mode .k-grid .btn-success,
 .dark-mode .k-grid .btn-success:focus,
 .dark-mode .k-grid .btn-success:hover {
-  background-color: #4caf50 !important;
-  border-color: #4caf50 !important;
+  background-color: #111 !important;
+  border-color:  #fff!important;
   color: #fff !important;
 }
 
-/* Column menu background */
-.dark-mode .k-grid .k-column-menu,
-.dark-mode .k-grid .k-menu,
-.dark-mode .k-grid .k-context-menu {
-  background-color: #2c2c2c;
-  color: #fff;
-  border-color: #444;
-}
-
-/* Dropdown in actions menu */
+/* Dropdown menu inside the Actions button */
 .dark-mode .k-grid .dropdown-menu {
-  background-color: #2a2a2a;
-  color: #fff;
-  border: 1px solid #444;
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
 }
 
-/* Dropdown items */
+/* Dropdown menu items */
 .dark-mode .k-grid .dropdown-menu button {
-  background: transparent;
-  color: #fff;
+  background: transparent !important;
+  color: #fff !important;
 }
 
 .dark-mode .k-grid .dropdown-menu button:hover {
-  background-color: #3a3a3a;
+  background-color: #111 !important;
 }
 
 /* Grid borders */
@@ -162,5 +259,184 @@ body.dark-mode .btn-success {
   border-color: #444 !important;
 }
 
+/* Dark mode navbar background */
+.dark-mode .navbar {
+  background-color: #000 !important;
+}
+
+/* All navbar buttons dark except Lead Management */
+.dark-mode .btn.btn-all {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: none;
+}
+
+/* Lead Management button stays green */
+.dark-mode .btn.btn-green {
+  background-color: #76b82a !important;
+  border-color:  #76b82a !important;
+  color: #fff !important;
+}
+
+/* Notification badge in dark mode */
+.dark-mode .badge.bg-success {
+  background-color:  #76b82a !important;
+  color: #fff !important;
+}
+
+/* Avatar circle in user button */
+.dark-mode .btn.btn-all .rounded-circle {
+  background-color:  #76b82a !important;
+  color: #fff !important;
+}
+
+/* Dropdown menu in dark mode */
+.dark-mode .dropdown-menu {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: 1px solid #444;
+}
+
+.dark-mode .dropdown-item {
+  color: #fff !important;
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: #222 !important;
+  color: #fff !important;
+}
 
 
+
+/* 1. General dark mode background and text */
+.dark-mode {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* 2. Navbar styling */
+.dark-mode .navbar {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* 3. All buttons dark except success (green) */
+.dark-mode .btn.btn-all,
+.dark-mode .btn-outline-secondary,
+.dark-mode .btn.border,
+.dark-mode .k-button:not(.btn-success):not(.k-primary) {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* 4. Keep green buttons (btn-success) green */
+.dark-mode .btn.btn-success {
+  background-color:  #76b82a !important;
+  border-color:  #76b82a !important;
+  color: #fff !important;
+}
+
+/* 5. Toggle icon (sun/moon) */
+.dark-mode .btn-outline-secondary .fas {
+  color: #fff !important;
+}
+
+/* 6. Notification badge */
+.dark-mode .badge.bg-success {
+  background-color:  #76b82a !important;
+  color: #fff !important;
+}
+
+/* 7. User avatar circle */
+.dark-mode .rounded-circle {
+  background-color:  #76b82a !important;
+  color: #fff !important;
+}
+
+/* 8. Dropdown menu and items */
+.dark-mode .dropdown-menu {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: 1px solid #444;
+}
+
+.dark-mode .dropdown-item {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: #222 !important;
+}
+
+/* 9. Kendo dropdownlist & textbox */
+.dark-mode .k-dropdownlist,
+.dark-mode .k-dropdownlist .k-input,
+.dark-mode .k-textbox,
+.dark-mode .k-input,
+.dark-mode .k-list-container,
+.dark-mode .k-list-ul {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+.dark-mode .k-list-item {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+.dark-mode .k-list-item:hover {
+  background-color: #222 !important;
+}
+
+/* 10. Kendo Grid header and rows */
+.dark-mode kendo-grid,
+.dark-mode .k-grid-header,
+.dark-mode .k-grid-content {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.dark-mode .k-grid td,
+.dark-mode .k-grid th {
+  background-color: #111 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+}
+
+/* 11. Toolbar & buttons inside kendoGridToolbarTemplate */
+.dark-mode kendo-grid .k-toolbar,
+.dark-mode .k-grid-toolbar {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* 12. Toggle button styles */
+.dark-mode .toggle-wrapper {
+  background-color: #111 !important;
+}
+
+.dark-mode .toggle-btn {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+.dark-mode .toggle-btn.active-btn {
+  background-color:  #76b82a !important;
+  color: #fff !important;
+  border-color:  #76b82a !important;
+}
+
+/* 13. Save/Delete icons in dropdown item */
+.dark-mode .fa-trash {
+  color: #dc3545 !important;
+}
+
+.dark-mode .bi-search,
+.dark-mode .bi-list,
+.dark-mode .bi {
+  color: #fff !important;
+}

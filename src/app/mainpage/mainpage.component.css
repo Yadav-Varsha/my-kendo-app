@@ -63,11 +63,6 @@ background-color:  #7ec241;
   color: #002366; /* Dark blue text on active */
 }
 
-/* ::ng-deep .k-grid-header .td.k-header {
-  background-color: #002366;
-  color: white;
-  font-weight: bold;
-} */
 ::ng-deep .k-grid-header th.k-header {
   background-color: #002366 !important;
   color: white !important;

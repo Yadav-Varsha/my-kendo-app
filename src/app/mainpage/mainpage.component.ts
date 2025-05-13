@@ -10,7 +10,7 @@
 
 // }
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -26,7 +26,7 @@ import {
   GridComponent,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
-  KENDO_GRID_PDF_EXPORT
+  KENDO_GRID_PDF_EXPORT,
 } from '@progress/kendo-angular-grid';
 
 import { formatDate } from '@angular/common';
@@ -34,11 +34,14 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { IconModule } from '@progress/kendo-angular-icons';
 import { KENDO_INPUTS } from '@progress/kendo-angular-inputs';
-import { process, State } from '@progress/kendo-data-query';
+import { process, State,CompositeFilterDescriptor,FilterDescriptor } from '@progress/kendo-data-query';
 import { fileExcelIcon, filePdfIcon, SVGIcon } from '@progress/kendo-svg-icons';
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
 import { TheamService } from '../service/theam.service';
+
+
+
 @Component({
   selector: 'app-mainpage',
   standalone: true,
@@ -54,14 +57,36 @@ import { TheamService } from '../service/theam.service';
     IconModule,
     GridModule,
     ReactiveFormsModule,
-    NgbDropdownModule, DateInputsModule,
+    NgbDropdownModule, DateInputsModule
   ],
   templateUrl: './mainpage.component.html',
   styleUrl: './mainpage.component.css',
-
 })
+
 export class MainpageComponent implements OnInit {
-  
+  //   @Input() filter: CompositeFilterDescriptor | null = null;
+  // @Output() filterChange = new EventEmitter<CompositeFilterDescriptor>();
+
+  // public options: string[] = ['Manual', 'Imported'];
+
+  // public onChange(value: string): void {
+  //   const newFilter: CompositeFilterDescriptor = {
+  //     logic: 'and',
+  //     filters: value
+  //       ? [{
+  //           field: 'createdSource',
+  //           operator: 'eq',
+  //           value
+  //         } as FilterDescriptor]
+  //       : []
+  //   };
+  //   this.filterChange.emit(newFilter);
+  // }
+
+  // public get currentValue(): string {
+  //   const descriptor = this.filter?.filters?.[0] as FilterDescriptor;
+  //   return descriptor?.value || '';
+  // }
   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   selectedLead = 'All Leads';
   // selectedPreference = 'Select Saved Preferences';
@@ -77,16 +102,19 @@ export class MainpageComponent implements OnInit {
   public pdfSVG: SVGIcon = filePdfIcon;
   public excelSVG: SVGIcon = fileExcelIcon;
   public stateName: string = '';
-    
   public selectedState: string = '';
   public savedStateNames: string[] = [];
   public selectedStateName: string = '';
   public newStateName: string = '';
   public originalData: any[] = [...this.gridData]; // store full data once on init/load
- 
+ createdSourceFilters: FilterDescriptor[] = [];
+
  
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @ViewChild('myGrid') myGrid!: GridComponent;
+
+
+
   public gridSettings: any = {
     state: {
       skip: 0,
@@ -200,42 +228,8 @@ export class MainpageComponent implements OnInit {
     ],
   };
   columns: any;
-  
 
-  // leadsOptions = ['All Leads', 'My Leads', 'Archived'];
-  // selectedLead = 'All Leads';
-  // selectedPreference = 'Select Saved Preferences';
-  // searchText = '';
-  // activeView: string = 'non-intl';
-
-  // toggleView(view: string): void {
-  //   this.activeView = view;
-  // }
-
-  // public selectedAction: string = 'Action';
-
-  // public areaList: Array<string> = [
-  // "Edit",
-  // "Delete",
-  // "View",
-  // ];
-
-  //   public someList: Array<string> = [
-  //     "avg smf",
-  //     "canada",
-  //     "App.setter",
-  //     "Canada Filter",
-  //     "Interstate",
-  //     "lostvswon",
-  //     "Shipper Type-National Account",
-
-  //   ];
-
-  //   public gridView: any[] = [];
-  //  public mySelection: string[] = [];
-  //   public pdfSVG: SVGIcon = filePdfIcon;
-  //   public excelSVG: SVGIcon = fileExcelIcon;
-  //   public gridData: any[] = [];
+ 
 
   constructor(
     public theamService: TheamService,
@@ -565,10 +559,53 @@ export class MainpageComponent implements OnInit {
     'Converted',
   ];
 
+  
+    // Logic for checking if the filter is applied
+  isFilterDescriptor(filter: any): filter is FilterDescriptor {
+    return filter && typeof filter.field === 'string' && 'operator' in filter;
+  }
 
-
-
-
-
-
+ isSelected(filter: CompositeFilterDescriptor, value: string): boolean {
+  return this.createdSourceFilters.some(f => f.value === value);
 }
+
+onFilterChange(event: any, value: string, filterService: any): void {
+  const checked = event.target.checked;
+
+  // Remove any existing filter for this value
+  this.createdSourceFilters = this.createdSourceFilters.filter(
+    (f) => f.value !== value
+  );
+
+  // Add the new filter if checked
+  if (checked) {
+    this.createdSourceFilters.push({
+      field: 'createdSource',
+      operator: 'eq',
+      value: value
+    });
+  }
+
+  // Apply the filter
+  filterService.filter({
+    logic: 'or',
+    filters: [...this.createdSourceFilters]
+  });
+}
+
+
+  // Method to check if a filter is applied
+ isFilterApplied(): boolean {
+  return this.createdSourceFilters.length > 0;
+}
+
+
+  // Method to apply the current filters manually
+applyFilter(filterService: any): void {
+  filterService.filter({
+    logic: 'or',
+    filters: [...this.createdSourceFilters]
+  });
+}
+}
+

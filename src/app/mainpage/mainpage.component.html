@@ -69,11 +69,7 @@
       class="large-dropdown"
     >
     </kendo-dropdownlist>
-    <!-- <kendo-dropdownlist
-      [data]="someList"
-      defaultItem="Select Saved Preferences"
-      class="large-dropdown"
-    ></kendo-dropdownlist> -->
+  
     <kendo-dropdownlist
     [data]="savedStateNames"
     [(ngModel)]="selectedState"
@@ -140,30 +136,7 @@
    
   </ng-template>
 
-  <!-- <kendo-grid-column field="actions" title="Actions" [width]="250">
-      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-      <ng-container *ngIf="editedRowIndex === rowIndex; else normalActions">
-        <button class="btn btn-sm btn-success me-1" (click)="saveEdit(rowIndex)">
-          <i class="bi bi-check-lg"></i>
-        </button>
-        <button class="btn btn-sm btn-secondary me-1" (click)="cancelEdit()">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </ng-container> 
-<ng-template #normalActions>
-        <button class="btn btn-sm btn-warning me-1"">
-          <i class="bi bi-pencil"></i>
-        </button>
-        <button class="btn btn-sm btn-danger me-1">
-          <i class="bi bi-trash"></i>
-        </button>
-        <kendo-dropdownlist [data]="areaList" defaultItem="Actions" class="large"></kendo-dropdownlist>
-   
-      </ng-template>
-       </ng-template>
-    </kendo-grid-column>  -->
-  
-  <kendo-grid-checkbox-column
+<kendo-grid-checkbox-column
     [width]="45"
     [headerClass]="{ 'text-center': true }"
     [class]="{ 'text-center': true }"
@@ -222,16 +195,7 @@
             </button>
           </div>
         </div>
-        
-        
-        <!-- <kendo-icon name="gear" size="default"></kendo-icon>
-        <kendo-dropdownlist 
-          [data]="areaList" 
-          [defaultItem]="'Actions'" 
-          class="large">
-        </kendo-dropdownlist> -->
-      <!-- </div> -->
-    </ng-template>
+         </ng-template>
   </kendo-grid-column>
   
 
@@ -305,17 +269,28 @@
   </ng-template>
 </kendo-grid-column>
 
-<kendo-grid-column field="createdSource" title="Created Source" [columnMenu]="columnMenuTemplate">
+
+<kendo-grid-column field="createdSource" title="Created Source" [width]="180" [filterable]="true">
+  <ng-template kendoGridFilterMenuTemplate let-filter let-filterService="filterService">
+    <div class="p-2">
+      <label class="d-block">
+        <input type="checkbox"
+               [checked]="isSelected(filter, 'Website')"
+               (change)="onFilterChange($event, 'Website', filterService)" />
+        Website
+      </label>
+      <label class="d-block">
+        <input type="checkbox"
+               [checked]="isSelected(filter, 'Mobile')"
+               (change)="onFilterChange($event, 'Mobile', filterService)" />
+        Mobile
+      </label>
+      <button *ngIf="isFilterApplied()" (click)="applyFilter(filterService)" class="btn btn-primary mt-2" [disabled]="!isFilterApplied()">Apply Filter</button>
+    </div>
+  </ng-template>
 </kendo-grid-column>
 
-<ng-template #columnMenuTemplate let-service="service">
-  <kendo-grid-columnmenu-sort [service]="service"></kendo-grid-columnmenu-sort>
-  <kendo-grid-columnmenu-filter [service]="service"></kendo-grid-columnmenu-filter>
-</ng-template>
-
-
-
-  <kendo-grid-pdf
+<kendo-grid-pdf
     fileName="GridData.pdf"
     [repeatHeaders]="true"
   ></kendo-grid-pdf>

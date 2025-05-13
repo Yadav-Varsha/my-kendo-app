@@ -29,7 +29,7 @@
     "@progress/kendo-angular-layout": "^18.5.0",
     "@progress/kendo-angular-navigation": "^18.5.0",
     "@progress/kendo-angular-toolbar": "^18.5.0",
-    "@progress/kendo-licensing": "^1.5.1",
+    "@progress/kendo-licensing": "^1.5.3",
     "@progress/kendo-theme-default": "^10.5.0",
     "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",

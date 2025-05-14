@@ -11,12 +11,8 @@
     <button type="button" class="btn btn-success" (click)="exportExcel()">
       <i class="bi bi-file-earmark-excel"></i> Export to Excel
     </button>
-    <!-- 
-    <button type="button" class="btn btn-all" (click)="addUser()">
-      Create
-    </button>  -->
    
-    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 " (click)="toggleTheme()">
+   <button class="btn btn-outline-secondary d-flex align-items-center gap-2 " (click)="toggleTheme()">
       <i class="fas" [ngClass]="theamService.isDarkMode() ? 'fa-sun' : 'fa-moon'"></i>
       <span> {{ theamService.isDarkMode() ? '' : '' }}</span>
     </button> 
@@ -48,58 +44,62 @@
   (dblclick)="saveRow($event)"
   (dataStateChange)="dataStateChange($event)"
  >
-  <ng-template kendoGridToolbarTemplate>
-
-    @if (!formGroup) {
-      <button kendoGridAddCommand>Add new</button>
-      } @if (formGroup) {
-      <div>
-        <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow($event)">
-          Save
-        </button>
-        <button kendoButton themeColor="primary" (click)="cancelHandler()">
-          Cancel
-        </button>
-      </div>
-      }
-    <kendo-dropdownlist
-      [data]="leadsOptions"
-      [(ngModel)]="selectedLead"
-      class="large-dropdown"
-    >
-    </kendo-dropdownlist>
-  
-    <kendo-dropdownlist
-    [data]="savedStateNames"
-    [(ngModel)]="selectedState"
-    [defaultItem]="'Select Saved Preferences'"
-    class="large-dropdown"
-    [valuePrimitive]="true"
-   
-    (valueChange)="loadSelectedGridState(myGrid, selectedState)"
-  >
-    <ng-template kendoDropDownListItemTemplate let-dataItem>
-      <span class="d-flex justify-content-between align-items-center w-100">
-        <span>{{ dataItem }}</span>
-        <span *ngIf="dataItem !== 'Select Saved Preferences'" class="ml-2 text-danger"
-              (click)="deleteState($event, dataItem)" title="Delete">
-          <i class="fa fa-trash"></i>
-        </span>
-        </span>
-    </ng-template>
-  </kendo-dropdownlist>
-
+ <ng-template kendoGridToolbarTemplate>
+  <div class="d-flex justify-content-between align-items-center flex-wrap w-100">
     
-    <kendo-textbox
-    [style.width.px]="165"
-    placeholder="Search in all columns..."
-    (valueChange)="onFilter($event)"
-  >
-  </kendo-textbox>
-  <button class="btn btn-success">
-    <i class="bi bi-search"></i>
-  </button>
-  
+    <div class="d-flex align-items-center flex-wrap gap-2">
+      @if (!formGroup) {
+        <button kendoGridAddCommand>Add new</button>
+      } @if (formGroup) {
+        <div>
+          <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow($event)">
+            Save
+          </button>
+          <button kendoButton themeColor="primary" (click)="cancelHandler()">
+            Cancel
+          </button>
+        </div>
+      }
+
+      <!-- Leads Dropdown -->
+      <kendo-dropdownlist
+        [data]="leadsOptions"
+        [(ngModel)]="selectedLead"
+        class="large-dropdown"
+      >
+      </kendo-dropdownlist>
+
+      <!-- Saved State Dropdown -->
+      <kendo-dropdownlist
+        [data]="savedStateNames"
+        [(ngModel)]="selectedState"
+        [defaultItem]="'Select Saved Preferences'"
+        class="large-dropdown"
+        [valuePrimitive]="true"
+        (valueChange)="loadSelectedGridState(myGrid, selectedState)"
+      >
+        <ng-template kendoDropDownListItemTemplate let-dataItem>
+          <span class="d-flex justify-content-between align-items-center w-100">
+            <span>{{ dataItem }}</span>
+            <span *ngIf="dataItem !== 'Select Saved Preferences'" class="ml-2 text-danger"
+                  (click)="deleteState($event, dataItem)" title="Delete">
+              <i class="fa fa-trash"></i>
+            </span>
+          </span>
+        </ng-template>
+      </kendo-dropdownlist>
+
+      <!-- Search Box -->
+      <kendo-textbox
+        [style.width.px]="165"
+        placeholder="Search in all columns..."
+        (valueChange)="onFilter($event)"
+      ></kendo-textbox>
+      <button class="btn btn-success">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+
    
     <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
       <!-- Toggle Buttons -->
@@ -111,7 +111,6 @@
         >
           Non-Intl.
         </button>
-
         <button
           class="toggle-btn"
           [ngClass]="{ 'active-btn': activeView === 'intl' }"
@@ -122,17 +121,20 @@
       </div>
 
       <!-- Action Buttons -->
-      <button class="btn  btn-success" (click)="clearFilters()">Clear Filters</button>
-      <button class="btn  btn-success ">Bulk Edit</button>
-      <button class="btn  btn-success" (click)="saveGridStateAs(myGrid)" >Save Preferences</button>
+      <button class="btn btn-success" (click)="clearFilters()">Clear Filters</button>
+      <button class="btn btn-success">Bulk Edit</button>
+      <button class="btn btn-success" (click)="saveGridStateAs(myGrid)">
+        Save Preferences
+      </button>
 
-      <!-- Menu Icon Button -->
+      <!-- Menu Icon -->
       <button class="btn border" style="padding: 4px 8px">
         <i class="bi bi-list"></i>
       </button>
     </div>
-   
-  </ng-template>
+  </div>
+</ng-template>
+
 
 <kendo-grid-checkbox-column
     [width]="45"

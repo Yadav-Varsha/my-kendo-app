@@ -1,16 +1,5 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-mainpage',
-//   imports: [],
-//   templateUrl: './mainpage.component.html',
-//   styleUrl: './mainpage.component.css'
-// })
-// export class MainpageComponent {
-
-// }
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule, formatDate } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -20,28 +9,23 @@ import {
 } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { KENDO_CHARTS } from '@progress/kendo-angular-charts';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import {
   DataBindingDirective,
   GridComponent,
+  GridModule,
   KENDO_GRID,
   KENDO_GRID_EXCEL_EXPORT,
   KENDO_GRID_PDF_EXPORT,
 } from '@progress/kendo-angular-grid';
-
-import { formatDate } from '@angular/common';
-import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
-import { GridModule } from '@progress/kendo-angular-grid';
 import { IconModule } from '@progress/kendo-angular-icons';
 import { KENDO_INPUTS } from '@progress/kendo-angular-inputs';
-import { process, State,CompositeFilterDescriptor,FilterDescriptor } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, FilterDescriptor, process, State } from '@progress/kendo-data-query';
 import { fileExcelIcon, filePdfIcon, SVGIcon } from '@progress/kendo-svg-icons';
 import { EmployeeService } from '../service/employee.service';
 import { PersistingService } from '../service/persisting.service';
 import { TheamService } from '../service/theam.service';
-
-
-
 @Component({
   selector: 'app-mainpage',
   standalone: true,
@@ -67,11 +51,9 @@ export class MainpageComponent implements OnInit {
 
   leadsOptions = ['All Leads', 'My Leads', 'Archived'];
   selectedLead = 'All Leads';
-  // selectedPreference = 'Select Saved Preferences';
   searchText = '';
   activeView: string = 'non-intl';
-
-  public gridData: any[] = [];
+ public gridData: any[] = [];
   public mySelection: string[] = [];
   public formGroup!: FormGroup;
   public editedRowIndex: number | undefined;
@@ -112,8 +94,6 @@ public gridSettings: any = {
    };
   columns: any;
 
- 
-
   constructor(
     public theamService: TheamService,
     private employeeService: EmployeeService,
@@ -133,7 +113,7 @@ public gridSettings: any = {
     this.employeeService.getAll().subscribe((data) => {
       // this.originalData = data;
       this.gridData = data;
-      // ✅ Force take to 1000 after data comes (override saved 5)
+      //  Force take to 1000 after data comes (override saved 5)
     this.gridSettings.state = {
       ...this.gridSettings.state,
       skip: 0,
@@ -210,7 +190,7 @@ public gridSettings: any = {
       this.gridSettings.state = savedStates[stateName].state;
       this.gridSettings.columnsConfig = savedStates[stateName].columnsConfig;
 
-      // Apply column visibility and sort order
+      // column visibility and sort order
       grid.columns.toArray().forEach((col: any) => {
         const savedColumn = this.gridSettings.columnsConfig.find(
           (c: any) => c.field === col.field

@@ -48,19 +48,12 @@
   <div class="d-flex justify-content-between align-items-center flex-wrap w-100">
     
     <div class="d-flex align-items-center flex-wrap gap-2">
-      @if (!formGroup) {
-        <button kendoGridAddCommand>Add new</button>
-      } @if (formGroup) {
-        <div>
-          <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow($event)">
-            Save
-          </button>
-          <button kendoButton themeColor="primary" (click)="cancelHandler()">
-            Cancel
-          </button>
-        </div>
-      }
 
+  <button *ngIf="!formGroup" kendoGridAddCommand>Add new</button>
+  <div *ngIf="formGroup">
+    <button kendoButton [disabled]="!formGroup.valid" (click)="saveRow($event)">Save</button>
+    <button kendoButton themeColor="primary" (click)="cancelHandler()">Cancel</button>
+  </div>
       <!-- Leads Dropdown -->
       <kendo-dropdownlist
         [data]="leadsOptions"
@@ -150,7 +143,7 @@
     <ng-template kendoGridCellTemplate let-dataItem>
       <!-- <div class="d-flex align-items-center gap-2"> -->
         <div ngbDropdown container="body" class="d-inline-block position-relative">
-          <button class="btn btn-success dropdown-toggle " ngbDropdownToggle>
+          <button class="btn btn-action dropdown-toggle " ngbDropdownToggle>
             <i class="bi bi-gear me-1"></i>Actions
           </button>
           <div ngbDropdownMenu class="p-2 shadow" style="columns: 2; width: 400px; font-size: 0.875rem;">
@@ -214,7 +207,7 @@
   <kendo-grid-column
     field="primaryPhoneType"
     title="Primary Phone Type"
-    editor="numeric"
+    
     [width]="200"
   >
   </kendo-grid-column>
@@ -245,8 +238,7 @@
 
 
   
-  <kendo-grid-column field="createdSource" title="Created Source">
-  </kendo-grid-column>
+
 <kendo-grid-column
   field="assignedDate"
   title="Assigned Date"

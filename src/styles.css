@@ -1,205 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 
-
-/* === DEFAULT (Light Mode) === */
-/* body {
-  background-color: #ffffff;
-  color: #212529;
-}
-
-.btn-all {
-  background-color: #012a6b ;
-  color: #fff;
-}
-
-.btn-success {
-  background-color: #28a745;
-  color: #fff;
-}
-
-/* === DARK MODE === */
-/* body.dark-mode {
-  background-color: #121212;
-  color: #e0e0e0;
-}
-
-body.dark-mode .btn-all {
-  background-color:  #012a6b ; 
-  color: #fff;
-  border: 1px solid  #012a6b ;
-}
-
-body.dark-mode .btn-success {
-  background-color: #66bb6a; 
-  color: #fff;
-  border: 1px solid #66bb6a;
-}
-
-body.dark-mode .btn-outline-secondary {
-  border-color: #ccc;
-  color: #ccc;
-}
-
-body.dark-mode .k-grid,
-body.dark-mode .k-grid-header,
-body.dark-mode .k-grid-content {
-  background-color: #1e1e1e;
-  color: #fff;
-}
-
-body.dark-mode .k-button {
-  background-color: #2e2e2e;
-  color: #eee;
-}
-body.light-mode {
-  background-color: #f8f9fa;
-  color: #212529;
-} */
-
-/* body.light-mode .navbar {
-  background-color: #f8f9fa !important;
-}
-
-body.light-mode .btn-all {
-  background-color: #012a6b ;
-  color: white;
-}
-
-body.light-mode .btn-success {
-  background-color: #198754;
-  color: white;
-}
-
-
-body.dark-mode {
-  background-color: #212529;
-  color: #f8f9fa;
-}
-
-body.dark-mode .navbar {
-  background-color: #343a40 !important;
-}
-
-body.dark-mode .btn-all {
-  background-color: #012a6b ;
-  color: white;
-}
-
-body.dark-mode .btn-success {
-  background-color: #20c997;
-  color: black;
-}  */
-
-
-/* styles.css or styles.scss */
-
-/* ===== Light Mode Defaults ===== */
-/* :root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --primary-color: #0d6efd;
-  --btn-bg: #198754;
-  --dropdown-bg: #f8f9fa;
-  --grid-header-bg: #e9ecef;
-  --grid-header-text: #000000;
-  --grid-cell-bg: #ffffff;
-  --column-menu-bg: #ffffff;
-} */
-
-/* ===== Dark Mode Overrides ===== */
-/* .dark-mode {
-  --bg-color: #1e1e2f;
-  --text-color: #f8f9fa;
-  --primary-color: #0dcaf0;
-  --btn-bg: #2d6a4f;
-  --dropdown-bg: #2c2f3e;
-  --grid-header-bg: #198754; 
-  --grid-header-text: #ffffff;
-  --grid-cell-bg: #2a2a3c;
-  --column-menu-bg: #2d2f41;
-} */
-
-/* Global Body */
-/* body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-} */
-
-/* ==== Kendo Grid Styles ==== */
-/* .k-grid {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-} */
-
-/* Grid content cells */
-/* .k-grid td,
-.k-grid .k-grid-content td {
-  background-color: var(--grid-cell-bg);
-  color: var(--text-color);
-} */
-
-/* Grid header */
-/* .k-grid-header,
-.k-grid-toolbar {
-  background-color: var(--grid-header-bg);
-  color: var(--grid-header-text);
-} */
-
-/* .k-grid-header th,
-.k-header,
-.k-grid-header .k-link {
-  background-color: var(--grid-header-bg);
-  color: var(--grid-header-text) !important;
-  border-color: transparent;
-} */
-
-/* Column menu */
-/* .k-column-menu,
-.k-column-menu-content,
-.k-column-menu-item,
-.k-column-menu-item-wrapper {
-  background-color: var(--column-menu-bg);
-  color: var(--text-color);
-} */
-/* 
-.k-column-menu-item:hover,
-.k-column-menu-item.k-state-hover {
-  background-color: var(--primary-color);
-  color: white;
-} */
-
-/* Hover rows (optional) */
-/* .k-grid tr:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-} */
-
-/* ==== Action Column Buttons ==== */
-/* .k-grid .btn-success {
-  background-color: var(--btn-bg) !important;
-  color: #fff !important;
-  border: none;
-} */
-
-/* Action Dropdown Menu */
-/* .k-grid .dropdown-menu {
-  background-color: var(--dropdown-bg);
-  color: var(--text-color);
-  border: 1px solid #444;
-} */
-
-/* Dropdown Items */
-/* .k-grid .dropdown-item,
-.k-grid button[ngbdropdownitem] {
-  background-color: transparent;
-  color: var(--text-color);
-}
-
-.k-grid .dropdown-item:hover,
-.k-grid button[ngbdropdownitem]:hover {
-  background-color: var(--primary-color);
-  color: #fff;
-} */
-
 /* Apply dark mode to the entire grid */
 .dark-mode .k-grid {
   background-color: #000 !important;
@@ -222,15 +22,12 @@ body.dark-mode .btn-success {
   border-color: #222 !important;
 }
 
-/* Hover effect on rows (optional: dark gray) */
-.dark-mode .k-grid tbody tr:hover {
-  background-color: #111 !important;
-}
+
 
 /* Action column button: green */
-.dark-mode .k-grid .btn-success,
-.dark-mode .k-grid .btn-success:focus,
-.dark-mode .k-grid .btn-success:hover {
+.dark-mode .k-grid .btn-action,
+.dark-mode .k-grid .btn-action:focus,
+.dark-mode .k-grid .btn-action:hover {
   background-color: #111 !important;
   border-color:  #fff!important;
   color: #fff !important;
@@ -440,3 +237,10 @@ body.dark-mode .btn-success {
 .dark-mode .bi {
   color: #fff !important;
 }
+
+
+/* .dark-mode .btn-action.dropdown-toggle {
+  background-color: #1e1e1e !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+} */

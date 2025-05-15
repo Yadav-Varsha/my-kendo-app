@@ -96,3 +96,8 @@ background-color:  #7ec241;
   color: #76b82a;
 }
 
+.btn.btn-action{
+    background-color: #76b82a !important;
+  color: #fff !important;
+  border: none;
+}

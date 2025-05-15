@@ -64,7 +64,7 @@ export class MainpageComponent implements OnInit {
   public stateName: string = '';
   public selectedState: string = '';
   public savedStateNames: string[] = [];
-  public selectedStateName: string = '';
+  // public selectedStateName: string = '';
   public newStateName: string = '';
   public originalData: any[] = [...this.gridData]; // store full data once on init/load
  createdSourceFilters: FilterDescriptor[] = [];
@@ -264,9 +264,7 @@ deleteState(event: MouseEvent, stateName: string): void {
       }
     });
   };
-  trackColumn(index: number, item: any): any {
-    return item.field;
-  }
+ 
 
   public clearFilters(): void {
     window.location.reload();
@@ -282,31 +280,39 @@ deleteState(event: MouseEvent, stateName: string): void {
     this.isNew = true;
     this.myGrid.addRow(this.formGroup);
   }
-
-  saveRow(event: any): void {
-    const dataItem = event.dataItem;
-
+ public saveRow(dataItem:any): void {
+  
     if (this.formGroup && this.formGroup.valid) {
       this.saveCurrent();
     }
   }
+// public saveRow(dataItem: any): void {
+//   if (this.formGroup) {
+//     this.formGroup.markAllAsTouched(); // ✅ Force validation check
+//     this.formGroup.updateValueAndValidity(); // ✅ Ensure all validations re-run
+
+//     if (this.formGroup.valid) {
+//       this.saveCurrent();
+//     }
+//   }
+// }
 
   private saveCurrent(): void {
     if (this.formGroup) {
       const item = this.formGroup.value;
-
+  
       if (!item.id && item.recordId) {
         item.id = item.recordId;
       }
 
        // Format assignedDate to 'MM-dd-yyyy' before saving
-    if (item.assignedDate) {
-      item.assignedDate = formatDate(item.assignedDate, 'MM-dd-yyyy', 'en-US');
+  if (item.assignedDate) {
+     item.assignedDate = formatDate(item.assignedDate, 'MM-dd-yyyy', 'en-US');
     }
-
+  
       // CLOSE editor immediately before API
       this.closeEditor();
-
+  
       // NOW call API safely
       this.employeeService.save(item, this.isNew!).subscribe(() => {
         this.employeeService.getAll().subscribe((res) => {
@@ -315,6 +321,8 @@ deleteState(event: MouseEvent, stateName: string): void {
       });
     }
   }
+  
+  
 
   public cellClickHandler({ isEdited, dataItem, rowIndex }: any): void {
     if (isEdited || (this.formGroup && !this.formGroup.valid)) {
@@ -376,30 +384,32 @@ deleteState(event: MouseEvent, stateName: string): void {
 )
 });
   }
-  public onFilter(value: string): void {
-    const inputValue = value.toLowerCase(); // small/capital ka problem na ho
+public onFilter(value: string): void {
+  const inputValue = value.toLowerCase();
 
-    this.gridView = process(this.gridData, {
-      filter: {
-        logic: 'or',
-        filters: [
-          {
-            field: 'lastName',
-            operator: 'contains',
-            value: inputValue,
-          },
-          {
-            field: 'firstName',
-            operator: 'contains',
-            value: inputValue,
-          },
-        ],
-      },
-    }).data;
+  const filtered = process(this.gridData, {
+    ...this.gridSettings.state,
+    filter: {
+      logic: 'or',
+      filters: [
+        {
+          field: 'lastName',
+          operator: 'contains',
+          value: inputValue,
+        },
+        {
+          field: 'firstName',
+          operator: 'contains',
+          value: inputValue,
+        },
+      ],
+    },
+  });
 
-    // this.gridSettings.state.skip = 0;
-    this.dataBinding.skip = 0;
-  }
+  this.gridSettings.gridData = filtered;
+  this.gridSettings.state.skip = 0; // Reset pagination
+}
+
 
 
   toggleView(view: string): void {

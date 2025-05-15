@@ -225,9 +225,7 @@ public get savedStateExists(): boolean {
   }
 
   loadGridData(): void {
-    // this.employeeService.getAll().subscribe(data => {
-    //   this.gridData = data;
-    // });
+  
     this.employeeService.getAll().subscribe((data) => {
       this.originalData = data; //  also store here if used for reload
      this.gridSettings.gridData = process(data, this.gridSettings.state);
@@ -254,16 +252,7 @@ public get savedStateExists(): boolean {
       return;
     }
 
-    // const columns = grid.columns.toArray().map((col: any) => ({
-    //   field: col.field,
-    //   title: col.title,
-    //   width: col.width,
-    //   filter: col.filter,
-    //   format: col.format,
-    //   filterable: col.filterable,
-    //   hidden: col.hidden,
-    //   sort: col.sort
-    // const columns = grid.columns.toArray().map(item => ({
+   
     const columns = grid.columns.toArray().map((item: { orderIndex: any; }) => ({
       field: (item as any).field,
       width: (item as any).width,

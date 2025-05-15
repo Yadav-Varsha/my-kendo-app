@@ -213,18 +213,29 @@ public gridSettings: any = {
     this.savedStateNames = Object.keys(savedStates);
   }
 
-  deleteState(event: MouseEvent, stateName: string): void {
-    event.stopPropagation(); // Prevent the dropdown from selecting the item
-    const index = this.savedStateNames.indexOf(stateName);
-    if (index !== -1) {
-      this.savedStateNames.splice(index, 1);
-      localStorage.removeItem(`grid-state-${stateName}`);
-      // Optional: Clear selection if deleted
-      if (this.selectedState === stateName) {
-        this.selectedState = '';
-      }
+deleteState(event: MouseEvent, stateName: string): void {
+  event.stopPropagation(); // Prevent dropdown selection
+
+  // Remove from the saved states object
+  const savedStates = this.persistingService.get('namedGridStates') || {};
+  if (savedStates[stateName]) {
+    delete savedStates[stateName];
+    this.persistingService.set('namedGridStates', savedStates); // Update in localStorage
+  }
+
+  // Remove from the local list
+  const index = this.savedStateNames.indexOf(stateName);
+  if (index !== -1) {
+    this.savedStateNames.splice(index, 1);
+    if (this.selectedState === stateName) {
+      this.selectedState = '';
     }
   }
+
+  // Refresh the list
+  this.loadSavedStateNames();
+}
+
 
   private mapGridSettings(savedSettings: any): any {
     const state = savedSettings.state;

@@ -156,44 +156,7 @@ export class MainComponent implements OnInit {
   columns: any;
 
 
-  // leadsOptions = ['All Leads', 'My Leads', 'Archived'];
-  // selectedLead = 'All Leads';
-  // selectedPreference = 'Select Saved Preferences';
-  // searchText = '';
-  // activeView: string = 'non-intl';
- 
 
-// toggleView(view: string): void {
-//   this.activeView = view;
-// }
-
-// public selectedAction: string = 'Action';
-
-// public areaList: Array<string> = [
-// "Edit",
-// "Delete", 
-// "View",
-// ];
-
-
-  
-//   public someList: Array<string> = [
-//     "avg smf",
-//     "canada",
-//     "App.setter",
-//     "Canada Filter",
-//     "Interstate",
-//     "lostvswon",
-//     "Shipper Type-National Account",
-  
-//   ];
- 
-  
-//   public gridView: any[] = [];
-//  public mySelection: string[] = [];
-//   public pdfSVG: SVGIcon = filePdfIcon;
-//   public excelSVG: SVGIcon = fileExcelIcon;
-//   public gridData: any[] = [];
  
  
 constructor(public theamService: TheamService,private employeeService: EmployeeService, public persistingService: PersistingService)  {const gridSettings = this.persistingService.get('gridSettings');

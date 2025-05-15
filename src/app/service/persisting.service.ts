@@ -14,5 +14,9 @@ export class PersistingService {
     // console.log(`Loading [${key}]`, data);
     return data ? JSON.parse(data) : null;
   }
+
+   remove(key: string): void {
+    localStorage.removeItem(key); // <-- Add this
+  }
 }
   

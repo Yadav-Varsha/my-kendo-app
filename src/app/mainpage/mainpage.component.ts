@@ -421,7 +421,7 @@ public onFilter(value: string): void {
   public exportExcel(): void {
     this.myGrid.saveAsExcel();
   }
-
+     
   public leadStatusOptions: string[] = [
     'New',
     'In Progress',
@@ -474,7 +474,7 @@ onFilterChange(event: any, value: string, filterService: any): void {
   // Method to apply the current filters manually
 applyFilter(filterService: any): void {
   filterService.filter({
-    logic: 'or',
+    logic: 'or', 
     filters: [...this.createdSourceFilters]
   });
 }
